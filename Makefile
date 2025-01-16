@@ -17,7 +17,13 @@ INCLUDE = include
 
 FDF = fdf
 
-DEFAULT =	fdf.c
+DEFAULT =	fdf.c		\
+		lines.c		\
+		lines_utils.c	\
+		map.c		\
+		points.c	\
+		utils.c		\
+		vector.c
 
 FILES = $(addprefix $(SRC)/, $(DEFAULT))
 
