@@ -21,6 +21,7 @@ DEFAULT =	fdf.c		\
 		lines.c		\
 		lines_utils.c	\
 		map.c		\
+		mlx_manager.c	\
 		points.c	\
 		utils.c		\
 		vector.c
@@ -29,7 +30,7 @@ FILES = $(addprefix $(SRC)/, $(DEFAULT))
 
 OBJS = $(FILES:%.c=%.o)
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -g
 
 LIBFT_DIR = libft
 LIBFT_INCLUDE_DIR = $(LIBFT_DIR)

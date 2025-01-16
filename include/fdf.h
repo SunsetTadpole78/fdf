@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:05:01 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/16 14:26:20 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/01/16 17:51:19 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,17 @@
 # define FDF_H
 
 #include "libft.h"
-#include "mlx.h"
+# include "mlx.h"
+# include <X11/keysym.h>
+
+#include <stdio.h>
 
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
+
+# define HEIGHT 1080
+# define WIDTH 1920
 
 typedef struct s_vector2
 {
@@ -60,6 +66,14 @@ typedef struct s_map
 	t_camera	*camera;
 }	t_map;
 
+typedef struct s_fdf
+{
+	void	*mlx;
+	void	*window;
+	void	*img;
+	t_map	*map;
+}	t_fdf;
+
 //lines_utils.c
 t_vector2	get_size(char ***lines);
 
@@ -73,6 +87,9 @@ int			init_lines(char *path, char ****lines, int *fd);
 void		free_map(t_map *map);
 void		add_to_map(t_map *map, t_line *line);
 t_map		*parse_map(char *path);
+
+//mlx_manager.c
+t_fdf	*create_window(t_map *map);
 
 //points.c
 t_point	*init_point(char ***lines, t_vector2 p);
