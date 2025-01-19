@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 14:42:40 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/16 14:42:41 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/01/19 11:46:36 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_point	*init_point(char ***lines, t_vector2 p)
 	point->pos.x = p.x;
 	point->pos.y = chars_to_float(lines[(size_t)p.y][(size_t)p.x]);
 	point->pos.z = p.y;
+	//point->color = get_color_for(point->pos.y);
 	return (point);
 }
 

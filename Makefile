@@ -24,6 +24,7 @@ DEFAULT =	fdf.c		\
 		mlx_manager.c	\
 		points.c	\
 		utils.c		\
+		display_data.c	\
 		vector.c
 
 FILES = $(addprefix $(SRC)/, $(DEFAULT))

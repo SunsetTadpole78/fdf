@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:00:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/16 18:04:37 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/01/19 11:43:19 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,86 @@ int	key_hook(int keycode, t_fdf *fdf)
 		mlx_destroy_display(fdf->mlx);
 		free(fdf->mlx);
 		free_map(fdf->map);
+		free(fdf->display_data);
 		free(fdf);
 		exit(EXIT_SUCCESS);
 	}
+	else if (keycode == XK_Left)
+	{
+		fdf->display_data->pivot_point.x -= 5;
+		draw_map(fdf);
+		mlx_put_image_to_window(fdf->mlx, fdf->window, fdf->img, 0, 0);
+	}
+	else if (keycode == XK_Right)
+	{
+		fdf->display_data->pivot_point.x += 5;
+		draw_map(fdf);
+		mlx_put_image_to_window(fdf->mlx, fdf->window, fdf->img, 0, 0);
+	}
+	else if (keycode == XK_Up)
+	{
+		fdf->display_data->pivot_point.z -= 5;
+		draw_map(fdf);
+		mlx_put_image_to_window(fdf->mlx, fdf->window, fdf->img, 0, 0);
+	}
+	else if (keycode == XK_Down)
+	{
+		fdf->display_data->pivot_point.z += 5;
+		draw_map(fdf);
+		mlx_put_image_to_window(fdf->mlx, fdf->window, fdf->img, 0, 0);
+	}
+
+
+	else if (keycode == XK_t)
+	{
+		printf("test");
+		fdf->display_data->rotate.x -= 5;
+		draw_map(fdf);
+		mlx_put_image_to_window(fdf->mlx, fdf->window, fdf->img, 0, 0);
+	}
+	else if (keycode == XK_y)
+	{
+		fdf->display_data->rotate.x += 5;
+		draw_map(fdf);
+		mlx_put_image_to_window(fdf->mlx, fdf->window, fdf->img, 0, 0);
+	}
+	else if (keycode == XK_u)
+	{
+		fdf->display_data->rotate.y -= 5;
+		draw_map(fdf);
+		mlx_put_image_to_window(fdf->mlx, fdf->window, fdf->img, 0, 0);
+	}
+	else if (keycode == XK_i)
+	{
+		fdf->display_data->rotate.y += 5;
+		draw_map(fdf);
+		mlx_put_image_to_window(fdf->mlx, fdf->window, fdf->img, 0, 0);
+	}
+	else if (keycode == XK_o)
+	{
+		fdf->display_data->rotate.z -= 5;
+		draw_map(fdf);
+		mlx_put_image_to_window(fdf->mlx, fdf->window, fdf->img, 0, 0);
+	}
+	else if (keycode == XK_p)
+	{
+		fdf->display_data->rotate.z += 5;
+		draw_map(fdf);
+		mlx_put_image_to_window(fdf->mlx, fdf->window, fdf->img, 0, 0);
+	}
+	else if (keycode == XK_minus)
+	{
+		fdf->display_data->zoom -= 2;
+		draw_map(fdf);
+		mlx_put_image_to_window(fdf->mlx, fdf->window, fdf->img, 0, 0);
+	}
+	else if (keycode == XK_equal)
+	{
+		fdf->display_data->zoom += 2;
+		draw_map(fdf);
+		mlx_put_image_to_window(fdf->mlx, fdf->window, fdf->img, 0, 0);
+	}
+	printf("%i %i\n", keycode, XK_minus);
 	return (0);
 }
 
