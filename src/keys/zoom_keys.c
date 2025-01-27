@@ -1,40 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   zoom_keys.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/16 14:42:35 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/27 12:31:59 by lroussel         ###   ########.fr       */
+/*   Created: 2025/01/22 09:16:14 by lroussel          #+#    #+#             */
+/*   Updated: 2025/01/27 10:34:50 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-float	chars_to_float(char *nbr)
+int	zoom(int keycode, t_fdf *fdf)
 {
-	float			res;
-	unsigned int	i;
-	int				sign;
-
-	res = 0;
-	i = 0;
-	sign = 1;
-	if (nbr[0] == '-')
+	if (keycode == XK_minus || keycode == XK_equal)
 	{
-		i = 1;
-		sign = -1;
+		if (fdf->display_data->zoom * fdf->display_data->zoom_v >= WIDTH
+			&& keycode == XK_equal)
+			return (0);
+		if (fdf->display_data->zoom * fdf->display_data->zoom_v <= 0.3
+			&& keycode == XK_minus)
+			return (0);
+		fdf->display_data->zoom *= 1.0 + 0.05 * (keycode == XK_equal)
+			- 0.05 * (keycode == XK_minus);
+		return (1);
 	}
-	while (nbr[i] >= '0' && nbr[i] <= '9')
-	{
-		res = res * 10 + (nbr[i] - '0');
-		i++;
-	}
-	return (res * sign);
-}
-
-int	ft_distance(t_vector2 v1, t_vector2 v2)
-{
-	return (sqrt(pow(v2.x - v1.x, 2) + pow(v2.y - v1.y, 2)));
+	return (0);
 }

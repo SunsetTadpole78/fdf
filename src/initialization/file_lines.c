@@ -12,52 +12,6 @@
 
 #include "fdf.h"
 
-t_line	*build_line(char ***lines, t_vector2 p1, t_vector2 p2)
-{
-	t_line	*line;
-
-	line = malloc(sizeof(t_line));
-	if (!line)
-		return (0);
-	line->previous = NULL;
-	line->next = NULL;
-	line->point1 = init_point(lines, p1);
-	if (!line->point1)
-	{
-		free(line);
-		return (NULL);
-	}
-	line->point2 = init_point(lines, p2);
-	if (!line->point2)
-	{
-		free(line->point1);
-		free(line);
-		return (NULL);
-	}
-	return (line);
-}
-
-void	free_lines(char ****lines, int y)
-{
-	int	x;
-
-	while (y >= 0)
-	{
-		if (*lines && (*lines)[y])
-		{
-			x = 0;
-			while ((*lines)[y][x])
-			{
-				free((*lines)[y][x]);
-				x++;
-			}
-			free((*lines)[y]);
-		}
-		y--;
-	}
-	free(*lines);
-}
-
 int	add_line(char *line, char ****lines, int y)
 {
 	char	***temp;

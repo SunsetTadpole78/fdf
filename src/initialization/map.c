@@ -6,59 +6,63 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 14:42:06 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/16 14:42:07 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/01/27 10:26:17 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	free_map(t_map *map)
+void	create_points(t_map *map, char ***lines)
 {
-	t_line	*cur;
-	t_line	*temp;
+	size_t	x;
+	size_t	y;
 
-	cur = map->line;
-	while (cur)
+	y = 0;
+	while (lines[y])
 	{
-		free(cur->point1);
-		free(cur->point2);
-		temp = cur->next;
-		free(cur);
-		cur = temp;
+		x = 0;
+		while (lines[y][x])
+		{
+			map->points[y][x].pos.x = x;
+			map->points[y][x].pos.y = chars_to_float(lines[y][x]) / 10;
+			map->points[y][x].pos.z = y;
+			if (ft_strchr(lines[y][x], ','))
+				map->points[y][x].color = get_color(lines[y][x]);
+			else
+				map->points[y][x].color = 0xFFFFFF;
+			x++;
+		}
+		y++;
 	}
-	free(map);
+	map->points[y] = NULL;
 }
 
-void	add_to_map(t_map *map, t_line *line)
-{
-	t_line	*cur;
-
-	if (!line)
-		return ;
-	if (!map->line)
-	{
-		map->line = line;
-		return ;
-	}
-	cur = map->line;
-	while (cur->next)
-		cur = cur->next;
-	line->previous = cur;
-	cur->next = line;
-}
-
-static t_map	*init_map(char ***lines)
+t_map	*init_map(char ***lines)
 {
 	t_map	*map;
+	int		y;
 
 	map = malloc(sizeof(t_map));
 	if (!map)
-	{
 		return (NULL);
+	set_map_data(lines, map);
+	map->points = malloc(sizeof(t_point *) * (map->size.z + 1));
+	if (!map->points)
+		return (NULL);
+	y = 0;
+	while (y < map->size.z)
+	{
+		map->points[y] = malloc(sizeof(t_point) * map->size.x);
+		if (!map->points[y])
+		{
+			while (y > 0)
+				free(map->points[--y]);
+			free(map->points);
+			return (NULL);
+		}
+		y++;
 	}
-	map->line = NULL;
-	map->size = get_size(lines);
-	init_points(map, lines);
+	create_points(map, lines);
 	return (map);
 }
 

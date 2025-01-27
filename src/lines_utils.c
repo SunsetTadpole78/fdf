@@ -6,35 +6,32 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 14:42:03 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/16 14:42:04 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/01/22 15:24:45 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static size_t	get_height(char ***lines)
+void	set_map_data(char ***lines, t_map *map)
 {
-	size_t	y;
+	float		v;
 
-	y = 0;
-	while (lines[y])
-		y++;
-	return (y);
-}
-
-static size_t	get_width(char ***lines)
-{
-	size_t	x;
-
-	if (!lines[0])
-		return (0);
-	x = 0;
-	while (lines[0][x])
-		x++;
-	return (x);
-}
-
-t_vector2	get_size(char ***lines)
-{
-	return (vector2((float)get_width(lines), (float)get_height(lines)));
+	map->size.z = 0;
+	map->min_y = MAX_INT;
+	map->max_y = MIN_INT;
+	while (lines[(int)map->size.z])
+	{
+		map->size.x = 0;
+		while (lines[(int)map->size.z][(int)map->size.x])
+		{
+			v = ft_atoi(lines[(int)map->size.z][(int)map->size.x]) / 10;
+			if (v < map->min_y)
+				map->min_y = v;
+			else if (v > map->max_y)
+				map->max_y = v;
+			map->size.x++;
+		}
+		map->size.z++;
+	}
+	map->size.y = ft_abs(map->max_y - map->min_y);
 }

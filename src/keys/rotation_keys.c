@@ -1,40 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   rotation_keys.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/16 14:42:35 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/27 12:31:59 by lroussel         ###   ########.fr       */
+/*   Created: 2025/01/22 09:17:43 by lroussel          #+#    #+#             */
+/*   Updated: 2025/01/22 12:12:48 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-float	chars_to_float(char *nbr)
+int	rotate(int keycode, t_fdf *fdf)
 {
-	float			res;
-	unsigned int	i;
-	int				sign;
-
-	res = 0;
-	i = 0;
-	sign = 1;
-	if (nbr[0] == '-')
+	if (keycode == XK_t || keycode == XK_y)
 	{
-		i = 1;
-		sign = -1;
+		fdf->display_data->rotate.x += 1 * (1 - 2 * (keycode == XK_t));
+		return (1);
 	}
-	while (nbr[i] >= '0' && nbr[i] <= '9')
+	if (keycode == XK_u || keycode == XK_i)
 	{
-		res = res * 10 + (nbr[i] - '0');
-		i++;
+		fdf->display_data->rotate.y += 1 * (1 - 2 * (keycode == XK_u));
+		return (1);
 	}
-	return (res * sign);
-}
-
-int	ft_distance(t_vector2 v1, t_vector2 v2)
-{
-	return (sqrt(pow(v2.x - v1.x, 2) + pow(v2.y - v1.y, 2)));
+	if (keycode == XK_o || keycode == XK_p)
+	{
+		fdf->display_data->rotate.z += 1 * (1 - 2 * (keycode == XK_o));
+		return (1);
+	}
+	return (0);
 }

@@ -18,20 +18,30 @@ INCLUDE = include
 FDF = fdf
 
 DEFAULT =	fdf.c		\
-		lines.c		\
+		utils/navbar/navbar.c		\
+		utils/navbar/default_color.c		\
+		utils/button.c		\
+		initialization/file_lines.c		\
+		initialization/map.c		\
+		initialization/display_data.c	\
+		initialization/navbar.c	\
+		keys/hook.c	\
+		keys/rotation_keys.c	\
+		keys/translation_keys.c	\
+		keys/zoom_keys.c	\
+		destructor.c	\
 		lines_utils.c	\
-		map.c		\
 		mlx_manager.c	\
-		points.c	\
 		utils.c		\
-		display_data.c	\
+		color.c		\
+		backgrounds.c		\
 		vector.c
 
 FILES = $(addprefix $(SRC)/, $(DEFAULT))
 
-OBJS = $(FILES:%.c=%.o)
+OBJS = $(DEFAULT:%.c=obj/%.o)
 
-FLAGS = -Wall -Wextra -Werror -g
+FLAGS = -Wall -Wextra -Werror -g -O3
 
 LIBFT_DIR = libft
 LIBFT_INCLUDE_DIR = $(LIBFT_DIR)
@@ -49,7 +59,7 @@ clean:
 	@echo "${RED}${CROSS} Cleaning object files...${CLEAR}"
 	make -C $(LIBFT_DIR) clean > /dev/null
 	make -C $(MINILIBX_DIR) clean > /dev/null
-	rm -f $(OBJS)
+	rm -rf obj
 	@echo "${GREEN}${CHECK} All object files cleaned successfully!${CLEAR}"	
 
 fclean: clean
@@ -59,15 +69,16 @@ fclean: clean
 	rm -f $(FDF)
 	@echo "${GREEN}${CHECK} All executables and libraries removed successfully!${CLEAR}"
 
-%.o: %.c
+obj/%.o: src/%.c
+	mkdir -p $(dir $@)
 	@echo $(SEPARATOR)
 	@echo "${ORANGE}${ARROW} Compiling ${YELLOW}$@${ORANGE}...${CLEAR}"
-	gcc $(FLAGS) $< -c -o $@ -I $(INCLUDE) -I $(LIBFT_INCLUDE_DIR) -I $(MINILIBX_INCLUDE_DIR) $(MINILIBX_FLAGS) -g
+	cc $(FLAGS) $< -c -o $@ -I $(INCLUDE) -I $(LIBFT_INCLUDE_DIR) -I $(MINILIBX_INCLUDE_DIR) $(MINILIBX_FLAGS)
 
 $(FDF): $(LIBFT) $(MINILIBX) $(OBJS)
 	@echo $(SEPARATOR)
 	@echo "${ORANGE}${ARROW} Compiling ${YELLOW}${FDF}${ORANGE}...${CLEAR}"
-	gcc $(FLAGS) $(OBJS) -o $(FDF) $(LIBFT) $(MINILIBX) -I $(INCLUDE) -I $(LIBFT_INCLUDE_DIR) -I $(MINILIBX_INCLUDE_DIR) $(MINILIBX_FLAGS) -g
+	cc $(FLAGS) $(OBJS) -o $(FDF) $(LIBFT) $(MINILIBX) -I $(INCLUDE) -I $(LIBFT_INCLUDE_DIR) -I $(MINILIBX_INCLUDE_DIR) $(MINILIBX_FLAGS)
 	@echo "${GREEN}${CHECK} ${YELLOW}${FDF}${GREEN} compiled successfully!${CLEAR}"
 	@echo $(SEPARATOR)
 	@echo "${GREEN}${CHECK} All targets are up to date!${CLEAR}"
