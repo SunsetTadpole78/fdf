@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:05:01 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/27 11:23:39 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/01/28 11:48:47 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef struct s_point
 {
 	t_vector3	pos;
 	int			color;
+	int			can_mirror;
 }	t_point;
 
 typedef struct s_line
@@ -63,12 +64,30 @@ enum CategoryId {
 
 enum ButtonId {
 	NAV,
-	BGG
+	TIT,
+	BGG,
+	AXIS,
+	MIRROR,
+	CTRL_UP,
+	CTRL_DOWN,
+	CTRL_LEFT,
+	CTRL_RIGHT,
+	CTRL_REDUCE_X,
+	CTRL_ADD_X,
+	CTRL_REDUCE_Y,
+	CTRL_ADD_Y,
+	CTRL_REDUCE_Z,
+	CTRL_ADD_Z,
+	CTRL_ZOOM,
+	CTRL_UNZOOM
 };
 
 enum ButtonType {
 	NAVBAR,
-	CIRCLE
+	TITLE,
+	CIRCLE,
+	TOGGLE,
+	KEYBOX
 };
 
 typedef struct s_button
@@ -76,6 +95,7 @@ typedef struct s_button
 	enum ButtonId	id;
 	int	uniq_id;
 	enum ButtonType	type;
+	char	*name;
 	t_vector2	size;
 	t_vector2	offset;
 	void	*color;
@@ -102,6 +122,8 @@ typedef struct s_display_data
 	float			zoom;
 	float			zoom_v;
 	void	*bg;
+	int	axis;
+	int	mirror;
 }	t_display_data;
 
 typedef struct s_map
@@ -119,6 +141,35 @@ typedef struct s_navbar
 	int		must_update;
 }	t_navbar;
 
+typedef struct s_key
+{
+	int	id;
+	int	v;
+	enum ButtonId	button;
+}	t_key;
+
+typedef struct s_edit
+{
+	t_key	old_key;
+	t_key	new_key;
+}	t_edit;
+
+typedef struct s_controls
+{
+	t_key	up;
+	t_key	down;
+	t_key	left;
+	t_key	right;
+	t_key	reduce_x;
+	t_key	add_x;
+	t_key	reduce_y;
+	t_key	add_y;
+	t_key	reduce_z;
+	t_key	add_z;
+	t_key	zoom;
+	t_key	unzoom;
+	t_edit	edit;
+}	t_controls;
 typedef struct s_fdf
 {
 	void			*mlx;
@@ -130,6 +181,7 @@ typedef struct s_fdf
 	int				endian;
 	t_map			*map;
 	t_display_data		*display_data;
+	t_controls		controls;
 	int				must_update;
 }	t_fdf;
 
@@ -194,7 +246,7 @@ int			color_between(int ca, int cb, float v, float t);
 
 int			ft_abs(int v);
 
-t_vector2	pixel_pos(t_fdf *fdf, t_vector3 v3);
+t_vector2	pixel_pos(t_fdf *fdf, t_vector3 v3, int mirror);
 
 int     black(void);
 void		free_buttons(t_button **buttons);
@@ -221,11 +273,11 @@ void	draw_navbar(t_fdf *fdf);
 void	draw_button(t_fdf *fdf, t_button *button);
 void	draw_buttons(t_fdf *fdf, t_button **buttons);
 
-void	update_navbar_text(t_fdf *fdf);
+void	update_buttons_texts(t_fdf *fdf);
 
 //button.c
 t_button	*set_color(t_button *button, void *default_color, void *hover_color, void *pressed_color);
-t_button	*create_button(enum ButtonId id, enum ButtonType type, t_vector2 size, t_vector2 offset);
+t_button	*create_button(enum ButtonId id, enum ButtonType type, char *name, t_vector2 size, t_vector2 offset);
 int	buttons_count(t_button **buttons);
 
 //utils/navbar
@@ -235,5 +287,25 @@ t_navbar	*get_navbar(void);
 int	active_navbar(int v);
 void		free_navbar(void);
 t_category	*get_navbar_category(enum CategoryId id);
+
+//templates/keybox.c
+void	draw_keybox(t_fdf *fdf, t_button *button);
+int	keybox_color(t_vector2 v, int w, int h);
+int	keybox_color_hover(t_vector2 v, int w, int h, int selected);
+int	keybox_color_pressed(t_vector2 v, int w, int h);
+
+//templates/toggle.c
+void	draw_toggle(t_fdf *fdf, t_button *button);
+int	toggle_color(t_vector2 v, int w, int h);
+int	toggle_color_hover(t_vector2 v, int w, int h, int selected);
+int	toggle_color_pressed(t_vector2 v, int w, int h);
+
+void	draw_square(t_fdf *fdf, t_button *button);
+
+//initialization/controls.c
+void	init_controls(t_fdf *fdf);
+void	change_key(t_fdf *fdf);
+char	*get_name_for(int key);
+t_key	get_key_from(t_fdf *fdf, enum ButtonId id);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 08:45:04 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/27 11:25:13 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/01/27 18:07:57 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_button	*set_color(t_button *button, void *default_color, void *hover_color
 }
 
 t_button	*create_button(enum ButtonId id, enum ButtonType type
-	, t_vector2 size, t_vector2 offset)
+	, char *name, t_vector2 size, t_vector2 offset)
 {
 	t_button	*button;
 
@@ -40,6 +40,7 @@ t_button	*create_button(enum ButtonId id, enum ButtonType type
 	button->id = id;
 	button->uniq_id = next_id();
 	button->type = type;
+	button->name = ft_strdup(name);
 	button->size = size;
 	button->offset = offset;
 	button->color = black;
@@ -70,6 +71,7 @@ void	free_buttons(t_button **buttons)
 	i = 0;
 	while (buttons[i])
 	{
+		free(buttons[i]->name);
 		free(buttons[i]);
 		i++;
 	}

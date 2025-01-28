@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/01/27 14:58:42 by lroussel          #+#    #+#              #
+#    Updated: 2025/01/28 09:40:29 by lroussel         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 GREEN = \033[0;32m
 YELLOW = \033[1;33m
 ORANGE = \033[38;5;208m
@@ -18,6 +30,8 @@ INCLUDE = include
 FDF = fdf
 
 DEFAULT =	fdf.c		\
+		utils/templates/toggle.c		\
+		utils/templates/keybox.c		\
 		utils/navbar/navbar.c		\
 		utils/navbar/default_color.c		\
 		utils/button.c		\
@@ -25,6 +39,7 @@ DEFAULT =	fdf.c		\
 		initialization/map.c		\
 		initialization/display_data.c	\
 		initialization/navbar.c	\
+		initialization/controls.c	\
 		keys/hook.c	\
 		keys/rotation_keys.c	\
 		keys/translation_keys.c	\

@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 12:49:27 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/27 11:41:00 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/01/27 18:22:38 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,22 @@ void	draw_category(t_fdf *fdf, t_category *category)
 	}
 }
 
-void	update_navbar_text(t_fdf *fdf)
+t_vector2	get_text_offset(t_button *button)
+{
+	t_vector2	offset;
+
+	offset.y = button->offset.y + button->size.y / 2 + 4;
+	if (button->type == TOGGLE)
+	{
+		offset.x = button->offset.x + button->size.x + 7;
+		return (offset);
+	}
+
+	offset.x = button->offset.x + button->size.x / 2 - ((ft_strlen(button->name) * 6) / 2);
+	return (offset);
+}
+
+void	update_buttons_texts(t_fdf *fdf)
 {
 	int			i;
 	t_category	*category;
@@ -83,12 +98,21 @@ void	update_navbar_text(t_fdf *fdf)
 	while (get_navbar()->categories[i])
 	{
 		category = get_navbar()->categories[i];
-		offset.x = category->main->offset.x + category->main->size.x / 2
-			- ((ft_strlen(category->title) * 6) / 2);
-		offset.y = category->main->offset.y + category->main->size.y / 2 + 4;
+		offset = get_text_offset(category->main);
 		mlx_string_put(fdf->mlx, fdf->window, offset.x, offset.y,
-			0xFFFFFF, category->title);
+			0xFFFFFF, category->main->name);
 		i++;
+	}
+	if (get_navbar()->actual)
+	{
+		i = 0;
+		while (get_navbar()->actual->buttons[i])
+		{
+			offset = get_text_offset(get_navbar()->actual->buttons[i]);
+			mlx_string_put(fdf->mlx, fdf->window, offset.x, offset.y,
+				0xFFFFFF, get_navbar()->actual->buttons[i]->name);
+			i++;
+		}
 	}
 }
 
@@ -133,6 +157,7 @@ void	free_navbar(void)
 		while (get_navbar()->categories[i])
 		{
 			free_buttons(get_navbar()->categories[i]->buttons);
+			free(get_navbar()->categories[i]->main->name);
 			free(get_navbar()->categories[i]->main);
 			free(get_navbar()->categories[i]);
 			i++;
@@ -176,7 +201,7 @@ void	add_category(enum CategoryId id, char *title)
 	size.y = 50;
 	offset.x = 0;
 	offset.y = 0;
-	category->main = create_button(NAV, NAVBAR, size, offset);
+	category->main = create_button(NAV, NAVBAR, title, size, offset);
 	set_color(category->main, dark_gray, light_gray, gray);
 	category->main->category = category;
 	category->id = id;

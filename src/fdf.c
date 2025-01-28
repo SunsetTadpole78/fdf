@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:00:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/24 16:08:54 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/01/27 15:25:43 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ int	on_update(t_fdf *fdf)
 		ft_memset(fdf->addr, 0, HEIGHT * WIDTH * (fdf->bpp / 8));
 		draw_map(fdf);
 		mlx_put_image_to_window(fdf->mlx, fdf->window, fdf->img, 0, 0);
-		update_navbar_text(fdf);
+		update_buttons_texts(fdf);
+		get_navbar()->must_update = 0;
 		fdf->must_update = 0;
 	}
 	return (0);

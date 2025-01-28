@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 09:17:43 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/22 12:12:48 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/01/28 09:49:21 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,19 @@
 
 int	rotate(int keycode, t_fdf *fdf)
 {
-	if (keycode == XK_t || keycode == XK_y)
+	if (keycode == fdf->controls.reduce_x.v || keycode == fdf->controls.add_x.v)
 	{
-		fdf->display_data->rotate.x += 1 * (1 - 2 * (keycode == XK_t));
+		fdf->display_data->rotate.x += 1 * (1 - 2 * (keycode == fdf->controls.reduce_x.v));
 		return (1);
 	}
-	if (keycode == XK_u || keycode == XK_i)
+	if (keycode == fdf->controls.reduce_y.v || keycode == fdf->controls.add_y.v)
 	{
-		fdf->display_data->rotate.y += 1 * (1 - 2 * (keycode == XK_u));
+		fdf->display_data->rotate.y += 1 * (1 - 2 * (keycode == fdf->controls.reduce_y.v));
 		return (1);
 	}
-	if (keycode == XK_o || keycode == XK_p)
+	if (keycode == fdf->controls.reduce_z.v || keycode == fdf->controls.add_z.v)
 	{
-		fdf->display_data->rotate.z += 1 * (1 - 2 * (keycode == XK_o));
+		fdf->display_data->rotate.z += 1 * (1 - 2 * (keycode == fdf->controls.add_z.v));
 		return (1);
 	}
 	return (0);

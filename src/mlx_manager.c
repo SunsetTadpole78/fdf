@@ -6,11 +6,29 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 14:45:42 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/27 13:52:05 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/01/28 09:41:31 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+
+int	call(int (color)(t_vector2, int, int, int), t_vector2 cpos, t_button *button, t_vector2 size)
+{
+	return color(cpos, size.x, size.y, button->selected);
+}
+
+int	get_button_color(t_vector2 cpos, t_button *button, t_vector2 size)
+{
+	void	*color;
+
+	if (button->hover)
+		color = button->hover_color;
+	else if (button->selected)
+		color = button->pressed_color;
+	else
+		color = button->color;
+	return call(color, cpos, button, size);
+}
 
 int	put_pixel(t_fdf *fdf, t_vector2 pos, int color, float alpha)
 {
@@ -58,12 +76,14 @@ void	rotate_z(t_fdf *fdf, t_vector3 *v3)
 	v3->y = tmp * sin(gamma) + v3->y * cos(gamma);
 }
 
-t_vector2	pixel_pos(t_fdf *fdf, t_vector3 v3)
+t_vector2	pixel_pos(t_fdf *fdf, t_vector3 v3, int  mirror)
 {
 	t_vector2	v2;
 	float		zoom;
 
 	zoom = fdf->display_data->zoom * fdf->display_data->zoom_v;
+	if (mirror)
+		v3.y *= -1;
 	v3.x *= zoom;
 	v3.y *= zoom;
 	v3.z *= zoom;
@@ -105,7 +125,7 @@ int	black(void)
 	return (0);
 }
 
-void	background(t_fdf *fdf, int (color)(t_vector2, int, int))
+void	background(t_fdf *fdf, int (color)(t_vector2, int, int, int))
 {
 	t_vector2	pos;
 
@@ -115,30 +135,32 @@ void	background(t_fdf *fdf, int (color)(t_vector2, int, int))
 		pos.x = 0;
 		while (pos.x <= WIDTH)
 		{
-			put_pixel(fdf, pos, color(pos, WIDTH, HEIGHT), 1);
+			put_pixel(fdf, pos, color(pos, WIDTH, HEIGHT, 0), 1);
 			pos.x++;
 		}
 		pos.y++;
 	}
 }
 
-void	circle_line(t_vector2 pos, int x2, int r, t_fdf *fdf, t_vector2 offset,
-		int (color)(t_vector2, int, int))
+void	circle_line(t_vector2 pos, int x2, t_fdf *fdf, t_button *button)
 {
 	t_vector2	cpos;
+	t_vector2	size;
 
+	size = button->size;
+	size.x *= 2;
+	size.y *= 2;
 	while (pos.x <= x2)
 	{
 		cpos = pos;
-		cpos.x -= offset.x - r;
-		cpos.y -= offset.y - r;
-		put_pixel(fdf, pos, color(cpos, r * 2, r * 2), 1);
+		cpos.x -= button->offset.x - button->size.x;
+		cpos.y -= button->offset.y - button->size.y;
+		put_pixel(fdf, pos, get_button_color(cpos, button, size), 1);
 		pos.x++;
 	}
 }
 
-void	circle(t_fdf *fdf, int radius, t_vector2 offset,
-		int (color)(t_vector2, int, int))
+void	draw_circle(t_fdf *fdf, int radius, t_button *button)
 {
 	int	x;
 	int	y;
@@ -150,16 +172,16 @@ void	circle(t_fdf *fdf, int radius, t_vector2 offset,
 	m = 5 - 4 * radius;
 	while (x <= y)
 	{
-		pos.x = offset.x - x;
-		pos.y = offset.y - y;
-		circle_line(pos, offset.x + x, radius, fdf, offset, color);
-		pos.y = offset.y + y;
-		circle_line(pos, offset.x + x, radius, fdf, offset, color);
-		pos.x = offset.x - y;
-		pos.y = offset.y - x;
-		circle_line(pos, offset.x + y, radius, fdf, offset, color);
-		pos.y = offset.y + x;
-		circle_line(pos, offset.x + y, radius, fdf, offset, color);
+		pos.x = button->offset.x - x;
+		pos.y = button->offset.y - y;
+		circle_line(pos, button->offset.x + x, fdf, button);
+		pos.y = button->offset.y + y;
+		circle_line(pos, button->offset.x + x, fdf, button);
+		pos.x = button->offset.x - y;
+		pos.y = button->offset.y - x;
+		circle_line(pos, button->offset.x + y, fdf, button);
+		pos.y = button->offset.y + x;
+		circle_line(pos, button->offset.x + y, fdf, button);
 		if (m > 0)
 		{
 			y--;
@@ -189,7 +211,7 @@ void	outline(t_fdf *fdf, int radius, t_vector2 offset)
 	}
 }
 
-void	draw_line(t_fdf *fdf, t_point a, t_point b)
+void	draw_line(t_fdf *fdf, t_point a, t_point b, int mirror)
 {
 	t_vector2	p1;
 	t_vector2	p2;
@@ -205,8 +227,8 @@ void	draw_line(t_fdf *fdf, t_point a, t_point b)
 	float		total;
 	float		current;
 
-	p1 = pixel_pos(fdf, a.pos);
-	p2 = pixel_pos(fdf, b.pos);
+	p1 = pixel_pos(fdf, a.pos, mirror);
+	p2 = pixel_pos(fdf, b.pos, mirror);
 	if (outside(p1, p2))
 		return ;
 	dx = ft_abs(p2.x - p1.x);
@@ -261,63 +283,80 @@ void	draw_axes(t_fdf *fdf)
 	t_vector3	x;
 	t_vector3	y;
 	t_vector3	z;
+	t_point		p;
+	t_point		p2;
+
+	if (!fdf->display_data->axis)
+		return ;
 
 	m_y = ((float)fdf->map->max_y + (float)fdf->map->min_y) / 2;
 	o.x = fdf->map->size.x / 2 - 0.5;
 	o.y = m_y;
 	o.z = fdf->map->size.z / 2 - 0.5;
 	x = o;
-	x.x *= 1000;
+	x.x = 10000000;
 	y = o;
-	y.y *= 1000;
+	y.y = x.x;
 	z = o;
-	z.z *= 1000;
-	draw_line(fdf, (t_point){o, 0xFF0000}, (t_point){x, 0xFF0000});
-	draw_line(fdf, (t_point){o, 0x00FF00}, (t_point){y, 0x00FF00});
-	draw_line(fdf, (t_point){o, 0x0000FF}, (t_point){z, 0x0000FF});
+	z.z = x.x;
+	p.pos = o;
+	p.color = 0xFF0000;
+	p.can_mirror = 0;
+	p2 = p;
+	p2.pos = x;
+	draw_line(fdf, p, p2, 0);
+	p.color = 0x00FF00;
+	p2.color = 0x00FF00;
+	p2.pos = y;
+	draw_line(fdf, p, p2, 0);
+	p.color = 0x0000FF;
+	p2.color = 0x0000FF;
+	p2.pos = z;
+	draw_line(fdf, p, p2, 0);
 }
 
-void	square(t_fdf *fdf, t_vector2 size, t_vector2 offset
-	, int (color)(t_vector2, int, int))
+void	draw_square(t_fdf *fdf, t_button *button)
 {
 	t_vector2	pos;
+	t_vector2	cpos;
 
-	pos.y = offset.y;
-	while (pos.y < (size.y + offset.y))
+	pos.y = button->offset.y;
+	cpos.y = 0;
+	while (pos.y < (button->size.y + button->offset.y))
 	{
-		pos.x = offset.x;
-		while (pos.x < (size.x + offset.x))
+		pos.x = button->offset.x;
+		cpos.x = 0;
+		while (pos.x < (button->size.x + button->offset.x))
 		{
-			put_pixel(fdf, pos, color(pos, size.x, size.y), 1);
+			put_pixel(fdf, pos, get_button_color(cpos, button, button->size), 1);
 			pos.x++;
+			cpos.x++;
 		}
 		pos.y++;
+		cpos.y++;
 	}
 }
 
 void	draw_button(t_fdf *fdf, t_button *button)
 {
 	int		radius;
-	void	*color;
 
-	if (button->hover)
-		color = button->hover_color;
-	else if (button->selected)
-		color = button->pressed_color;
-	else
-		color = button->color;
 	if (button->type == CIRCLE)
 	{
 		if (button->size.x > button->size.y)
 			radius = button->size.x;
 		else
 			radius = button->size.y;
-		circle(fdf, radius, button->offset, color);
+		draw_circle(fdf, radius, button);
 		if (button->selected)
 			outline(fdf, radius, button->offset);
 	}
 	else if (button->type == NAVBAR)
-		square(fdf, button->size, button->offset, color);
+		draw_square(fdf, button);
+	else if (button->type == TOGGLE)
+		draw_toggle(fdf, button);
+	else if (button->type == KEYBOX)
+		draw_keybox(fdf, button);
 }
 
 void	draw_buttons(t_fdf *fdf, t_button **buttons)
@@ -348,9 +387,17 @@ void	draw_map(t_fdf *fdf)
 		while (x < map->size.x)
 		{
 			if (x + 1 < map->size.x)
-				draw_line(fdf, map->points[y][x], map->points[y][x + 1]);
+			{
+				draw_line(fdf, map->points[y][x], map->points[y][x + 1], 0);
+				if (fdf->display_data->mirror && (map->points[y][x].can_mirror || map->points[y][x + 1].can_mirror))
+					draw_line(fdf, map->points[y][x], map->points[y][x + 1], 1);
+			}
 			if (map->points[y + 1])
-				draw_line(fdf, map->points[y][x], map->points[y + 1][x]);
+			{
+				draw_line(fdf, map->points[y][x], map->points[y + 1][x], 0);
+				if (fdf->display_data->mirror && (map->points[y][x].can_mirror || map->points[y + 1][x].can_mirror))
+					draw_line(fdf, map->points[y][x], map->points[y + 1][x], 1);
+			}
 			x++;
 		}
 		y++;
@@ -372,10 +419,11 @@ t_fdf	*create_window(t_map *map)
 	fdf->addr = mlx_get_data_addr(fdf->img, &fdf->bpp, &fdf->ll, &fdf->endian);
 	fdf->map = map;
 	init_display_data(fdf);
+	init_controls(fdf);
 	fdf->must_update = 0;
 	init_navbar(fdf);
 	draw_map(fdf);
 	mlx_put_image_to_window(fdf->mlx, fdf->window, fdf->img, 0, 0);
-	update_navbar_text(fdf);
+	update_buttons_texts(fdf);
 	return (fdf);
 }
