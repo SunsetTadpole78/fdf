@@ -139,7 +139,7 @@ Depending on the display, the number of bits used to store a pixel color
 can change. The user usually represents a color in RGB mode, using
 one byte for each component (see
 .B mlx_pixel_put
-manual). This must be translated to fit the
+manual). This must be translation_check(d to fit the
 .I bits_per_pixel
 requirement of the image, and make the color understandable to the X-Server.
 That is the purpose of the

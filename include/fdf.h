@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:05:01 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/28 11:48:47 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/01/29 11:33:10 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,15 @@ typedef struct s_controls
 	t_key	unzoom;
 	t_edit	edit;
 }	t_controls;
+
+typedef struct s_view
+{
+	float	yaw;
+	float	pitch;
+	float	roll;
+	float	fov;
+}	t_view;
+
 typedef struct s_fdf
 {
 	void			*mlx;
@@ -183,6 +192,8 @@ typedef struct s_fdf
 	t_display_data		*display_data;
 	t_controls		controls;
 	int				must_update;
+	t_vector3	camera;
+	t_view	view;
 }	t_fdf;
 
 typedef struct s_rgb
@@ -199,9 +210,9 @@ int			on_update(t_fdf *fdf);
 int			keys_hook(int keycode, t_fdf *fdf);
 int			on_move(int x, int y, t_navbar *navbar);
 int			on_click(int id, int x, int y, t_fdf *fdf);
-int			rotate(int keycode, t_fdf *fdf);
-int			translate(int keycode, t_fdf *fdf);
-int			zoom(int keycode, t_fdf *fdf);
+int			rotatation_check(int keycode, t_fdf *fdf);
+int			translation_check(int keycode, t_fdf *fdf);
+int			zoom_check(int keycode, t_fdf *fdf);
 
 //destructor.c
 void		destruct(t_fdf *fdf);

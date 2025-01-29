@@ -12,7 +12,7 @@
 
 #include "fdf.h"
 
-int	rotate(int keycode, t_fdf *fdf)
+int	rotatation_check(int keycode, t_fdf *fdf)
 {
 	if (keycode == fdf->controls.reduce_x.v || keycode == fdf->controls.add_x.v)
 	{

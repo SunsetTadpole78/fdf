@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>		  +#+  +:+	   +#+		*/
 /*												+#+#+#+#+#+   +#+		   */
 /*   Created: 2025/01/27 08:48:43 by lroussel		  #+#	#+#			 */
-/*   Updated: 2025/01/28 12:12:07 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/01/28 14:01:49 by lroussel         ###   ########.fr       */
 /*																			*/
 /* ************************************************************************** */
 
@@ -103,7 +103,9 @@ void	register_controls_buttons(t_fdf *fdf)
 	size.y = 40;
 	o.x = 200;
 	o.y = 60;
-	btn = create_button(CTRL_UP, KEYBOX, get_name_for(fdf->controls.up.v), size, o);
+	char *name = get_name_for(fdf->controls.up.v);
+	btn = create_button(CTRL_UP, KEYBOX, name, size, o);
+	free(name);
 	set_color(btn, keybox_color, keybox_color_hover, keybox_color_pressed);
 	add_button(controls, btn);
 	btn = next_bm(btn, get_name_for(fdf->controls.down.v), 200, 100);

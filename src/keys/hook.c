@@ -27,9 +27,9 @@ int	keys_hook(int keycode, t_fdf *fdf)
 		change_key(fdf);
 		return (0);
 	}
-	resend = translate(keycode, fdf);
-	resend |= resend || rotate(keycode, fdf);
-	resend |= resend || zoom(keycode, fdf);
+	resend = translation_check(keycode, fdf);
+	resend |= resend || rotatation_check(keycode, fdf);
+	resend |= resend || zoom_check(keycode, fdf);
 	if (resend)
 		fdf->must_update = 1;
 	return (0);

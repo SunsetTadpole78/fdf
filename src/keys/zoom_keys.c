@@ -12,7 +12,7 @@
 
 #include "fdf.h"
 
-int	zoom(int keycode, t_fdf *fdf)
+int	zoom_check(int keycode, t_fdf *fdf)
 {
 	if (keycode == fdf->controls.zoom.v || keycode == fdf->controls.unzoom.v)
 	{
