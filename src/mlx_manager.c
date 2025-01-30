@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 14:45:42 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/29 17:49:24 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/01/30 11:16:06 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	put_pixel(t_fdf *fdf, t_vector2 pos, int color, float alpha)
 
 	if (pos.x < 0 || pos.x > WIDTH || pos.y < 0 || pos.y > HEIGHT)
 		return (0);
-	pixel = fdf->addr + ((int)pos.y * fdf->ll + (int)pos.x * (fdf->bpp / 8));
+	pixel = fdf->img.addr + ((int)pos.y * fdf->img.ll + (int)pos.x * (fdf->img.bpp / 8));
 	if (alpha < 1 && pixel != 0)
 		color = color_between(*(unsigned int *)pixel, color, alpha, 1);
 	*(unsigned int *)pixel = color;
@@ -108,21 +108,43 @@ int	black(void)
 	return (0);
 }
 
-void	background(t_fdf *fdf, int (color)(t_vector2, int, int, int))
+void	change_background(t_fdf *fdf, int (color)(t_vector2, int, int, int))
 {
+	t_display_data	*dd;
+	char	*pixel;
+	
+	dd = fdf->display_data;
+	dd->bg_color = color;
+	if (!color)
+		return ;
+	if (!dd->bg.img)
+		dd->bg.img = mlx_new_image(fdf->mlx, WIDTH, HEIGHT);
+	dd->bg.addr = mlx_get_data_addr(dd->bg.img, &dd->bg.bpp, &dd->bg.ll, &dd->bg.endian);
 	t_vector2	pos;
-
 	pos.y = 0;
 	while (pos.y <= HEIGHT)
 	{
 		pos.x = 0;
 		while (pos.x <= WIDTH)
 		{
-			put_pixel(fdf, pos, color(pos, WIDTH, HEIGHT, 0), 1);
+			pixel = fdf->display_data->bg.addr + ((int)pos.y * fdf->img.ll + (int)pos.x * (fdf->img.bpp / 8));
+			*(unsigned int *)pixel = color(pos, WIDTH, HEIGHT, 0);
 			pos.x++;
 		}
 		pos.y++;
 	}
+
+}
+
+void	draw_background(t_fdf *fdf)
+{
+	if (!fdf->display_data->bg_color)
+		return ;
+	ft_memcpy(
+		fdf->img.addr,
+		fdf->display_data->bg.addr,
+		HEIGHT * fdf->img.ll + WIDTH * (fdf->img.bpp / 8)
+	);
 }
 
 void	circle_line(t_vector2 pos, int x2, t_fdf *fdf, t_button *button)
@@ -362,8 +384,7 @@ void	draw_map(t_fdf *fdf)
 	size_t	y;
 	t_map	*map;
 
-	if (fdf->display_data->bg)
-		background(fdf, fdf->display_data->bg);
+	draw_background(fdf);
 	map = fdf->map;
 	y = 0;
 	while (map->points[y])
@@ -400,8 +421,8 @@ t_fdf	*create_window(t_map *map)
 		return (NULL);	
 	fdf->mlx = mlx_init();
 	fdf->window = mlx_new_window(fdf->mlx, WIDTH, HEIGHT, "FdF");
-	fdf->img = mlx_new_image(fdf->mlx, WIDTH, HEIGHT);
-	fdf->addr = mlx_get_data_addr(fdf->img, &fdf->bpp, &fdf->ll, &fdf->endian);
+	fdf->img.img = mlx_new_image(fdf->mlx, WIDTH, HEIGHT);
+	fdf->img.addr = mlx_get_data_addr(fdf->img.img, &fdf->img.bpp, &fdf->img.ll, &fdf->img.endian);
 	fdf->map = map;
 	init_display_data(fdf);
 	init_controls(fdf);
@@ -416,7 +437,7 @@ t_fdf	*create_window(t_map *map)
 	fdf->view.fov = 60;
 	draw_map(fdf);
 	//draw_lin(fdf, (t_vector2){0.000000, -3673601.000000}, (t_vector2){-149640.000000, 0.000000}, 0);
-	mlx_put_image_to_window(fdf->mlx, fdf->window, fdf->img, 0, 0);
+	mlx_put_image_to_window(fdf->mlx, fdf->window, fdf->img.img, 0, 0);
 	update_buttons_texts(fdf);
 	
 	return (fdf);

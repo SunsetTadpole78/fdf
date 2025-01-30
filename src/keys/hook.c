@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 09:17:17 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/28 10:41:24 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/01/30 08:36:52 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,11 @@ int	on_move(int x, int y, t_navbar *navbar)
 void	button_click(t_fdf *fdf, t_button *button)
 {
 	if (button->id == BGG && button->color == black)
-		fdf->display_data->bg = NULL;
+		change_background(fdf, NULL);
+		//		fdf->display_data->bg_color = NULL;
 	else if (button->id == BGG)
-		fdf->display_data->bg = button->color;
+		change_background(fdf, button->color);
+		//fdf->display_data->bg_color = button->color;
 	else if (button->type == NAVBAR)
 	{
 		if (get_navbar()->actual)

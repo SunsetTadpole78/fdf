@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 10:32:56 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/27 16:45:39 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/01/30 10:37:56 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,10 @@ void	init_display_data(t_fdf *fdf)
 	display_data->zoom_v = zoom_height;
 	if (zoom_width < zoom_height)
 		display_data->zoom_v = zoom_width;
-	display_data->bg = NULL;
+	display_data->bg_color = NULL;
 	display_data->axis = 1;
 	display_data->mirror = 0;
+	display_data->bg.img = NULL;
 	fdf->display_data = display_data;
+	init_backgrounds(fdf);
 }

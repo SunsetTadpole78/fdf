@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 11:51:46 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/27 12:25:28 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/01/30 11:21:03 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,4 +136,24 @@ int	spir_m(t_vector2 v, int w, int h)
 	return ((int)(127 * (1 + sin(angle + i / 255.0f)) * 2) |
 		((int)(127 * (1 + cos(angle - i / 255.0f)) * 2) << 8) |
 		((int)((255 - i) * 2) << 16));
+}
+
+int	test(t_vector2 v)
+{
+	t_img	*img;
+	char	*pixel;
+	
+	img = get_fdf()->display_data->backgrounds[0];
+	pixel = img->addr + ((int)v.y * img->ll + (int)v.x * (img->bpp / 8));
+	return *(unsigned int *)pixel;
+}
+
+int	gakarbou(t_vector2 v)
+{
+	t_img	*img;
+	char	*pixel;
+	
+	img = get_fdf()->display_data->backgrounds[1];
+	pixel = img->addr + ((int)v.y * img->ll + (int)v.x * (img->bpp / 8));
+	return *(unsigned int *)pixel;
 }

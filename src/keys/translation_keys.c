@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 09:14:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/29 15:09:15 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/01/30 11:27:06 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	translation_check(int keycode, t_fdf *fdf)
 {
 	//printf("%f %f %f\n", fdf->camera.x, fdf->camera.y, fdf->camera.z);
 	//printf("%f %f %f\n", fdf->view.yaw, fdf->view.pitch, fdf->view.roll);
-	if (keycode == XK_Left)
+	/*if (keycode == XK_Left)
 	{
 		fdf->camera.x -= 1;
 		return (1);
@@ -87,7 +87,7 @@ int	translation_check(int keycode, t_fdf *fdf)
 		return (1);
 	}
 		
-	return (0);
+	return (0);*/
 	if (keycode == fdf->controls.left.v || keycode == fdf->controls.right.v)
 	{
 		fdf->display_data->offset.x += 0.5 * (1 - 2 * (keycode == fdf->controls.left.v));

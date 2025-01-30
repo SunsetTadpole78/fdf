@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:05:01 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/29 11:33:10 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/01/30 11:21:38 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,15 @@
 
 # define HEIGHT 1040
 # define WIDTH 1900
+
+typedef struct s_mimg
+{
+	void			*img;
+	void			*addr;
+	int				bpp;
+	int				ll;
+	int				endian;
+}	t_img;
 
 typedef struct s_vector2
 {
@@ -121,9 +130,11 @@ typedef struct s_display_data
 	t_vector3	rotate;
 	float			zoom;
 	float			zoom_v;
-	void	*bg;
+	t_img	bg;
+	void	*bg_color;
 	int	axis;
 	int	mirror;
+	t_img	**backgrounds;
 }	t_display_data;
 
 typedef struct s_map
@@ -183,11 +194,7 @@ typedef struct s_fdf
 {
 	void			*mlx;
 	void			*window;
-	void			*img;
-	void			*addr;
-	int				bpp;
-	int				ll;
-	int				endian;
+	t_img			img;
 	t_map			*map;
 	t_display_data		*display_data;
 	t_controls		controls;
@@ -247,6 +254,10 @@ t_vector2	vector2(float x, float y);
 //display_data.c
 void		init_display_data(t_fdf *fdf);
 
+//backgrounds.c
+void		init_backgrounds(t_fdf *fdf);
+void		free_backgrounds(t_fdf *fdf);
+
 //init/navbar.c
 void		init_navbar(t_fdf *fdf);
 
@@ -273,6 +284,8 @@ int rnb2(t_vector2 v, int w, int h);
 int rnb2_m(t_vector2 v, int w, int h);
 int spir(t_vector2 v, int w, int h);
 int spir_m(t_vector2 v, int w, int h);
+int test(t_vector2 v);
+int gakarbou(t_vector2 v);
 
 //utils/navbar/default_color.c
 int	dark_gray(void);
@@ -318,5 +331,9 @@ void	init_controls(t_fdf *fdf);
 void	change_key(t_fdf *fdf);
 char	*get_name_for(int key);
 t_key	get_key_from(t_fdf *fdf, enum ButtonId id);
+
+void    change_background(t_fdf *fdf, int (color)(t_vector2, int, int, int));
+
+t_fdf	*get_fdf(void);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 09:22:53 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/24 13:15:52 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/01/30 11:07:58 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,10 @@
 
 void	destruct(t_fdf *fdf)
 {
-	mlx_destroy_image(fdf->mlx, fdf->img);
+	mlx_destroy_image(fdf->mlx, fdf->img.img);
+	if (fdf->display_data->bg.img)
+		mlx_destroy_image(fdf->mlx, fdf->display_data->bg.img);
+	free_backgrounds(fdf);
 	mlx_clear_window(fdf->mlx, fdf->window);
 	mlx_destroy_window(fdf->mlx, fdf->window);
 	mlx_destroy_display(fdf->mlx);

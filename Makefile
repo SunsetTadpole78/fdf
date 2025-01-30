@@ -6,7 +6,7 @@
 #    By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/27 14:58:42 by lroussel          #+#    #+#              #
-#    Updated: 2025/01/29 17:38:58 by lroussel         ###   ########.fr        #
+#    Updated: 2025/01/30 11:26:24 by lroussel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ INCLUDE = include
 FDF = fdf
 
 DEFAULT =	fdf.c		\
-		views/conic.c		\
+		views/isometric.c		\
 		utils/templates/toggle.c		\
 		utils/templates/keybox.c		\
 		utils/navbar/navbar.c		\
@@ -41,6 +41,7 @@ DEFAULT =	fdf.c		\
 		initialization/display_data.c	\
 		initialization/navbar.c	\
 		initialization/controls.c	\
+		initialization/backgrounds.c	\
 		keys/hook.c	\
 		keys/rotation_keys.c	\
 		keys/translation_keys.c	\
