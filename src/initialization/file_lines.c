@@ -53,6 +53,7 @@ int	init_lines(char *path, char ****lines, int *fd)
 		return (0);
 	}
 	(*lines)[0] = ft_split(line, ' ');
+	(*lines)[1] = NULL;
 	free(line);
 	if (!(*lines)[0])
 	{

@@ -1,15 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/01/27 14:58:42 by lroussel          #+#    #+#              #
-#    Updated: 2025/02/04 12:22:51 by lroussel         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 GREEN = \033[0;32m
 YELLOW = \033[1;33m
 ORANGE = \033[38;5;208m
@@ -93,7 +81,7 @@ obj/%.o: src/%.c
 	mkdir -p $(dir $@)
 	@echo $(SEPARATOR)
 	@echo "${ORANGE}${ARROW} Compiling ${YELLOW}$@${ORANGE}...${CLEAR}"
-	cc $(FLAGS) $< -c -o $@ -I $(INCLUDE) -I $(LIBFT_INCLUDE_DIR) -I $(MINILIBX_INCLUDE_DIR) $(MINILIBX_FLAGS)
+	cc $(FLAGS) $< -c -o $@ -I $(INCLUDE) -I $(LIBFT_INCLUDE_DIR) -I $(MINILIBX_INCLUDE_DIR)
 
 $(FDF): $(LIBFT) $(MINILIBX) $(OBJS)
 	@echo $(SEPARATOR)

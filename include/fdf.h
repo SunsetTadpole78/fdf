@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:05:01 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/04 12:53:53 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/04 12:59:46 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,8 @@
 # include <X11/keysym.h>
 # include <math.h>
 
-# define HEIGHT 2000
-# define WIDTH 2000
-//# define HEIGHT (get_swidth() - 40)
-//# define WIDTH (get_sheight() - 20)
+# define HEIGHT (get_swidth() - 40)
+# define WIDTH (get_sheight() - 20)
 
 typedef struct s_mimg
 {
