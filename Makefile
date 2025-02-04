@@ -6,7 +6,7 @@
 #    By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/27 14:58:42 by lroussel          #+#    #+#              #
-#    Updated: 2025/01/30 11:26:24 by lroussel         ###   ########.fr        #
+#    Updated: 2025/02/04 10:18:18 by lroussel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,6 +52,8 @@ DEFAULT =	fdf.c		\
 		utils.c		\
 		color.c		\
 		backgrounds.c		\
+		depth_manager.c		\
+		fix_line.c		\
 		vector.c
 
 FILES = $(addprefix $(SRC)/, $(DEFAULT))

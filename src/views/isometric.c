@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 13:16:21 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/28 13:44:37 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/01/31 17:26:05 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	rotate(t_fdf *fdf, t_vector3 *v3)
 	float	theta;
 	float	gamma;
 	t_vector3	cpy;
-
+	
 	alpha = fdf->display_data->rotate.x * (M_PI / 180);
 	theta = fdf->display_data->rotate.y * (M_PI / 180);
 	gamma = fdf->display_data->rotate.z * (M_PI / 180);
@@ -34,27 +34,21 @@ static void	rotate(t_fdf *fdf, t_vector3 *v3)
 		+ cpy.z * cos(theta) * cos(alpha);
 }
 
-t_vector2   vround(t_vector2 v)
-{
-    v.x = (int)v.x;
-    v.y = (int)v.y;
-    return (v);
-}
-
-t_vector2	pixel_pos(t_fdf *fdf, t_vector3 v3, int  mirror)
+t_pixel_data	pixel_pos(t_fdf *fdf, t_vector3 v3, int  mirror)
 {
 	t_vector2	v2;
 	float		zoom;
+	t_pixel_data	data;
 
 	zoom = fdf->display_data->zoom * fdf->display_data->zoom_v;
 	if (mirror)
 		v3.y *= -1;
+	v3.x -= fdf->display_data->pivot_point.x;
+	v3.y -= fdf->display_data->pivot_point.y;
+	v3.z -= fdf->display_data->pivot_point.z;
 	v3.x *= zoom;
 	v3.y *= zoom;
 	v3.z *= zoom;
-	v3.x -= fdf->display_data->pivot_point.x * zoom;
-	v3.y -= fdf->display_data->pivot_point.y * zoom;
-	v3.z -= fdf->display_data->pivot_point.z * zoom;
 	v3.x += 0.5 * zoom;
 	v3.z += 0.5 * zoom;
 	rotate(fdf, &v3);
@@ -62,5 +56,7 @@ t_vector2	pixel_pos(t_fdf *fdf, t_vector3 v3, int  mirror)
 	v2.y = 2 + HEIGHT / 2 + (v3.x + v3.z) * sin(30 * (M_PI / 180)) - v3.y;
 	v2.x += fdf->display_data->offset.x * 60;
 	v2.y += fdf->display_data->offset.y * 60;
-	return (vround(v2));
+	data.pos = v2;
+	data.depth = v3.z;
+	return (data);
 }

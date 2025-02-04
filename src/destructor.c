@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 09:22:53 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/30 11:07:58 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/01/30 12:19:49 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	destruct(t_fdf *fdf)
 	free_map(fdf->map);
 	free_navbar();
 	free(fdf->display_data);
+	free_depth(fdf);
 	free(fdf);
 	exit(EXIT_SUCCESS);
 }

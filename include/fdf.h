@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:05:01 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/30 11:21:38 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/03 17:58:55 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,12 @@ typedef struct s_vector3
 	float	y;
 	float	z;
 }	t_vector3;
+
+typedef	struct s_pixel_data
+{
+	t_vector2	pos;
+	float	depth;
+}	t_pixel_data;
 
 typedef struct s_point
 {
@@ -200,7 +206,10 @@ typedef struct s_fdf
 	t_controls		controls;
 	int				must_update;
 	t_vector3	camera;
+	int	camerai;
 	t_view	view;
+	float	**depth;
+	t_vector2	par;
 }	t_fdf;
 
 typedef struct s_rgb
@@ -268,7 +277,7 @@ int			color_between(int ca, int cb, float v, float t);
 
 int			ft_abs(int v);
 
-t_vector2	pixel_pos(t_fdf *fdf, t_vector3 v3, int mirror);
+t_pixel_data	pixel_pos(t_fdf *fdf, t_vector3 v3, int mirror);
 
 int     black(void);
 void		free_buttons(t_button **buttons);
@@ -335,5 +344,11 @@ t_key	get_key_from(t_fdf *fdf, enum ButtonId id);
 void    change_background(t_fdf *fdf, int (color)(t_vector2, int, int, int));
 
 t_fdf	*get_fdf(void);
+
+void    init_depth(t_fdf *fdf);
+void    clear_depth(t_fdf *fdf);
+void    free_depth(t_fdf *fdf);
+
+int cohenSutherlandClip(t_vector2 *v1, t_vector2 *v2);
 
 #endif

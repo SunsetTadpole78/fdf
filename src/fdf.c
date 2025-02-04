@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:00:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/30 09:27:28 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/01/30 15:46:33 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,9 @@ int	main(int argc, char **argv)
 		ft_putstr_fd("Malloc Error\n", 2);
 		return (2);
 	}
+	draw_map(fdf);
+	mlx_put_image_to_window(fdf->mlx, fdf->window, fdf->img.img, 0, 0);
+	update_buttons_texts(fdf);
 	mlx_hook(fdf->window, 2, 1L << 0, keys_hook, fdf);
 	mlx_loop_hook(fdf->mlx, on_update, fdf);
 	mlx_loop(fdf->mlx);
