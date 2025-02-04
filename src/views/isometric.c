@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 13:16:21 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/31 17:26:05 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/04 11:45:30 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ t_pixel_data	pixel_pos(t_fdf *fdf, t_vector3 v3, int  mirror)
 	v3.x += 0.5 * zoom;
 	v3.z += 0.5 * zoom;
 	rotate(fdf, &v3);
-	v2.x = WIDTH / 2 + (v3.x - v3.z) * cos(30 * (M_PI / 180));
+		v2.x = WIDTH / 2 + (v3.x - v3.z) * cos(30 * (M_PI / 180));
 	v2.y = 2 + HEIGHT / 2 + (v3.x + v3.z) * sin(30 * (M_PI / 180)) - v3.y;
 	v2.x += fdf->display_data->offset.x * 60;
 	v2.y += fdf->display_data->offset.y * 60;

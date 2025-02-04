@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 14:45:42 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/04 10:30:25 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/04 12:00:47 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -431,6 +431,9 @@ t_fdf	*create_window(t_map *map)
 	fdf = malloc(sizeof(t_fdf));
 	if (!fdf)
 		return (NULL);	
+	f(fdf);
+	fdf->screen.x = get_resolution()[1];
+	fdf->screen.y = get_resolution()[0];
 	fdf->mlx = mlx_init();
 	fdf->window = mlx_new_window(fdf->mlx, WIDTH, HEIGHT, "FdF");
 	fdf->img.img = mlx_new_image(fdf->mlx, WIDTH, HEIGHT);

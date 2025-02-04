@@ -16,7 +16,7 @@ int	translation_check(int keycode, t_fdf *fdf)
 {
 	//printf("%f %f %f\n", fdf->camera.x, fdf->camera.y, fdf->camera.z);
 	printf("%f %f %f\n", fdf->display_data->rotate.x, fdf->display_data->rotate.y, fdf->display_data->rotate.z);
-
+/* 
 	if (keycode == XK_Up)    fdf->par.x = (int)(fdf->par.x + 1) % 4;
 if (keycode == XK_Down)  fdf->par.x = (int)(fdf->par.x - 1 + 4) % 4;
 
@@ -109,7 +109,7 @@ printf("%f %f\n", fdf->par.x, fdf->par.y);
 		return (1);
 	}
 		
-	return (0);
+	return (0); */
 	if (keycode == fdf->controls.left.v || keycode == fdf->controls.right.v)
 	{
 		fdf->display_data->offset.x += 0.5 * (1 - 2 * (keycode == fdf->controls.left.v));

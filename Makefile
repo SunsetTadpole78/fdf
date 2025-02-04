@@ -6,7 +6,7 @@
 #    By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/27 14:58:42 by lroussel          #+#    #+#              #
-#    Updated: 2025/02/04 10:18:18 by lroussel         ###   ########.fr        #
+#    Updated: 2025/02/04 11:55:59 by lroussel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,7 @@ DEFAULT =	fdf.c		\
 		utils/navbar/navbar.c		\
 		utils/navbar/default_color.c		\
 		utils/button.c		\
+		utils/resolution.c		\
 		initialization/file_lines.c		\
 		initialization/map.c		\
 		initialization/display_data.c	\

@@ -72,8 +72,8 @@ void	register_background_buttons(void)
 	btn = create_button(BGG, CIRCLE, "", size, o);
 	btn->selected = 1;
 	add_button(bg, btn);
-	add_button(bg, set_color(next_b(btn, "", 200, 100), test, rnb, rnb));
-	add_button(bg, set_color(next_b(btn, "", 300, 100), gakarbou, rnb2, rnb2));
+	add_button(bg, set_color(next_b(btn, "", 200, 100), test, test, test));
+	add_button(bg, set_color(next_b(btn, "", 300, 100), gakarbou, gakarbou, gakarbou));
 	add_button(bg, set_color(next_b(btn, "", 400, 100), ver, ver, ver));
 	add_button(bg, set_color(next_b(btn, "", 500, 100), hor, hor, hor));
 	add_button(bg, set_color(next_b(btn, "", 600, 100), diag, diag, diag));

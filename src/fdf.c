@@ -6,13 +6,13 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:00:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/30 15:46:33 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/04 11:57:25 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static t_fdf	*f(t_fdf *v)
+t_fdf	*f(t_fdf *v)
 {
 	static	t_fdf *fdf = NULL;
 	
@@ -63,7 +63,6 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	fdf = create_window(map);
-	f(fdf);
 	if (!fdf)
 	{
 		ft_putstr_fd("Malloc Error\n", 2);

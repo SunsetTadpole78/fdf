@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:05:01 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/03 17:58:55 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/04 11:59:30 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@
 # include <X11/keysym.h>
 # include <math.h>
 
-# define HEIGHT 1040
-# define WIDTH 1900
+# define HEIGHT (get_swidth() - 40)
+# define WIDTH (get_sheight() - 20)
 
 typedef struct s_mimg
 {
@@ -210,6 +210,7 @@ typedef struct s_fdf
 	t_view	view;
 	float	**depth;
 	t_vector2	par;
+	t_vector2	screen;
 }	t_fdf;
 
 typedef struct s_rgb
@@ -221,6 +222,7 @@ typedef struct s_rgb
 }	t_rgb;
 
 int			on_update(t_fdf *fdf);
+t_fdf	*f(t_fdf *v);
 
 //hook.c
 int			keys_hook(int keycode, t_fdf *fdf);
@@ -352,4 +354,7 @@ void    free_depth(t_fdf *fdf);
 
 int cohenSutherlandClip(t_vector2 *v1, t_vector2 *v2);
 
+int	*get_resolution(void);
+int	get_swidth(void);
+int	get_sheight(void);
 #endif
