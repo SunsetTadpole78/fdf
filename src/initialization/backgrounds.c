@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 09:03:02 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/30 11:20:35 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/04 12:54:59 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,17 @@
 void	add_background(t_fdf *fdf, char *path)
 {
 	t_display_data	*dd;
-	int	*a;
 	static int	c = 0;
 
-	a = malloc(sizeof(int));
 	dd = fdf->display_data;
 	printf("%p\n", dd->backgrounds);
 	dd->backgrounds = ft_realloc(dd->backgrounds,
                         (c + 1) * sizeof(t_img *),
                         (c + 2) * sizeof(t_img *));
 	dd->backgrounds[c] = malloc(sizeof(t_img));
-	dd->backgrounds[c]->img = mlx_xpm_file_to_image(fdf->mlx, path, a, a);
+	dd->backgrounds[c]->img = mlx_xpm_file_to_image(fdf->mlx, path, &dd->backgrounds[c]->width, &dd->backgrounds[c]->height);
 	dd->backgrounds[c]->addr = mlx_get_data_addr(dd->backgrounds[c]->img, &dd->backgrounds[c]->bpp, &dd->backgrounds[c]->ll, &dd->backgrounds[c]->endian);
 	dd->backgrounds[c + 1] = NULL;
-	free(a);
 	c++;
 }
 

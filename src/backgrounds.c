@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 11:51:46 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/30 11:21:03 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/04 12:56:06 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,22 +138,23 @@ int	spir_m(t_vector2 v, int w, int h)
 		((int)((255 - i) * 2) << 16));
 }
 
+int	from_img(t_vector2 v, t_img *img)
+{
+	char	*pixel;
+	v.x = img->width * v.x / WIDTH;
+	v.y = img->height * v.y / HEIGHT;
+	pixel = img->addr + ((int)v.y * img->ll + (int)v.x * (img->bpp / 8));
+
+	return *(unsigned int *)pixel;
+
+}
+
 int	test(t_vector2 v)
 {
-	t_img	*img;
-	char	*pixel;
-	
-	img = get_fdf()->display_data->backgrounds[0];
-	pixel = img->addr + ((int)v.y * img->ll + (int)v.x * (img->bpp / 8));
-	return *(unsigned int *)pixel;
+	return (from_img(v, get_fdf()->display_data->backgrounds[0]));
 }
 
 int	gakarbou(t_vector2 v)
 {
-	t_img	*img;
-	char	*pixel;
-	
-	img = get_fdf()->display_data->backgrounds[1];
-	pixel = img->addr + ((int)v.y * img->ll + (int)v.x * (img->bpp / 8));
-	return *(unsigned int *)pixel;
+	return (from_img(v, get_fdf()->display_data->backgrounds[1]));
 }

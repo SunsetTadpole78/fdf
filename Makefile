@@ -6,7 +6,7 @@
 #    By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/27 14:58:42 by lroussel          #+#    #+#              #
-#    Updated: 2025/02/04 11:55:59 by lroussel         ###   ########.fr        #
+#    Updated: 2025/02/04 12:22:51 by lroussel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,7 +61,7 @@ FILES = $(addprefix $(SRC)/, $(DEFAULT))
 
 OBJS = $(DEFAULT:%.c=obj/%.o)
 
-FLAGS = -Wall -Wextra -Werror -g -O3
+FLAGS = -Wall -Wextra -Werror -O3
 
 LIBFT_DIR = libft
 LIBFT_INCLUDE_DIR = $(LIBFT_DIR)

@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 12:49:27 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/27 18:22:38 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/04 12:33:25 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,11 @@ void	add_to_navbar(t_category *category)
 	{
 		offset = get_navbar()->categories[count - 1]->main->offset;
 		offset.x += get_navbar()->categories[count - 1]->main->size.x + 1;
+	}
+	else
+	{
+		offset.x = 0;
+		offset.y = 0;
 	}
 	category->main->offset = offset;
 	get_navbar()->categories[count] = category;
