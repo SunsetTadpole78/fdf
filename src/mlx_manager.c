@@ -442,7 +442,6 @@ t_fdf	*create_window(t_map *map)
 	init_navbar(fdf);
 	fdf->camera.x = 0;
 	fdf->camera.y = 0;
-	fdf->camera.z = (2 * tan(fdf->view.fov * (M_PI / 180) / 2));;
 	fdf->view.yaw = 0;
 	fdf->view.pitch = -116;
 	fdf->view.roll = 0;

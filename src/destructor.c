@@ -30,6 +30,12 @@ void	destruct(t_fdf *fdf)
 	exit(EXIT_SUCCESS);
 }
 
+int	on_close(t_fdf *fdf)
+{
+	destruct(fdf);
+	return (1);
+}
+
 void	free_lines(char ****lines, int y)
 {
 	int	x;

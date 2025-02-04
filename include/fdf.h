@@ -232,6 +232,7 @@ int			zoom_check(int keycode, t_fdf *fdf);
 
 //destructor.c
 void		destruct(t_fdf *fdf);
+int			on_close(t_fdf *fdf);
 
 //lines_utils.c
 void	set_map_data(char ***lines, t_map *map);

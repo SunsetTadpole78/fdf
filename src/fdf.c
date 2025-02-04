@@ -40,6 +40,12 @@ int	on_update(t_fdf *fdf)
 	return (0);
 }
 
+int	on_expose(t_fdf *fdf)
+{
+	fdf->must_update = 1;
+	return (1);
+}
+
 int	main(int argc, char **argv)
 {
 	t_map	*map;
@@ -67,6 +73,8 @@ int	main(int argc, char **argv)
 	mlx_put_image_to_window(fdf->mlx, fdf->window, fdf->img.img, 0, 0);
 	update_buttons_texts(fdf);
 	mlx_hook(fdf->window, 2, 1L << 0, keys_hook, fdf);
+	mlx_hook(fdf->window, 17, 0, on_close, fdf);
+	mlx_hook(fdf->window, 12, 1L << 15, on_expose, fdf);
 	mlx_loop_hook(fdf->mlx, on_update, fdf);
 	mlx_loop(fdf->mlx);
 	return (0);
