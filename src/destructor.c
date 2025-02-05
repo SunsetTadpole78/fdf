@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 09:22:53 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/30 12:19:49 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/05 11:54:13 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 void	destruct(t_fdf *fdf)
 {
 	mlx_destroy_image(fdf->mlx, fdf->img.img);
-	if (fdf->display_data->bg.img)
-		mlx_destroy_image(fdf->mlx, fdf->display_data->bg.img);
+	if (fdf->background->bg.img)
+		mlx_destroy_image(fdf->mlx, fdf->background->bg.img);
 	free_backgrounds(fdf);
 	mlx_clear_window(fdf->mlx, fdf->window);
 	mlx_destroy_window(fdf->mlx, fdf->window);
@@ -24,7 +24,10 @@ void	destruct(t_fdf *fdf)
 	free(fdf->mlx);
 	free_map(fdf->map);
 	free_navbar();
-	free(fdf->display_data);
+	free(fdf->background);
+	free_contr(fdf->isometric.controls);
+	free_contr(fdf->conic.controls);
+	free_contr(fdf->parallel.controls);
 	free_depth(fdf);
 	free(fdf);
 	exit(EXIT_SUCCESS);

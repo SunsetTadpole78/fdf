@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>		  +#+  +:+	   +#+		*/
 /*												+#+#+#+#+#+   +#+		   */
 /*   Created: 2025/01/27 08:48:43 by lroussel		  #+#	#+#			 */
-/*   Updated: 2025/01/30 11:21:25 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/05 11:04:06 by lroussel         ###   ########.fr       */
 /*																			*/
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ char	*to_chars(char c)
 }
 
 void	register_controls_buttons(t_fdf *fdf)
-{
+{(void)fdf;/*
 	t_category	*controls;
 	t_vector2	size;
 	t_vector2	o;
@@ -103,49 +103,49 @@ void	register_controls_buttons(t_fdf *fdf)
 	size.y = 40;
 	o.x = 200;
 	o.y = 60;
-	char *name = get_name_for(fdf->controls.up.v);
+	char *name = get_name_for(fdf->isometric.controls.up.v);
 	btn = create_button(CTRL_UP, KEYBOX, name, size, o);
 	free(name);
 	set_color(btn, keybox_color, keybox_color_hover, keybox_color_pressed);
 	add_button(controls, btn);
-	btn = next_bm(btn, get_name_for(fdf->controls.down.v), 200, 100);
+	btn = next_bm(btn, get_name_for(fdf->isometric.controls.down.v), 200, 100);
 	btn->id = CTRL_DOWN;
 	add_button(controls, btn);
-	btn = next_bm(btn, get_name_for(fdf->controls.left.v), 160, 100);
+	btn = next_bm(btn, get_name_for(fdf->isometric.controls.left.v), 160, 100);
 	btn->id = CTRL_LEFT;
 	add_button(controls, btn);
-	btn = next_bm(btn, get_name_for(fdf->controls.right.v), 240, 100);
+	btn = next_bm(btn, get_name_for(fdf->isometric.controls.right.v), 240, 100);
 	btn->id = CTRL_RIGHT;
 	add_button(controls, btn);
 	add_title(controls, "Rotation X:", 440, 100);
-	btn = next_bm(btn, get_name_for(fdf->controls.reduce_x.v), 497, 60);
+	btn = next_bm(btn, get_name_for(fdf->isometric.controls.reduce_x.v), 497, 60);
 	btn->id = CTRL_REDUCE_X;
 	add_button(controls, btn);
-	btn = next_bm(btn, get_name_for(fdf->controls.add_x.v), 497, 100);
+	btn = next_bm(btn, get_name_for(fdf->isometric.controls.add_x.v), 497, 100);
 	btn->id = CTRL_ADD_X;
 	add_button(controls, btn);
 	add_title(controls, "Rotation Y:", 702, 100);
-	btn = next_bm(btn, get_name_for(fdf->controls.reduce_y.v), 759, 60);
+	btn = next_bm(btn, get_name_for(fdf->isometric.controls.reduce_y.v), 759, 60);
 	btn->id = CTRL_REDUCE_Y;
 	add_button(controls, btn);
-	btn = next_bm(btn, get_name_for(fdf->controls.add_y.v), 759, 100);
+	btn = next_bm(btn, get_name_for(fdf->isometric.controls.add_y.v), 759, 100);
 	btn->id = CTRL_ADD_Y;
 	add_button(controls, btn);
 	add_title(controls, "Rotation Z:", 962, 100);
-	btn = next_bm(btn, get_name_for(fdf->controls.reduce_z.v), 1019, 60);
+	btn = next_bm(btn, get_name_for(fdf->isometric.controls.reduce_z.v), 1019, 60);
 	btn->id = CTRL_REDUCE_Z;
 	add_button(controls, btn);
-	btn = next_bm(btn, get_name_for(fdf->controls.add_z.v), 1019, 100);
+	btn = next_bm(btn, get_name_for(fdf->isometric.controls.add_z.v), 1019, 100);
 	btn->id = CTRL_ADD_Z;
 	add_button(controls, btn);
 	add_title(controls, "Zoom :", 1207, 100);
-	btn = next_bm(btn, get_name_for(fdf->controls.zoom.v), 1249, 60);
+	btn = next_bm(btn, get_name_for(fdf->isometric.controls.zoom.v), 1249, 60);
 	btn->id = CTRL_ZOOM;
 	add_button(controls, btn);
-	btn = next_bm(btn, get_name_for(fdf->controls.unzoom.v), 1249, 100);
+	btn = next_bm(btn, get_name_for(fdf->isometric.controls.unzoom.v), 1249, 100);
 	btn->id = CTRL_UNZOOM;
 	add_button(controls, btn);
-}
+*/}
 
 void	register_other_buttons(void)
 {

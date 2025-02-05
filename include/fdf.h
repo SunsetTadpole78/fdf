@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:05:01 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/04 12:59:46 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/05 12:02:38 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,11 @@ enum ButtonId {
 	CTRL_REDUCE_Z,
 	CTRL_ADD_Z,
 	CTRL_ZOOM,
-	CTRL_UNZOOM
+	CTRL_UNZOOM,
+	CTRL_RX1,
+	CTRL_RX2,
+	CTRL_RY1,
+	CTRL_RY2
 };
 
 enum ButtonType {
@@ -160,9 +164,40 @@ typedef struct s_navbar
 	int		must_update;
 }	t_navbar;
 
+enum KeyId
+{
+	I_UP,
+	I_DOWN,
+	I_LEFT,
+	I_RIGHT,
+	I_REDUCE_X,
+	I_ADD_X,
+	I_REDUCE_Y,
+	I_ADD_Y,
+	I_REDUCE_Z,
+	I_ADD_Z,
+	I_ZOOM,
+	I_UNZOOM,
+	C_UP,
+	C_DOWN,
+	C_LEFT,
+	C_RIGHT,
+	P_UP,
+	P_DOWN,
+	P_LEFT,
+	P_RIGHT,
+	P_RX1,
+	P_RX2,
+	P_RY1,
+	P_RY2,
+	P_ZOOM,
+	P_UNZOOM
+};
+
 typedef struct s_key
 {
 	int	id;
+	enum KeyId	key_id;
 	int	v;
 	enum ButtonId	button;
 }	t_key;
@@ -198,21 +233,79 @@ typedef struct s_view
 	float	fov;
 }	t_view;
 
+enum ViewType
+{
+	ISOMETRIC,
+	CONIC,
+	PARALLEL
+};
+
+typedef struct s_e
+{
+	t_key	*old_key;
+	t_key	*new_key;
+}	t_e;
+
+typedef struct s_c
+{
+	t_key	**keys;
+	t_e	edit;
+}	t_c;
+
+typedef struct s_isometric
+{
+	t_c		controls;
+	t_vector2	offset;
+	t_vector3	rotation;
+	float			zoom;
+	float			zoom_base;
+	int	axis;
+	int	mirror;
+}	t_isometric;
+
+typedef struct s_conic
+{
+	t_c		controls;
+	t_vector3	camera;
+	float	default_z;
+	t_view		view;
+	float			zoom;
+	float			zoom_base;
+}	t_conic;
+
+typedef struct s_parallel
+{
+	t_c		controls;
+	t_vector2	offset;
+	t_vector2	rotation;
+	float			zoom;
+	float			zoom_base;
+}	t_parallel;
+
+typedef struct s_background
+{
+	t_img	bg;
+	void	*bg_color;
+	t_img	**backgrounds;
+}	t_background;
+
 typedef struct s_fdf
 {
 	void			*mlx;
 	void			*window;
 	t_img			img;
 	t_map			*map;
-	t_display_data		*display_data;
-	t_controls		controls;
 	int				must_update;
-	t_vector3	camera;
-	int	camerai;
-	t_view	view;
 	float	**depth;
-	t_vector2	par;
 	t_vector2	screen;
+	enum ViewType		type;
+	void	*pixel_pos;
+	t_isometric	isometric;
+	t_conic		conic;
+	t_parallel		parallel;
+	t_vector3	pivot_point;
+	t_background	*background;
+	t_img	**backgrounds;
 }	t_fdf;
 
 typedef struct s_rgb
@@ -268,6 +361,12 @@ t_vector2	vector2(float x, float y);
 //display_data.c
 void		init_display_data(t_fdf *fdf);
 
+void		init_isometric(t_fdf *fdf);
+void		init_conic(t_fdf *fdf);
+void		init_parallel(t_fdf *fdf);
+
+t_key   key(int v, enum ButtonId id);
+
 //backgrounds.c
 void		init_backgrounds(t_fdf *fdf);
 void		free_backgrounds(t_fdf *fdf);
@@ -283,6 +382,9 @@ int			color_between(int ca, int cb, float v, float t);
 int			ft_abs(int v);
 
 t_pixel_data	pixel_pos(t_fdf *fdf, t_vector3 v3, int mirror);
+t_pixel_data	ipp(t_fdf *fdf, t_vector3 v3, int mirror);
+t_pixel_data	cpp(t_fdf *fdf, t_vector3 v3, int mirror);
+t_pixel_data	ppp(t_fdf *fdf, t_vector3 v3, int mirror);
 
 int     black(void);
 void		free_buttons(t_button **buttons);
@@ -341,7 +443,6 @@ int	toggle_color_pressed(t_vector2 v, int w, int h);
 void	draw_square(t_fdf *fdf, t_button *button);
 
 //initialization/controls.c
-void	init_controls(t_fdf *fdf);
 void	change_key(t_fdf *fdf);
 char	*get_name_for(int key);
 t_key	get_key_from(t_fdf *fdf, enum ButtonId id);
@@ -359,4 +460,12 @@ int cohenSutherlandClip(t_vector2 *v1, t_vector2 *v2);
 int	*get_resolution(void);
 int	get_swidth(void);
 int	get_sheight(void);
+
+int	outside_p(t_vector2 v);
+
+void	init_contr(t_c *controls);
+void	add_key(t_c *controls, enum KeyId id, int key, enum ButtonId button);
+int	is_key(t_c controls, enum KeyId id, int keycode);
+void	free_contr(t_c controls);
+
 #endif

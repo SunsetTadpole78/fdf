@@ -6,26 +6,127 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 09:14:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/04 09:41:39 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/05 11:49:52 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
+static int	isometric_view(int keycode, t_fdf *fdf)
+{
+	t_c	controls;
+	int	res;
+
+	controls = fdf->isometric.controls;
+	res = 0;
+	if (is_key(controls, I_UP, keycode))
+	{
+		fdf->isometric.offset.y -= 0.5;
+		res = 1;
+	}
+	if (is_key(controls, I_DOWN, keycode))
+	{
+		fdf->isometric.offset.y += 0.5;
+		res = 1;
+	}
+	if (is_key(controls, I_LEFT, keycode))
+	{
+		fdf->isometric.offset.x -= 0.5;
+		res = 1;
+	}
+	if (is_key(controls, I_RIGHT, keycode))
+	{
+		fdf->isometric.offset.x += 0.5;
+		res = 1;
+	}
+	return (res);
+}
+
+static int	conic_view(int keycode, t_fdf *fdf)
+{
+	t_c	controls;
+	int	res;
+
+	controls = fdf->conic.controls;
+	res = 0;
+	if (is_key(controls, C_UP, keycode))
+	{
+		if (fdf->conic.camera.z < -2)
+		{
+			fdf->conic.camera.z += 1;
+			res = 1;
+		}
+	}
+	if (is_key(controls, C_DOWN, keycode))
+	{
+		t_vector3	p1;
+		t_vector3	p2;
+
+		p1.x = 0;
+		p1.y = fdf->map->points[(int)fdf->map->size.z - 1][0].pos.y;
+		p1.z = (int)fdf->map->size.z - 1;
+		p2.x = fdf->map->size.x - 1;
+		p2.y = fdf->map->points[(int)fdf->map->size.z - 1][(int)fdf->map->size.x - 1].pos.y;
+		p2.z = (int)fdf->map->size.z - 1;
+		if (!(fdf->conic.camera.z < fdf->conic.default_z && ft_distance(pixel_pos(fdf, p1, 0).pos, pixel_pos(fdf, p2, 0).pos) <= 50))
+		{
+			fdf->conic.camera.z -= 1;
+			res = 1;
+		}
+	}
+	if (is_key(controls, C_LEFT, keycode))
+	{
+		fdf->conic.camera.x -= 1;
+		res = 1;
+	}
+	if (is_key(controls, C_RIGHT, keycode))
+	{
+		fdf->conic.camera.x += 1;
+		res = 1;
+	}
+	return (res);
+}
+
+static int	parallel_view(int keycode, t_fdf *fdf)
+{
+	t_c	controls;
+	int	res;
+
+	controls = fdf->parallel.controls;
+	res = 0;
+	if (is_key(controls, P_UP, keycode))
+	{
+		fdf->parallel.offset.y -= 1;
+		res = 1;
+	}
+	if (is_key(controls, P_DOWN, keycode))
+	{
+		fdf->parallel.offset.y += 1;
+		res = 1;
+	}
+	if (is_key(controls, P_LEFT, keycode))
+	{
+		fdf->parallel.offset.x -= 1;
+		res = 1;
+	}
+	if (is_key(controls, P_RIGHT, keycode))
+	{
+		fdf->parallel.offset.x += 1;
+		res = 1;
+	}
+	return (res);
+}
+
 int	translation_check(int keycode, t_fdf *fdf)
 {
-	//printf("%f %f %f\n", fdf->camera.x, fdf->camera.y, fdf->camera.z);
-	printf("%f %f %f\n", fdf->display_data->rotate.x, fdf->display_data->rotate.y, fdf->display_data->rotate.z);
-/* 
-	if (keycode == XK_Up)    fdf->par.x = (int)(fdf->par.x + 1) % 4;
-if (keycode == XK_Down)  fdf->par.x = (int)(fdf->par.x - 1 + 4) % 4;
-
-if (keycode == XK_Right)  fdf->par.y = (int)(fdf->par.y + 1) % 4;
-if (keycode == XK_Left) fdf->par.y = (int)(fdf->par.y - 1 + 4) % 4;
-printf("%f %f\n", fdf->par.x, fdf->par.y);
-
-	return (1);
-	if (keycode == XK_Left)
+	if (fdf->type == ISOMETRIC)
+		return (isometric_view(keycode, fdf));
+	if (fdf->type == CONIC)
+		return (conic_view(keycode, fdf));
+	if (fdf->type == PARALLEL)
+		return (parallel_view(keycode, fdf));
+	return (0);
+/*	if (keycode == XK_Left)
 	{
 		fdf->camera.x -= 1;
 		return (1);
@@ -110,15 +211,18 @@ printf("%f %f\n", fdf->par.x, fdf->par.y);
 	}
 		
 	return (0); */
-	if (keycode == fdf->controls.left.v || keycode == fdf->controls.right.v)
+	/*t_controls	controls;
+
+	controls = fdf->isometric.controls;
+	if (keycode == controls.left.v || keycode == controls.right.v)
 	{
-		fdf->display_data->offset.x += 0.5 * (1 - 2 * (keycode == fdf->controls.left.v));
+		fdf->isometric.offset.x += 0.5 * (1 - 2 * (keycode == controls.left.v));
 		return (1);
 	}
-	if (keycode == fdf->controls.up.v || keycode == fdf->controls.down.v)
+	if (keycode == controls.up.v || keycode == controls.down.v)
 	{
-		fdf->display_data->offset.y += 0.5 * (1 - 2 * (keycode == fdf->controls.up.v));
+		fdf->isometric.offset.y += 0.5 * (1 - 2 * (keycode == controls.up.v));
 		return (1);
-	}
+	}*/
 	return (0);
 }

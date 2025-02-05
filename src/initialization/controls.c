@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:38:03 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/28 11:42:30 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/05 11:06:14 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,24 +32,6 @@ t_key	key(int v, enum ButtonId id)
 	return (k);
 }
 
-void	init_controls(t_fdf *fdf)
-{
-	fdf->controls.up = key('w', CTRL_UP);
-	fdf->controls.down = key('s', CTRL_DOWN);
-	fdf->controls.left = key('a', CTRL_LEFT);
-	fdf->controls.right = key('d', CTRL_RIGHT);
-	fdf->controls.reduce_x = key('u', CTRL_REDUCE_X);
-	fdf->controls.add_x = key('j', CTRL_ADD_X);
-	fdf->controls.reduce_y = key('i', CTRL_REDUCE_Y);
-	fdf->controls.add_y = key('k', CTRL_ADD_Y);
-	fdf->controls.reduce_z = key('o', CTRL_REDUCE_Z);
-	fdf->controls.add_z = key('l', CTRL_ADD_Z);
-	fdf->controls.zoom = key('=', CTRL_ZOOM);
-	fdf->controls.unzoom = key('-', CTRL_UNZOOM);
-	fdf->controls.edit.old_key = key(-1, CTRL_UP);
-	fdf->controls.edit.new_key = key(-1, CTRL_UP);
-}
-
 char	*get_name_for(int key)
 {
 	char	c;
@@ -69,36 +51,38 @@ char	*get_name_for(int key)
 }
 
 void	change_key(t_fdf *fdf)
-{
+{(void)fdf;/*
 	int	old;
 	t_category	*category;
 	int	i;
+	t_controls	controls;
 
-	old = fdf->controls.edit.old_key.id;
-	if (old == fdf->controls.up.id)
-		fdf->controls.up.v = fdf->controls.edit.new_key.v;
-	else if (old == fdf->controls.down.id)
-		fdf->controls.down.v = fdf->controls.edit.new_key.v;
-	else if (old == fdf->controls.left.id)
-		fdf->controls.left.v = fdf->controls.edit.new_key.v;
-	else if (old == fdf->controls.right.id)
-		fdf->controls.right.v = fdf->controls.edit.new_key.v;
-	else if (old == fdf->controls.reduce_x.id)
-		fdf->controls.reduce_x.v = fdf->controls.edit.new_key.v;
-	else if (old == fdf->controls.add_x.id)
-		fdf->controls.add_x.v = fdf->controls.edit.new_key.v;
-	else if (old == fdf->controls.reduce_y.id)
-		fdf->controls.reduce_y.v = fdf->controls.edit.new_key.v;
-	else if (old == fdf->controls.add_y.id)
-		fdf->controls.add_y.v = fdf->controls.edit.new_key.v;
-	else if (old == fdf->controls.reduce_z.id)
-		fdf->controls.reduce_z.v = fdf->controls.edit.new_key.v;
-	else if (old == fdf->controls.add_z.id)
-		fdf->controls.add_z.v = fdf->controls.edit.new_key.v;
-	else if (old == fdf->controls.zoom.id)
-		fdf->controls.zoom.v = fdf->controls.edit.new_key.v;
-	else if (old == fdf->controls.unzoom.id)
-		fdf->controls.unzoom.v = fdf->controls.edit.new_key.v;
+	controls = fdf->isometric.controls;
+	old = controls.edit.old_key.id;
+	if (old == controls.up.id)
+		controls.up.v = controls.edit.new_key.v;
+	else if (old == controls.down.id)
+		controls.down.v = controls.edit.new_key.v;
+	else if (old == controls.left.id)
+		controls.left.v = controls.edit.new_key.v;
+	else if (old == controls.right.id)
+		controls.right.v = controls.edit.new_key.v;
+	else if (old == controls.reduce_x.id)
+		controls.reduce_x.v = controls.edit.new_key.v;
+	else if (old == controls.add_x.id)
+		controls.add_x.v = controls.edit.new_key.v;
+	else if (old == controls.reduce_y.id)
+		controls.reduce_y.v = controls.edit.new_key.v;
+	else if (old == controls.add_y.id)
+		controls.add_y.v = controls.edit.new_key.v;
+	else if (old == controls.reduce_z.id)
+		controls.reduce_z.v = controls.edit.new_key.v;
+	else if (old == controls.add_z.id)
+		controls.add_z.v = controls.edit.new_key.v;
+	else if (old == controls.zoom.id)
+		controls.zoom.v = controls.edit.new_key.v;
+	else if (old == controls.unzoom.id)
+		controls.unzoom.v = controls.edit.new_key.v;
 
 	category = get_navbar_category(CONTROLS);
 	if (category)
@@ -106,45 +90,51 @@ void	change_key(t_fdf *fdf)
 		i = 0;
 		while (category->buttons[i])
 		{
-			if (category->buttons[i]->id == fdf->controls.edit.old_key.button)
+			if (category->buttons[i]->id == controls.edit.old_key.button)
 			{
 				free(category->buttons[i]->name);
-				category->buttons[i]->name = get_name_for(fdf->controls.edit.new_key.v);
+				category->buttons[i]->name = get_name_for(controls.edit.new_key.v);
 			}
 			if (category->buttons[i]->selected)
 				category->buttons[i]->selected = 0;
 			i++;
 		}
 	}
-	fdf->controls.edit.old_key.id = -1;
-	fdf->controls.edit.new_key.id = -1;
+	controls.edit.old_key.id = -1;
+	controls.edit.new_key.id = -1;
 	fdf->must_update = 1;
-}
+*/}
 
 t_key	get_key_from(t_fdf *fdf, enum ButtonId id)
-{
-	if (id == fdf->controls.up.button)
-		return (fdf->controls.up);
-	if (id == fdf->controls.down.button)
-		return (fdf->controls.down);
-	if (id == fdf->controls.left.button)
-		return (fdf->controls.left);
-	if (id == fdf->controls.right.button)
-		return (fdf->controls.right);
-	if (id == fdf->controls.reduce_x.button)
-		return (fdf->controls.reduce_x);
-	if (id == fdf->controls.add_x.button)
-		return (fdf->controls.add_x);
-	if (id == fdf->controls.reduce_y.button)
-		return (fdf->controls.reduce_y);
-	if (id == fdf->controls.add_y.button)
-		return (fdf->controls.add_y);
-	if (id == fdf->controls.reduce_z.button)
-		return (fdf->controls.reduce_z);
-	if (id == fdf->controls.add_z.button)
-		return (fdf->controls.add_z);
-	if (id == fdf->controls.zoom.button)
-		return (fdf->controls.zoom);
-	return (fdf->controls.unzoom);
+{(void)fdf;(void)id;/*
+	t_controls	controls;
 
+	controls = fdf->isometric.controls;
+	if (id == controls.up.button)
+		return (controls.up);
+	if (id == controls.down.button)
+		return (controls.down);
+	if (id == controls.left.button)
+		return (controls.left);
+	if (id == controls.right.button)
+		return (controls.right);
+	if (id == controls.reduce_x.button)
+		return (controls.reduce_x);
+	if (id == controls.add_x.button)
+		return (controls.add_x);
+	if (id == controls.reduce_y.button)
+		return (controls.reduce_y);
+	if (id == controls.add_y.button)
+		return (controls.add_y);
+	if (id == controls.reduce_z.button)
+		return (controls.reduce_z);
+	if (id == controls.add_z.button)
+		return (controls.add_z);
+	if (id == controls.zoom.button)
+		return (controls.zoom);
+	return (controls.unzoom);
+*/
+	t_key	k;
+	k.v = 0;
+	return k;
 }

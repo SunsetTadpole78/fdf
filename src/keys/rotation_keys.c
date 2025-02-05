@@ -6,28 +6,87 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 09:17:43 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/28 09:49:21 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/05 11:56:11 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
+static int	isometric_view(int keycode, t_fdf *fdf)
+{
+	t_c	controls;
+	int	res;
+
+	controls = fdf->isometric.controls;
+	res = 0;
+	if (is_key(controls, I_REDUCE_X, keycode))
+	{
+		fdf->isometric.rotation.x -= 1;
+		res = 1;
+	}
+	if (is_key(controls, I_ADD_X, keycode))
+	{
+		fdf->isometric.rotation.x += 1;
+		res = 1;
+	}
+	if (is_key(controls, I_REDUCE_Y, keycode))
+	{
+		fdf->isometric.rotation.y -= 1;
+		res = 1;
+	}
+	if (is_key(controls, I_ADD_Y, keycode))
+	{
+		fdf->isometric.rotation.y += 1;
+		res = 1;
+	}
+	if (is_key(controls, I_REDUCE_Z, keycode))
+	{
+		fdf->isometric.rotation.z -= 1;
+		res = 1;
+	}
+	if (is_key(controls, I_ADD_Z, keycode))
+	{
+		fdf->isometric.rotation.z += 1;
+		res = 1;
+	}
+	return (res);	
+}
+
+static int	parallel_view(int keycode, t_fdf *fdf)
+{
+	t_c	controls;
+	int	res;
+
+	controls = fdf->parallel.controls;
+	res = 0;
+	if (is_key(controls, P_RX1, keycode))
+	{
+		fdf->parallel.rotation.x = ((int)fdf->parallel.rotation.x + 1) % 4;
+		res = 1;
+	}
+	if (is_key(controls, P_RX2, keycode))
+	{
+		fdf->parallel.rotation.x = ((int)fdf->parallel.rotation.x - 1 + 4) % 4;
+		res = 1;
+	}
+	if (is_key(controls, P_RY1, keycode))
+	{
+		fdf->parallel.rotation.y = ((int)fdf->parallel.rotation.y + 1) % 4;
+		res = 1;
+	}
+	if (is_key(controls, P_RY2, keycode))
+	{
+		fdf->parallel.rotation.y = ((int)fdf->parallel.rotation.y - 1 + 4) % 4;
+		res = 1;
+	}
+	return (res);
+}
+
 int	rotatation_check(int keycode, t_fdf *fdf)
 {
-	if (keycode == fdf->controls.reduce_x.v || keycode == fdf->controls.add_x.v)
-	{
-		fdf->display_data->rotate.x += 1 * (1 - 2 * (keycode == fdf->controls.reduce_x.v));
-		return (1);
-	}
-	if (keycode == fdf->controls.reduce_y.v || keycode == fdf->controls.add_y.v)
-	{
-		fdf->display_data->rotate.y += 1 * (1 - 2 * (keycode == fdf->controls.reduce_y.v));
-		return (1);
-	}
-	if (keycode == fdf->controls.reduce_z.v || keycode == fdf->controls.add_z.v)
-	{
-		fdf->display_data->rotate.z += 1 * (1 - 2 * (keycode == fdf->controls.add_z.v));
-		return (1);
-	}
+	if (fdf->type == ISOMETRIC)
+		return (isometric_view(keycode, fdf));
+	if (fdf->type == PARALLEL)
+		return (parallel_view(keycode, fdf));
 	return (0);
 }

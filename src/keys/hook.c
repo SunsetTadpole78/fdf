@@ -6,11 +6,31 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 09:17:17 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/30 08:36:52 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/05 11:38:58 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+
+void	switch_view(t_fdf *fdf)
+{
+	if (fdf->type == ISOMETRIC)
+	{
+		fdf->type = CONIC;
+		fdf->pixel_pos = cpp;
+	}
+	else if (fdf->type == CONIC)
+	{
+		fdf->type = PARALLEL;
+		fdf->pixel_pos = ppp;
+	}
+	else
+	{
+		fdf->type = ISOMETRIC;
+		fdf->pixel_pos = ipp;
+	}
+	fdf->must_update = 1;
+}
 
 int	keys_hook(int keycode, t_fdf *fdf)
 {
@@ -21,15 +41,20 @@ int	keys_hook(int keycode, t_fdf *fdf)
 		destruct(fdf);
 		return (0);
 	}
-	if (fdf->controls.edit.old_key.id != -1)
+	if (keycode == XK_space)
 	{
-		fdf->controls.edit.new_key.v = keycode;
-		change_key(fdf);
+		switch_view(fdf);
 		return (0);
 	}
+/*	if (fdf->isometric.controls.edit.old_key.id != -1)
+	{
+		fdf->isometric.controls.edit.new_key.v = keycode;
+		change_key(fdf);
+		return (0);
+	}*/
 	resend = translation_check(keycode, fdf);
-	resend |= resend || rotatation_check(keycode, fdf);
-	resend |= resend || zoom_check(keycode, fdf);
+	resend |= rotatation_check(keycode, fdf);
+	resend |= zoom_check(keycode, fdf);
 	if (resend)
 		fdf->must_update = 1;
 	return (0);
@@ -94,10 +119,8 @@ void	button_click(t_fdf *fdf, t_button *button)
 {
 	if (button->id == BGG && button->color == black)
 		change_background(fdf, NULL);
-		//		fdf->display_data->bg_color = NULL;
 	else if (button->id == BGG)
 		change_background(fdf, button->color);
-		//fdf->display_data->bg_color = button->color;
 	else if (button->type == NAVBAR)
 	{
 		if (get_navbar()->actual)
@@ -111,13 +134,13 @@ void	button_click(t_fdf *fdf, t_button *button)
 		}
 	}
 	else if (button->id == AXIS)
-		fdf->display_data->axis = button->selected;
+		fdf->isometric.axis = button->selected;
 	else if (button->id == MIRROR)
-		fdf->display_data->mirror = button->selected;
-	else if (button->type == KEYBOX && button->selected)
-		fdf->controls.edit.old_key = get_key_from(fdf, button->id);
-	else if (button->type == KEYBOX)
-		fdf->controls.edit.old_key.id = -1;
+		fdf->isometric.mirror = button->selected;
+//	else if (button->type == KEYBOX && button->selected)
+//		fdf->isometric.controls.edit.old_key = get_key_from(fdf, button->id);
+//	else if (button->type == KEYBOX)
+//		fdf->isometric.controls.edit.old_key.id = -1;
 }
 
 void	select_toolbar_button(t_button *button)

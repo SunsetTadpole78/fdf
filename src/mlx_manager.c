@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 14:45:42 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/04 12:00:47 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/05 11:53:16 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,16 +107,16 @@ int	black(void)
 
 void	change_background(t_fdf *fdf, int (color)(t_vector2, int, int, int))
 {
-	t_display_data	*dd;
+	t_background	*bg;
 	char	*pixel;
 	
-	dd = fdf->display_data;
-	dd->bg_color = color;
+	bg = fdf->background;
+	bg->bg_color = color;
 	if (!color)
 		return ;
-	if (!dd->bg.img)
-		dd->bg.img = mlx_new_image(fdf->mlx, WIDTH, HEIGHT);
-	dd->bg.addr = mlx_get_data_addr(dd->bg.img, &dd->bg.bpp, &dd->bg.ll, &dd->bg.endian);
+	if (!bg->bg.img)
+		bg->bg.img = mlx_new_image(fdf->mlx, WIDTH, HEIGHT);
+	bg->bg.addr = mlx_get_data_addr(bg->bg.img, &bg->bg.bpp, &bg->bg.ll, &bg->bg.endian);
 	t_vector2	pos;
 	pos.y = 0;
 	while (pos.y <= HEIGHT)
@@ -124,7 +124,7 @@ void	change_background(t_fdf *fdf, int (color)(t_vector2, int, int, int))
 		pos.x = 0;
 		while (pos.x <= WIDTH)
 		{
-			pixel = fdf->display_data->bg.addr + ((int)pos.y * fdf->img.ll + (int)pos.x * (fdf->img.bpp / 8));
+			pixel = fdf->background->bg.addr + ((int)pos.y * fdf->img.ll + (int)pos.x * (fdf->img.bpp / 8));
 			*(unsigned int *)pixel = color(pos, WIDTH, HEIGHT, 0);
 			pos.x++;
 		}
@@ -135,11 +135,11 @@ void	change_background(t_fdf *fdf, int (color)(t_vector2, int, int, int))
 
 void	draw_background(t_fdf *fdf)
 {
-	if (!fdf->display_data->bg_color)
+	if (!fdf->background->bg_color)
 		return ;
 	ft_memcpy(
 		fdf->img.addr,
-		fdf->display_data->bg.addr,
+		fdf->background->bg.addr,
 		HEIGHT * fdf->img.ll + WIDTH * (fdf->img.bpp / 8)
 	);
 }
@@ -220,6 +220,14 @@ int	ft_max(int v, int v2)
 	return v2;
 }
 
+t_pixel_data	pixel_pos(t_fdf *fdf, t_vector3 v3, int  mirror)
+{
+	t_pixel_data (*pos)(t_fdf *, t_vector3, int);
+
+	pos = fdf->pixel_pos;
+	return (pos(fdf, v3, mirror));
+}
+
 void	draw_line(t_fdf *fdf, t_point a, t_point b, int mirror)
 {(void)mirror;
 	float	dx;
@@ -296,7 +304,7 @@ void	draw_axes(t_fdf *fdf)
 	t_point		p;
 	t_point		p2;
 
-	if (!fdf->display_data->axis)
+	if (!fdf->isometric.axis)
 		return ;
 
 	m_y = ((float)fdf->map->max_y + (float)fdf->map->min_y) / 2;
@@ -403,7 +411,7 @@ void	draw_map(t_fdf *fdf)
 				if (map->points[y][x].pos.x == x && map->points[y][x + 1].pos.x == x + 1)
 				{
 						draw_line(fdf, map->points[y][x], map->points[y][x + 1], 0);
-					if (fdf->display_data->mirror && (map->points[y][x].can_mirror || map->points[y][x + 1].can_mirror))
+					if (fdf->isometric.mirror && (map->points[y][x].can_mirror || map->points[y][x + 1].can_mirror))
 						draw_line(fdf, map->points[y][x], map->points[y][x + 1], 1);
 				}
 			}
@@ -412,7 +420,7 @@ void	draw_map(t_fdf *fdf)
 				if (map->points[y][x].pos.x == x && map->points[y + 1][x].pos.x == x)
 				{
 						draw_line(fdf, map->points[y][x], map->points[y + 1][x], 0);
-					if (fdf->display_data->mirror && (map->points[y][x].can_mirror || map->points[y + 1][x].can_mirror))
+					if (fdf->isometric.mirror && (map->points[y][x].can_mirror || map->points[y + 1][x].can_mirror))
 						draw_line(fdf, map->points[y][x], map->points[y + 1][x], 1);
 				}
 			}
@@ -439,41 +447,17 @@ t_fdf	*create_window(t_map *map)
 	fdf->img.img = mlx_new_image(fdf->mlx, WIDTH, HEIGHT);
 	fdf->img.addr = mlx_get_data_addr(fdf->img.img, &fdf->img.bpp, &fdf->img.ll, &fdf->img.endian);
 	fdf->map = map;
-	init_display_data(fdf);
-	init_controls(fdf);
+	fdf->pivot_point.x = fdf->map->size.x / 2;
+	fdf->pivot_point.y = fdf->map->size.y / 2;
+	fdf->pivot_point.z = fdf->map->size.z / 2;
+	init_backgrounds(fdf);
+	init_isometric(fdf);
+	init_conic(fdf);
+	init_parallel(fdf);
+	fdf->type = ISOMETRIC;
+	fdf->pixel_pos = ipp;
 	fdf->must_update = 0;
 	init_navbar(fdf);
-	fdf->camera.x = 0;
-	fdf->camera.y = 0;
-	fdf->view.yaw = 0;
-	fdf->view.pitch = -116;
-	fdf->view.roll = 0;
-	fdf->view.fov = 60;
 	init_depth(fdf);
-	t_vector3	pos;
-	t_vector3	posl;
-	t_vector3	posr;
-
-	pos.x = (int)(map->size.x / 2);
-	pos.y = map->points[(int)map->size.z - 1][(int)((map->size.x - 1) / 2)].pos.y;
-	pos.z = map->size.z - 1;
-	
-	posl.x = 0;
-	posl.y = map->points[(int)(map->size.z - 1)][0].pos.y;
-	posl.z = map->size.z - 1;
-	
-	posr.x = map->size.x - 1;
-	posr.y = map->points[(int)map->size.z - 1][(int)map->size.x - 1].pos.y;
-	posr.z = map->size.z - 1;
-	fdf->camera.z = 0;
-	//while (outside_p(pixel_pos(fdf, pos, 0).pos) || outside_p(pixel_pos(fdf, posl, 0).pos) || outside_p(pixel_pos(fdf, posr, 0).pos))
-	//	fdf->camera.z--;
-	(void)posl;
-	(void)posr;
-	(void)pos;
-	fdf->camera.z--;
-	fdf->camerai = fdf->camera.z;
-	fdf->par.x = 1;
-	fdf->par.y = 0;
 	return (fdf);
 }

@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 09:03:02 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/04 12:54:59 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/04 17:06:38 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 void	add_background(t_fdf *fdf, char *path)
 {
-	t_display_data	*dd;
+	t_background	*dd;
 	static int	c = 0;
 
-	dd = fdf->display_data;
+	dd = fdf->background;
 	printf("%p\n", dd->backgrounds);
 	dd->backgrounds = ft_realloc(dd->backgrounds,
                         (c + 1) * sizeof(t_img *),
@@ -31,8 +31,11 @@ void	add_background(t_fdf *fdf, char *path)
 
 void	init_backgrounds(t_fdf *fdf)
 {
-	fdf->display_data->backgrounds = malloc(sizeof(t_img *));
-	fdf->display_data->backgrounds[0] = NULL;
+	fdf->background = malloc(sizeof(t_background));
+	fdf->background->bg_color = NULL;
+	fdf->background->bg.img = NULL;
+	fdf->background->backgrounds = malloc(sizeof(t_img *));
+	fdf->background->backgrounds[0] = NULL;
 	add_background(fdf, "./resources/backgrounds/test.xpm");
 	add_background(fdf, "./resources/backgrounds/gakarbou.xpm");
 }
@@ -43,12 +46,12 @@ void	free_backgrounds(t_fdf *fdf)
 
 	i = 0;
 	printf("freee\n");
-	while (fdf->display_data->backgrounds[i])
+	while (fdf->background->backgrounds[i])
 	{
 		printf("%i", i);
-		mlx_destroy_image(fdf->mlx, fdf->display_data->backgrounds[i]->img);
-		free(fdf->display_data->backgrounds[i]);
+		mlx_destroy_image(fdf->mlx, fdf->background->backgrounds[i]->img);
+		free(fdf->background->backgrounds[i]);
 		i++;
 	}
-	free(fdf->display_data->backgrounds);
+	free(fdf->background->backgrounds);
 }

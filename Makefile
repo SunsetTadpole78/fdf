@@ -19,18 +19,23 @@ FDF = fdf
 
 DEFAULT =	fdf.c		\
 		views/isometric.c		\
+		views/parallel.c		\
+		views/conic.c		\
 		utils/templates/toggle.c		\
 		utils/templates/keybox.c		\
 		utils/navbar/navbar.c		\
 		utils/navbar/default_color.c		\
 		utils/button.c		\
 		utils/resolution.c		\
+		utils/controls.c		\
 		initialization/file_lines.c		\
 		initialization/map.c		\
-		initialization/display_data.c	\
 		initialization/navbar.c	\
 		initialization/controls.c	\
 		initialization/backgrounds.c	\
+		initialization/isometric.c	\
+		initialization/conic.c	\
+		initialization/parallel.c	\
 		keys/hook.c	\
 		keys/rotation_keys.c	\
 		keys/translation_keys.c	\
@@ -49,7 +54,7 @@ FILES = $(addprefix $(SRC)/, $(DEFAULT))
 
 OBJS = $(DEFAULT:%.c=obj/%.o)
 
-FLAGS = -Wall -Wextra -Werror -O3
+FLAGS = -Wall -Wextra -Werror -O3 -g
 
 LIBFT_DIR = libft
 LIBFT_INCLUDE_DIR = $(LIBFT_DIR)

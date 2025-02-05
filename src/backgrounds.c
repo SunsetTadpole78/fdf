@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 11:51:46 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/04 12:56:06 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/04 14:21:12 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,10 +151,10 @@ int	from_img(t_vector2 v, t_img *img)
 
 int	test(t_vector2 v)
 {
-	return (from_img(v, get_fdf()->display_data->backgrounds[0]));
+	return (from_img(v, get_fdf()->background->backgrounds[0]));
 }
 
 int	gakarbou(t_vector2 v)
 {
-	return (from_img(v, get_fdf()->display_data->backgrounds[1]));
+	return (from_img(v, get_fdf()->background->backgrounds[1]));
 }
