@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 12:49:27 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/06 10:54:51 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/06 17:39:40 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,24 @@ void	draw_open_category(t_fdf *fdf)
 	}
 }
 
+int	exec(int (showable)(void))
+{
+	return (showable());
+}
+
+void	draw_subs(t_fdf *fdf, t_subcategory **subs)
+{
+	int	i;
+
+	i = 0;
+	while (subs[i])
+	{
+		if (exec(subs[i]->showable))
+			draw_buttons(fdf, subs[i]->buttons);
+		i++;
+	}
+}
+
 void	draw_category(t_fdf *fdf, t_category *category)
 {
 	t_vector2	pos;
@@ -68,6 +86,7 @@ void	draw_category(t_fdf *fdf, t_category *category)
 	{
 		draw_open_category(fdf);
 		draw_buttons(fdf, category->buttons);
+		draw_subs(fdf, category->subs);
 	}
 }
 
@@ -151,6 +170,20 @@ int	cat_count(t_category **categories)
 	return (i);
 }
 
+void	free_subs(t_subcategory **subs)
+{
+	int	i;
+
+	i = 0;
+	while (subs[i])
+	{
+		free_buttons(subs[i]->buttons);
+		free(subs[i]);
+		i++;
+	}
+	free(subs);
+}
+
 void	free_navbar(void)
 {
 	int	i;
@@ -165,6 +198,7 @@ void	free_navbar(void)
 			free_buttons(get_navbar()->categories[i]->buttons);
 			free(get_navbar()->categories[i]->main->name);
 			free(get_navbar()->categories[i]->main);
+			free_subs(get_navbar()->categories[i]->subs);
 			free(get_navbar()->categories[i]);
 			i++;
 		}
@@ -219,6 +253,8 @@ void	add_category(enum CategoryId id, char *title)
 	category->title = title;
 	category->buttons = malloc(sizeof(t_button *));
 	category->buttons[0] = NULL;
+	category->subs = malloc(sizeof(t_subcategory *));
+	category->subs[0] = NULL;
 	add_to_navbar(category);
 }
 
@@ -282,4 +318,33 @@ t_navbar	*get_navbar(void)
 		navbar->must_update = 0;
 	}
 	return (navbar);
+}
+
+int	subs_count(t_subcategory **subs)
+{
+	int	i;
+	
+	i = 0;
+	while (subs[i])
+		i++;
+	return (i);
+}
+
+void	add_sub(t_category *category, enum SubCategoryId id, int (showable)(void))
+{
+	int	count;
+
+	count = subs_count(category->subs);
+	category->subs = ft_realloc(
+			category->subs,
+			sizeof(t_subcategory *) * (count + 1),
+			sizeof(t_subcategory *) * (count + 2)
+		);
+	category->subs[count] = malloc(sizeof (t_subcategory));
+	category->subs[count]->id = id;
+	category->subs[count]->showable = showable;
+	category->subs[count]->buttons = malloc(sizeof(t_button *));
+	category->subs[count]->buttons[0] = NULL;
+	category->subs[count + 1] = NULL;
+
 }

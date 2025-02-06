@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>		  +#+  +:+	   +#+		*/
 /*												+#+#+#+#+#+   +#+		   */
 /*   Created: 2025/01/27 08:48:43 by lroussel		  #+#	#+#			 */
-/*   Updated: 2025/02/06 16:38:11 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/06 17:28:22 by lroussel         ###   ########.fr       */
 /*																			*/
 /* ************************************************************************** */
 
@@ -117,7 +117,12 @@ char	*to_chars(char c)
 }
 
 void	register_controls_buttons(t_fdf *fdf)
-{(void)fdf;/*
+{(void)fdf;
+	t_category      *controls;
+
+	controls = get_navbar_category(CONTROLS);
+	add_sub(controls, CONTROLS_ISO, is_isometric);
+	/*
 	t_category	*controls;
 	t_vector2	size;
 	t_vector2	o;

@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:05:01 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/06 16:58:48 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/06 17:28:59 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,10 @@ enum CategoryId {
 	OTHER
 };
 
+enum SubCategoryId {
+	CONTROLS_ISO,
+};
+
 enum ButtonId {
 	NAV,
 	TIT,
@@ -136,11 +140,19 @@ typedef struct s_button
 	struct s_category	*category;
 }	t_button;
 
+typedef struct s_subcategory
+{
+	enum SubCategoryId id;
+	void	*showable;
+	t_button	**buttons;
+}	t_subcategory;
+
 typedef struct s_category
 {
 	enum CategoryId	id;
 	t_button	*main;
 	t_button	**buttons;
+	t_subcategory	**subs;
 	char	*title;
 }	t_category;
 
@@ -407,6 +419,10 @@ void	update_colors(t_fdf *fdf, int (color)(t_vector3, t_vector2, t_vector3));
 
 int			ft_abs(int v);
 
+int	is_isometric(void);
+int	is_conic(void);
+int	is_parallel(void);
+
 t_pixel_data	pixel_pos(t_fdf *fdf, t_vector3 v3, int mirror);
 t_pixel_data	ipp(t_fdf *fdf, t_vector3 v3, int mirror);
 t_pixel_data	cpp(t_fdf *fdf, t_vector3 v3, int mirror);
@@ -462,6 +478,8 @@ t_navbar	*get_navbar(void);
 int	active_navbar(int v);
 void		free_navbar(void);
 t_category	*get_navbar_category(enum CategoryId id);
+
+void	add_sub(t_category *category, enum SubCategoryId id, int (showable)(void));
 
 //templates/keybox.c
 void	draw_keybox(t_fdf *fdf, t_button *button);

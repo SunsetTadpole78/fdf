@@ -6,11 +6,16 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 13:16:21 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/05 16:22:09 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/06 17:27:01 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+
+int	is_isometric(void)
+{
+	return (get_fdf()->type == ISOMETRIC);
+}
 
 static void	rotate(t_fdf *fdf, t_vector3 *v3)
 {
