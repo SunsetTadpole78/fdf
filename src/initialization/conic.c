@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 09:42:08 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/05 15:06:55 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/06 17:01:58 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ static void	init_controls(t_fdf *fdf)
 	add_key(&fdf->conic.controls, C_RZ2, 'l', CTRL_RZ2);
 	add_key(&fdf->conic.controls, C_FOV1, '-', CTRL_FOV1);
 	add_key(&fdf->conic.controls, C_FOV2, '=', CTRL_FOV2);
+	add_key(&fdf->conic.controls, C_YA1, '0', CTRL_YA1);
+	add_key(&fdf->conic.controls, C_YA2, '9', CTRL_YA2);
 }
 
 static void	init_default_z(t_fdf *fdf)
@@ -65,6 +67,7 @@ void	init_conic(t_fdf *fdf)
 	fdf->conic.fov = 60;
 	fdf->conic.yaw = 0;
 	fdf->conic.pitch = 0;
+	fdf->conic.y_amplifier = 1;
 	init_default_z(fdf);
 	init_controls(fdf);
 }

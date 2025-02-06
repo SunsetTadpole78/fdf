@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 11:32:18 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/05 15:02:04 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/06 17:04:29 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,14 @@ static void	init_controls(t_fdf *fdf)
 	add_key(&fdf->parallel.controls, P_DOWN, 's', CTRL_DOWN);
 	add_key(&fdf->parallel.controls, P_LEFT, 'a', CTRL_LEFT);
 	add_key(&fdf->parallel.controls, P_RIGHT, 'd', CTRL_RIGHT);
-	add_key(&fdf->parallel.controls, P_RX1, 'u', CTRL_RX1);
-	add_key(&fdf->parallel.controls, P_RX2, 'j', CTRL_RX2);
-	add_key(&fdf->parallel.controls, P_RY1, 'i', CTRL_RY1);
-	add_key(&fdf->parallel.controls, P_RY2, 'k', CTRL_RY2);
+	add_key(&fdf->parallel.controls, P_RX1, 65362, CTRL_RX1);
+	add_key(&fdf->parallel.controls, P_RX2, 65364, CTRL_RX2);
+	add_key(&fdf->parallel.controls, P_RY1, 65361, CTRL_RY1);
+	add_key(&fdf->parallel.controls, P_RY2, 65363, CTRL_RY2);
 	add_key(&fdf->parallel.controls, P_ZOOM, '=', CTRL_ZOOM);
 	add_key(&fdf->parallel.controls, P_UNZOOM, '-', CTRL_UNZOOM);
+	add_key(&fdf->parallel.controls, P_YA1, '0', CTRL_YA1);
+	add_key(&fdf->parallel.controls, P_YA2, '9', CTRL_YA2);
 }
 
 void	init_parallel(t_fdf *fdf)
@@ -41,5 +43,6 @@ void	init_parallel(t_fdf *fdf)
 	if ((float)WIDTH / t < fdf->parallel.zoom_base)
 		fdf->parallel.zoom_base = (float)WIDTH / t;
 	fdf->parallel.axis = 1;
+	fdf->parallel.y_amplifier = 1;
 	init_controls(fdf);
 }

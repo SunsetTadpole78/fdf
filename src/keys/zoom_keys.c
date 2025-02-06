@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 09:16:14 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/05 16:14:20 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/06 17:00:19 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,42 @@ static int	isometric_view(int keycode, t_fdf *fdf)
 	return (res);
 }
 
+static int	conic_view(int keycode, t_fdf *fdf)
+{
+	t_c	controls;
+	int	res;
+
+	controls = fdf->conic.controls;
+	res = 0;
+	if (is_key(controls, C_FOV1, keycode))
+	{
+		if (fdf->conic.fov < 179)
+		{
+			fdf->conic.fov += 1;
+			res = 1;
+		}
+	}
+	if (is_key(controls, C_FOV2, keycode))
+	{
+		if (fdf->conic.fov > 1)
+		{
+			fdf->conic.fov -= 1;
+			res = 1;
+		}
+	}
+	if (is_key(controls, C_YA1, keycode))
+	{
+		fdf->conic.y_amplifier += 1;
+		res = 1;
+	}
+	if (is_key(controls, C_YA2, keycode))
+	{
+		fdf->conic.y_amplifier -= 1;
+		res = 1;
+	}
+	return (res);
+}
+
 static int	parallel_view(int keycode, t_fdf *fdf)
 {
 	t_c	controls;
@@ -71,31 +107,15 @@ static int	parallel_view(int keycode, t_fdf *fdf)
 			res = 1;
 		}
 	}
-	return (res);
-}
-
-static int	conic_view(int keycode, t_fdf *fdf)
-{
-	t_c	controls;
-	int	res;
-
-	controls = fdf->conic.controls;
-	res = 0;
-	if (is_key(controls, C_FOV1, keycode))
+	if (is_key(controls, P_YA1, keycode))
 	{
-		if (fdf->conic.fov < 179)
-		{
-			fdf->conic.fov += 1;
-			res = 1;
-		}
+		fdf->parallel.y_amplifier += 1;
+		res = 1;
 	}
-	if (is_key(controls, C_FOV2, keycode))
+	if (is_key(controls, P_YA2, keycode))
 	{
-		if (fdf->conic.fov > 1)
-		{
-			fdf->conic.fov -= 1;
-			res = 1;
-		}
+		fdf->parallel.y_amplifier -= 1;
+		res = 1;
 	}
 	return (res);
 }

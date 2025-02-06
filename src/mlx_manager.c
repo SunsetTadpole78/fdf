@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 14:45:42 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/06 15:16:46 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/06 16:56:06 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -446,7 +446,7 @@ void	draw_map(t_fdf *fdf)
 		}
 		y++;
 	}
-	//draw_axes(fdf);
+	draw_axes(fdf);
 	draw_navbar(fdf);
 }
 

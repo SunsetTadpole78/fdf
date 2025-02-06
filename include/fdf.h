@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:05:01 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/06 16:26:37 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/06 16:58:48 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,6 +203,8 @@ enum KeyId
 	C_RZ2,
 	C_FOV1,
 	C_FOV2,
+	C_YA1,
+	C_YA2,
 	P_UP,
 	P_DOWN,
 	P_LEFT,
@@ -212,7 +214,9 @@ enum KeyId
 	P_RY1,
 	P_RY2,
 	P_ZOOM,
-	P_UNZOOM
+	P_UNZOOM,
+	P_YA1,
+	P_YA2
 };
 
 typedef struct s_key
@@ -288,6 +292,7 @@ typedef struct s_conic
 	float	pitch;
 	float			zoom;
 	float			zoom_base;
+	float	y_amplifier;
 }	t_conic;
 
 typedef struct s_parallel
@@ -298,6 +303,7 @@ typedef struct s_parallel
 	float			zoom;
 	float			zoom_base;
 	int	axis;
+	float	y_amplifier;
 }	t_parallel;
 
 typedef struct s_background

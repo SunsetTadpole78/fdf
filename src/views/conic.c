@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 13:53:20 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/05 14:13:34 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/06 17:00:58 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ t_pixel_data	cpp(t_fdf *fdf, t_vector3 v3, int  mirror)
 	v3.x -= fdf->pivot_point.x;
 	v3.y -= fdf->pivot_point.y;
 	v3.z -= fdf->pivot_point.z;
+	v3.y *= fdf->conic.y_amplifier;
 	if (mirror)
 		v3.y *= -1;
 	rotate(fdf, &v3);
