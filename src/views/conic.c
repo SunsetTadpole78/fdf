@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 13:53:20 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/05 10:52:10 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/05 14:13:34 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ static void	rotate(t_fdf *fdf, t_vector3 *v3)
 	float	gamma;
 	t_vector3	cpy;
 
-	alpha = fdf->conic.view.pitch * (M_PI / 180);
-	theta = fdf->conic.view.yaw * (M_PI / 180);
-	gamma = fdf->conic.view.roll * (M_PI / 180);
+	alpha = fdf->conic.rotation.y * (M_PI / 180);
+	theta = fdf->conic.rotation.x * (M_PI / 180);
+	gamma = fdf->conic.rotation.z * (M_PI / 180);
 	cpy = *v3;
 	v3->x = cpy.x * cos(theta) * cos(gamma) 
 		+ cpy.y * (cos(gamma) * sin(theta) * sin(alpha) - sin(gamma) * cos(alpha)) 
@@ -36,7 +36,7 @@ static void	rotate(t_fdf *fdf, t_vector3 *v3)
 
 t_pixel_data	cpp(t_fdf *fdf, t_vector3 v3, int  mirror)
 {
-	float	fovr = fdf->conic.view.fov * (M_PI / 180);
+	float	fovr = fdf->conic.fov * (M_PI / 180);
 	float	d = WIDTH / (2 * tan(fovr / 2));
 	t_vector2	v;
 	float	dist;

@@ -25,7 +25,6 @@ t_pixel_data	ppp(t_fdf *fdf, t_vector3 v3, int mirror)
 	(void)mirror;
 
 	zoom = fdf->parallel.zoom * fdf->parallel.zoom_base;
-
 	v3.x -= fdf->pivot_point.x;
 	v3.y -= fdf->pivot_point.y;
 	v3.z -= fdf->pivot_point.z;
@@ -76,6 +75,6 @@ t_pixel_data	ppp(t_fdf *fdf, t_vector3 v3, int mirror)
 	v2.y += fdf->parallel.offset.y * zoom;
 
 	data.pos = v2;
-	data.depth = v3.z;
+	data.depth = -v3.z;
 	return (data);
 }

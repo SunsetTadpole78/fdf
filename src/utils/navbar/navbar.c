@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 12:49:27 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/04 12:33:25 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/06 10:54:51 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,12 @@ t_vector2	get_text_offset(t_button *button)
 {
 	t_vector2	offset;
 
+	if (button->type == CIRCLE)
+	{
+		offset.x = button->offset.x + button->size.x / 4 - ((ft_strlen(button->name) * 6) / 2) - 8;
+		offset.y = button->offset.y + button->size.y / 4 + 8;
+		return (offset);
+	}
 	offset.y = button->offset.y + button->size.y / 2 + 4;
 	if (button->type == TOGGLE)
 	{

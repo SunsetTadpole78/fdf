@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 09:17:17 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/05 11:38:58 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/06 16:38:31 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ int	keys_hook(int keycode, t_fdf *fdf)
 		return (0);
 	}*/
 	resend = translation_check(keycode, fdf);
-	resend |= rotatation_check(keycode, fdf);
-	resend |= zoom_check(keycode, fdf);
+	resend |= resend || rotatation_check(keycode, fdf);
+	resend |= resend || zoom_check(keycode, fdf);
 	if (resend)
 		fdf->must_update = 1;
 	return (0);
@@ -67,6 +67,9 @@ int	is_button(t_vector2 v, t_button *button)
 	offset = button->offset;
 	if (button->type == CIRCLE)
 		return (ft_distance(offset, v) <= button->size.x);
+	if (button->type == CUBE)
+		return (v.x >= (offset.x - button->size.x) && v.x <= button->size.x - 10 + offset.x
+			&& v.y >= (offset.y - button->size.y) && v.y <= button->size.y + offset.y);
 	return (v.x >= offset.x && v.x <= button->size.x + offset.x
 		&& v.y >= offset.y && v.y <= button->size.y + offset.y);
 }
@@ -121,6 +124,8 @@ void	button_click(t_fdf *fdf, t_button *button)
 		change_background(fdf, NULL);
 	else if (button->id == BGG)
 		change_background(fdf, button->color);
+	if (button->id == LINE)
+		update_colors(fdf, button->color);
 	else if (button->type == NAVBAR)
 	{
 		if (get_navbar()->actual)

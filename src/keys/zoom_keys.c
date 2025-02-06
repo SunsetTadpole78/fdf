@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 09:16:14 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/05 12:02:21 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/05 16:14:20 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,16 @@ static int	isometric_view(int keycode, t_fdf *fdf)
 			fdf->isometric.zoom *= 0.95;
 			res = 1;
 		}
+	}
+	if (is_key(controls, I_YA1, keycode))
+	{
+		fdf->isometric.y_amplifier += 1;
+		res = 1;
+	}
+	if (is_key(controls, I_YA2, keycode))
+	{
+		fdf->isometric.y_amplifier -= 1;
+		res = 1;
 	}
 	return (res);
 }
@@ -64,10 +74,38 @@ static int	parallel_view(int keycode, t_fdf *fdf)
 	return (res);
 }
 
+static int	conic_view(int keycode, t_fdf *fdf)
+{
+	t_c	controls;
+	int	res;
+
+	controls = fdf->conic.controls;
+	res = 0;
+	if (is_key(controls, C_FOV1, keycode))
+	{
+		if (fdf->conic.fov < 179)
+		{
+			fdf->conic.fov += 1;
+			res = 1;
+		}
+	}
+	if (is_key(controls, C_FOV2, keycode))
+	{
+		if (fdf->conic.fov > 1)
+		{
+			fdf->conic.fov -= 1;
+			res = 1;
+		}
+	}
+	return (res);
+}
+
 int	zoom_check(int keycode, t_fdf *fdf)
 {
 	if (fdf->type == ISOMETRIC)
 		return (isometric_view(keycode, fdf));
+	if (fdf->type == CONIC)
+		return (conic_view(keycode, fdf));
 	if (fdf->type == PARALLEL)
 		return (parallel_view(keycode, fdf));
 	return (0);

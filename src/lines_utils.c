@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 14:42:03 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/22 15:24:45 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/05 16:25:22 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	set_map_data(char ***lines, t_map *map)
 		map->size.x = 0;
 		while (lines[(int)map->size.z][(int)map->size.x])
 		{
-			v = ft_atoi(lines[(int)map->size.z][(int)map->size.x]) / 10;
+			v = (float)ft_atoi(lines[(int)map->size.z][(int)map->size.x]) / 10;
 			if (v < map->min_y)
 				map->min_y = v;
 			else if (v > map->max_y)

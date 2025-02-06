@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 14:45:42 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/05 11:53:16 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/06 15:16:46 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	put_pixel(t_fdf *fdf, t_vector2 pos, int color, float alpha)
 {
 	char	*pixel;
 
-	if (pos.x < 0 || pos.x > WIDTH || pos.y < 0 || pos.y > HEIGHT)
+	if (pos.x < 0 || pos.x >= WIDTH || pos.y < 0 || pos.y >= HEIGHT)
 		return (0);
 	pixel = fdf->img.addr + ((int)pos.y * fdf->img.ll + (int)pos.x * (fdf->img.bpp / 8));
 	if (alpha < 1 && pixel != 0)
@@ -228,33 +228,24 @@ t_pixel_data	pixel_pos(t_fdf *fdf, t_vector3 v3, int  mirror)
 	return (pos(fdf, v3, mirror));
 }
 
-void	draw_line(t_fdf *fdf, t_point a, t_point b, int mirror)
-{(void)mirror;
+void	draw_points(t_fdf *fdf, t_vector2 p1, int c1, t_vector2 p2, int c2)
+{
+	put_pixel(fdf, p1, c1, 1);
+	put_pixel(fdf, p2, c2, 1);
+}
+
+void	algo(t_fdf *fdf, t_vector2 po1, t_vector2 po2, int d1, int d2, int ca, int cb)
+{
 	float	dx;
 	float	dy;
 	float	e;
 	float	sx;
 	float	sy;
-	t_pixel_data	p1;
-	t_pixel_data	p2;
-	t_vector2	po1;
-	t_vector2	po2;
 	float	e2;
 	t_pixel_data	new;
 	float		total;
 	float		current;
-	p1 = pixel_pos(fdf, a.pos, mirror);
-	po1 = p1.pos;
-	p2 = pixel_pos(fdf, b.pos, mirror);
-	po2 = p2.pos;
-	if (outside(po1, po2))
-		return ;
-	if (!cohenSutherlandClip(&po1, &po2) || outside(po1, po2))
-		return ;
-	po1.x = rround(po1.x);
-	po1.y = rround(po1.y);
-	po2.x = rround(po2.x);
-	po2.y = rround(po2.y);
+	float	depth;
 	sx = -1;
 	if (po1.x < po2.x)
 		sx = 1;
@@ -266,17 +257,16 @@ void	draw_line(t_fdf *fdf, t_point a, t_point b, int mirror)
 	e = dx + dy;
 	total = sqrt((po2.x - po1.x) * (po2.x - po1.x)
 			+ (po2.y - po1.y) * (po2.y - po1.y));
-	new = p1;
 	new.pos = po1;
 	while (1)
 	{
 		current = sqrt((new.pos.x - po1.x) * (new.pos.x - po1.x)
 				+ (new.pos.y - po1.y) * (new.pos.y - po1.y));
-		new.depth = p1.depth + (current / total) * (p2.depth - p1.depth);
+		depth = d1 + (current / total) * (d2 - d1);
 		if (new.pos.x >= 0 && new.pos.x < WIDTH && new.pos.y >= 0 && new.pos.y < HEIGHT) {
-			if (new.depth > fdf->depth[(int)new.pos.y][(int)new.pos.x]) {
-        			put_pixel(fdf, new.pos, color_between(a.color, b.color, current, total), 1);
-        			fdf->depth[(int)new.pos.y][(int)new.pos.x] = new.depth;
+			if (depth > fdf->depth[(int)new.pos.y][(int)new.pos.x]) {
+        			put_pixel(fdf, new.pos, color_between(ca, cb, current, total), 1);
+        			fdf->depth[(int)new.pos.y][(int)new.pos.x] = depth;
    			}
 		}
 
@@ -294,6 +284,33 @@ void	draw_line(t_fdf *fdf, t_point a, t_point b, int mirror)
 	}
 }
 
+void	draw_line(t_fdf *fdf, t_point a, t_point b, int mirror)
+{(void)mirror;
+	t_pixel_data	p1;
+	t_pixel_data	p2;
+	t_vector2	po1;
+	t_vector2	po2;
+	p1 = pixel_pos(fdf, a.pos, mirror);
+	po1 = p1.pos;
+	p2 = pixel_pos(fdf, b.pos, mirror);
+	po2 = p2.pos;
+	if (outside(po1, po2))
+		return ;
+	if (!cohenSutherlandClip(&po1, &po2) || outside(po1, po2))
+		return ;
+	po1.x = rround(po1.x);
+	po1.y = rround(po1.y);
+	po2.x = rround(po2.x);
+	po2.y = rround(po2.y);
+	if (fdf->only_points)
+	{
+		put_pixel(fdf, po1, a.color, 1);
+		put_pixel(fdf, po2, b.color, 1);
+		return ;
+	}
+	algo(fdf, po1, po2, p1.depth, p2.depth, a.color, b.color);
+}
+
 void	draw_axes(t_fdf *fdf)
 {
 	float		m_y;
@@ -304,13 +321,13 @@ void	draw_axes(t_fdf *fdf)
 	t_point		p;
 	t_point		p2;
 
-	if (!fdf->isometric.axis)
+	if (fdf->type == CONIC || (fdf->type == ISOMETRIC && !fdf->isometric.axis)
+	|| (fdf->type == PARALLEL && !fdf->parallel.axis))
 		return ;
-
-	m_y = ((float)fdf->map->max_y + (float)fdf->map->min_y) / 2;
-	o.x = fdf->map->size.x / 2 - 0.5;
+	m_y = ((fdf->map->max_y) + (fdf->map->min_y)) / 2;
+	o.x = (fdf->map->size.x - 1) / 2 - 0.5;
 	o.y = m_y;
-	o.z = fdf->map->size.z / 2 - 0.5;
+	o.z = (fdf->map->size.z - 1) / 2 - 0.5;
 	x = o;
 	x.x = 1000000;
 	y = o;
@@ -322,16 +339,15 @@ void	draw_axes(t_fdf *fdf)
 	p.can_mirror = 0;
 	p2 = p;
 	p2.pos = x;
-	//draw_line(fdf, p, p2, 0);
+	draw_line(fdf, p, p2, 0);
 	p.color = 0x00FF00;
 	p2.color = 0x00FF00;
 	p2.pos = y;
-	//draw_line(fdf, p, p2, 0);
+	draw_line(fdf, p, p2, 0);
 	p.color = 0x0000FF;
 	p2.color = 0x0000FF;
 	p2.pos = z;
-	//draw_line(fdf, p, p2, 0);
-	(void)p2;
+	draw_line(fdf, p, p2, 0);
 }
 
 void	draw_square(t_fdf *fdf, t_button *button)
@@ -376,6 +392,8 @@ void	draw_button(t_fdf *fdf, t_button *button)
 		draw_toggle(fdf, button);
 	else if (button->type == KEYBOX)
 		draw_keybox(fdf, button);
+	else if (button->type == CUBE)
+		draw_cube(fdf, button);
 }
 
 void	draw_buttons(t_fdf *fdf, t_button **buttons)
@@ -428,7 +446,7 @@ void	draw_map(t_fdf *fdf)
 		}
 		y++;
 	}
-	draw_axes(fdf);
+	//draw_axes(fdf);
 	draw_navbar(fdf);
 }
 
@@ -457,6 +475,7 @@ t_fdf	*create_window(t_map *map)
 	fdf->type = ISOMETRIC;
 	fdf->pixel_pos = ipp;
 	fdf->must_update = 0;
+	fdf->only_points = 0;
 	init_navbar(fdf);
 	init_depth(fdf);
 	return (fdf);

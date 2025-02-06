@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 11:51:46 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/04 14:21:12 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/06 10:37:26 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,23 +138,66 @@ int	spir_m(t_vector2 v, int w, int h)
 		((int)((255 - i) * 2) << 16));
 }
 
-int	from_img(t_vector2 v, t_img *img)
+int from_img(t_vector2 v, t_img *img, t_vector2 size)
 {
-	char	*pixel;
-	v.x = img->width * v.x / WIDTH;
-	v.y = img->height * v.y / HEIGHT;
-	pixel = img->addr + ((int)v.y * img->ll + (int)v.x * (img->bpp / 8));
+    char	*pixel;
+    float	scale;
 
-	return *(unsigned int *)pixel;
+    if ((float)img->width / size.x < (float)img->height / size.y)
+        scale = (float)img->width / size.x;
+    else
+        scale = (float)img->height / size.y;
+    v.x = (v.x - size.x / 2) * scale + img->width / 2;
+    v.y = (v.y - size.y / 2) * scale + img->height / 2;
+    
+    if (v.x < 0 || v.x >= img->width || v.y < 0 || v.y >= img->height)
+        return 0;
 
+    pixel = img->addr + ((int)v.y * img->ll + (int)v.x * (img->bpp / 8));
+    return *(unsigned int *)pixel;
 }
 
-int	test(t_vector2 v)
+int	test(t_vector2 v, int w, int h)
 {
-	return (from_img(v, get_fdf()->background->backgrounds[0]));
+	return (from_img(v, get_fdf()->background->backgrounds[0], vector2(w, h)));
 }
 
-int	gakarbou(t_vector2 v)
+int	gakarbou(t_vector2 v, int w, int h)
 {
-	return (from_img(v, get_fdf()->background->backgrounds[1]));
+	return (from_img(v, get_fdf()->background->backgrounds[1], vector2(w, h)));
+}
+
+int	montain(t_vector2 v, int w, int h)
+{
+	return (from_img(v, get_fdf()->background->backgrounds[2], vector2(w, h)));
+}
+
+int	neon(t_vector2 v, int w, int h)
+{
+	return (from_img(v, get_fdf()->background->backgrounds[3], vector2(w, h)));
+}
+
+int	win(t_vector2 v, int w, int h)
+{
+	return (from_img(v, get_fdf()->background->backgrounds[4], vector2(w, h)));
+}
+
+int	ft(t_vector2 v, int w, int h)
+{
+	return (from_img(v, get_fdf()->background->backgrounds[5], vector2(w, h)));
+}
+
+int	rick(t_vector2 v, int w, int h)
+{
+	return (from_img(v, get_fdf()->background->backgrounds[6], vector2(w, h)));
+}
+
+int	larry(t_vector2 v, int w, int h)
+{
+	return (from_img(v, get_fdf()->background->backgrounds[7], vector2(w, h)));
+}
+
+int	hello_kitty(t_vector2 v, int w, int h)
+{
+	return (from_img(v, get_fdf()->background->backgrounds[8], vector2(w, h)));
 }

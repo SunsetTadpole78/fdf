@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 13:16:21 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/05 10:51:25 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/05 16:22:09 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ t_pixel_data	ipp(t_fdf *fdf, t_vector3 v3, int  mirror)
 	v3.x -= fdf->pivot_point.x;
 	v3.y -= fdf->pivot_point.y;
 	v3.z -= fdf->pivot_point.z;
+	v3.y *= fdf->isometric.y_amplifier;
 	v3.x *= zoom;
 	v3.y *= zoom;
 	v3.z *= zoom;

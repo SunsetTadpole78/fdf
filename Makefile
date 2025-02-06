@@ -21,6 +21,7 @@ DEFAULT =	fdf.c		\
 		views/isometric.c		\
 		views/parallel.c		\
 		views/conic.c		\
+		utils/templates/cube.c		\
 		utils/templates/toggle.c		\
 		utils/templates/keybox.c		\
 		utils/navbar/navbar.c		\
@@ -46,6 +47,7 @@ DEFAULT =	fdf.c		\
 		utils.c		\
 		color.c		\
 		backgrounds.c		\
+		lines.c		\
 		depth_manager.c		\
 		fix_line.c		\
 		vector.c
@@ -54,7 +56,7 @@ FILES = $(addprefix $(SRC)/, $(DEFAULT))
 
 OBJS = $(DEFAULT:%.c=obj/%.o)
 
-FLAGS = -Wall -Wextra -Werror -O3 -g
+FLAGS = -Wall -Wextra -Werror -O3
 
 LIBFT_DIR = libft
 LIBFT_INCLUDE_DIR = $(LIBFT_DIR)

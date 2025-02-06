@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 09:14:37 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/05 11:49:52 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/05 17:45:17 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static int	conic_view(int keycode, t_fdf *fdf)
 
 	controls = fdf->conic.controls;
 	res = 0;
-	if (is_key(controls, C_UP, keycode))
+	if (is_key(controls, C_FRONT, keycode))
 	{
 		if (fdf->conic.camera.z < -2)
 		{
@@ -57,7 +57,7 @@ static int	conic_view(int keycode, t_fdf *fdf)
 			res = 1;
 		}
 	}
-	if (is_key(controls, C_DOWN, keycode))
+	else if (is_key(controls, C_BEHIND, keycode))
 	{
 		t_vector3	p1;
 		t_vector3	p2;
@@ -74,14 +74,24 @@ static int	conic_view(int keycode, t_fdf *fdf)
 			res = 1;
 		}
 	}
-	if (is_key(controls, C_LEFT, keycode))
+	else if (is_key(controls, C_LEFT, keycode))
 	{
 		fdf->conic.camera.x -= 1;
 		res = 1;
 	}
-	if (is_key(controls, C_RIGHT, keycode))
+	else if (is_key(controls, C_RIGHT, keycode))
 	{
 		fdf->conic.camera.x += 1;
+		res = 1;
+	}
+	else if (is_key(controls, C_UP, keycode))
+	{
+		fdf->conic.camera.y += 1;
+		res = 1;
+	}
+	else if (is_key(controls, C_DOWN, keycode))
+	{
+		fdf->conic.camera.y -= 1;
 		res = 1;
 	}
 	return (res);

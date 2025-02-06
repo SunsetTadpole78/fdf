@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>		  +#+  +:+	   +#+		*/
 /*												+#+#+#+#+#+   +#+		   */
 /*   Created: 2025/01/27 08:48:43 by lroussel		  #+#	#+#			 */
-/*   Updated: 2025/02/05 11:04:06 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/06 16:38:11 by lroussel         ###   ########.fr       */
 /*																			*/
 /* ************************************************************************** */
 
@@ -69,20 +69,46 @@ void	register_background_buttons(void)
 	size.y = 40;
 	o.x = 100;
 	o.y = 100;
-	btn = create_button(BGG, CIRCLE, "", size, o);
+	btn = create_button(BGG, CIRCLE, "black", size, o);
 	btn->selected = 1;
 	add_button(bg, btn);
-	add_button(bg, set_color(next_b(btn, "", 200, 100), test, test, test));
-	add_button(bg, set_color(next_b(btn, "", 300, 100), gakarbou, gakarbou, gakarbou));
-	add_button(bg, set_color(next_b(btn, "", 400, 100), ver, ver, ver));
-	add_button(bg, set_color(next_b(btn, "", 500, 100), hor, hor, hor));
-	add_button(bg, set_color(next_b(btn, "", 600, 100), diag, diag, diag));
-	add_button(bg, set_color(next_b(btn, "", 700, 100), circ, circ, circ));
-	add_button(bg, set_color(next_b(btn, "", 800, 100), spir, spir, spir));
-	add_button(bg, set_color(next_b(btn, "", 900, 100), rnb2_m, rnb2_m, rnb2_m));
-	add_button(bg, set_color(next_b(btn, "", 1000, 100), diag_m, diag_m, diag_m));
-	add_button(bg, set_color(next_b(btn, "", 1100, 100), circ_m, circ_m, circ_m));
-	add_button(bg, set_color(next_b(btn, "", 1200, 100), spir_m, spir_m, spir_m));
+	add_button(bg, set_color(next_b(btn, "rnbw", 200, 100), rnb, rnb, rnb));
+	add_button(bg, set_color(next_b(btn, "rnbw2", 300, 100), diag, diag, diag));
+	add_button(bg, set_color(next_b(btn, "gakarbou", 400, 100), gakarbou, gakarbou, gakarbou));
+	add_button(bg, set_color(next_b(btn, "blue", 500, 100), test, test, test));
+	add_button(bg, set_color(next_b(btn, "montain", 600, 100), montain, montain, montain));
+	add_button(bg, set_color(next_b(btn, "neon", 700, 100), neon, neon, neon));
+	add_button(bg, set_color(next_b(btn, "windows", 800, 100), win, win, win));
+	add_button(bg, set_color(next_b(btn, "42", 900, 100), ft, ft, ft));
+	add_button(bg, set_color(next_b(btn, "rick roll", 1000, 100), rick, rick, rick));
+	add_button(bg, set_color(next_b(btn, "larry", 1100, 100), larry, larry, larry));
+	add_button(bg, set_color(next_b(btn, "hello kitty", 1200, 100), hello_kitty, hello_kitty, hello_kitty));
+}
+
+void	register_lines_buttons(void)
+{
+	t_category	*lines;
+	t_vector2	size;
+	t_vector2	o;
+	t_button	*btn;
+
+	lines = get_navbar_category(LINES);
+	size.x = 40;
+	size.y = 40;
+	o.x = 100;
+	o.y = 100;
+	btn = create_button(LINE, CUBE, "", size, o);
+	btn->selected = 1;
+	add_button(lines, set_color(btn, white, white, white));
+	add_button(lines, set_color(next_b(btn, "", 200, 100), subject, subject, subject));
+	add_button(lines, set_color(next_b(btn, "", 300, 100), blue, blue, blue));
+	add_button(lines, set_color(next_b(btn, "", 400, 100), relief, relief, relief));
+	add_button(lines, set_color(next_b(btn, "", 500, 100), rgb, rgb, rgb));
+	add_button(lines, set_color(next_b(btn, "", 600, 100), pays, pays, pays));
+	add_button(lines, set_color(next_b(btn, "", 700, 100), mars, mars, mars));
+	add_button(lines, set_color(next_b(btn, "", 800, 100), black_and_white, black_and_white, black_and_white));
+	add_button(lines, set_color(next_b(btn, "", 900, 100), blue_and_yellow, blue_and_yellow, blue_and_yellow));
+	add_button(lines, set_color(next_b(btn, "", 1000, 100), random_c, random_c, random_c));
 }
 
 char	*to_chars(char c)
@@ -176,6 +202,7 @@ void	init_navbar(t_fdf *fdf)
 	mlx_hook(fdf->window, 4, 1L << 2, on_click, fdf);
 	register_categories();
 	register_background_buttons();
+	register_lines_buttons();
 	register_controls_buttons(fdf);
 	register_other_buttons();
 }

@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 13:29:41 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/05 11:35:12 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/05 16:30:49 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ static void	init_controls(t_fdf *fdf)
 	add_key(&fdf->isometric.controls, I_ADD_Z, 'l', CTRL_ADD_Z);
 	add_key(&fdf->isometric.controls, I_ZOOM, '=', CTRL_ZOOM);
 	add_key(&fdf->isometric.controls, I_UNZOOM, '-', CTRL_UNZOOM);
+	add_key(&fdf->isometric.controls, I_YA1, '0', CTRL_YA1);
+	add_key(&fdf->isometric.controls, I_YA2, '9', CTRL_YA2);
 }
 
 void	init_isometric(t_fdf *fdf)
@@ -45,5 +47,6 @@ void	init_isometric(t_fdf *fdf)
 		fdf->isometric.zoom_base = (float)WIDTH / t;
 	fdf->isometric.axis = 1;
 	fdf->isometric.mirror = 0;
+	fdf->isometric.y_amplifier = 1;
 	init_controls(fdf);
 }

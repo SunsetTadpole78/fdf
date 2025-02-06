@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 14:42:06 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/31 16:42:21 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/06 16:22:31 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,11 @@ void	create_points(t_map *map, char ***lines)
 			map->points[y][x].pos.y = chars_to_float(lines[y][x]) / 10;
 			map->points[y][x].pos.z = y;
 			map->points[y][x].can_mirror = map->points[y][x].pos.y != 0;
-			if (ft_strchr(lines[y][x], ','))
+			map->points[y][x].hardcoded_color = ft_strchr(lines[y][x], ',') != NULL;
+			if (map->points[y][x].hardcoded_color)
 				map->points[y][x].color = get_color(lines[y][x]);
 			else
-				map->points[y][x].color = create_color(x, map->points[y][x].pos.y, y, map->size);
+				map->points[y][x].color = white();
 			x++;
 		}
 		y++;

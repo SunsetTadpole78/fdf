@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:05:01 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/05 12:02:38 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/06 16:26:37 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef struct s_point
 {
 	t_vector3	pos;
 	int			color;
+	int			hardcoded_color;
 	int			can_mirror;
 }	t_point;
 
@@ -83,6 +84,7 @@ enum ButtonId {
 	NAV,
 	TIT,
 	BGG,
+	LINE,
 	AXIS,
 	MIRROR,
 	CTRL_UP,
@@ -100,13 +102,20 @@ enum ButtonId {
 	CTRL_RX1,
 	CTRL_RX2,
 	CTRL_RY1,
-	CTRL_RY2
+	CTRL_RY2,
+	CTRL_RZ1,
+	CTRL_RZ2,
+	CTRL_FOV1,
+	CTRL_FOV2,
+	CTRL_YA1,
+	CTRL_YA2
 };
 
 enum ButtonType {
 	NAVBAR,
 	TITLE,
 	CIRCLE,
+	CUBE,
 	TOGGLE,
 	KEYBOX
 };
@@ -152,8 +161,8 @@ typedef struct s_display_data
 typedef struct s_map
 {
 	t_vector3       size;
-	int	min_y;
-	int	max_y;
+	float	min_y;
+	float	max_y;
 	t_point		**points;
 }	t_map;
 
@@ -178,10 +187,22 @@ enum KeyId
 	I_ADD_Z,
 	I_ZOOM,
 	I_UNZOOM,
-	C_UP,
-	C_DOWN,
+	I_YA1,
+	I_YA2,
+	C_FRONT,
+	C_BEHIND,
 	C_LEFT,
 	C_RIGHT,
+	C_UP,
+	C_DOWN,
+	C_RX1,
+	C_RX2,
+	C_RY1,
+	C_RY2,
+	C_RZ1,
+	C_RZ2,
+	C_FOV1,
+	C_FOV2,
 	P_UP,
 	P_DOWN,
 	P_LEFT,
@@ -207,7 +228,7 @@ typedef struct s_edit
 	t_key	old_key;
 	t_key	new_key;
 }	t_edit;
-
+/* 
 typedef struct s_controls
 {
 	t_key	up;
@@ -224,15 +245,7 @@ typedef struct s_controls
 	t_key	unzoom;
 	t_edit	edit;
 }	t_controls;
-
-typedef struct s_view
-{
-	float	yaw;
-	float	pitch;
-	float	roll;
-	float	fov;
-}	t_view;
-
+ */
 enum ViewType
 {
 	ISOMETRIC,
@@ -261,6 +274,7 @@ typedef struct s_isometric
 	float			zoom_base;
 	int	axis;
 	int	mirror;
+	float	y_amplifier;
 }	t_isometric;
 
 typedef struct s_conic
@@ -268,7 +282,10 @@ typedef struct s_conic
 	t_c		controls;
 	t_vector3	camera;
 	float	default_z;
-	t_view		view;
+	t_vector3	rotation;
+	float	fov;
+	float	yaw;
+	float	pitch;
 	float			zoom;
 	float			zoom_base;
 }	t_conic;
@@ -280,6 +297,7 @@ typedef struct s_parallel
 	t_vector2	rotation;
 	float			zoom;
 	float			zoom_base;
+	int	axis;
 }	t_parallel;
 
 typedef struct s_background
@@ -306,6 +324,7 @@ typedef struct s_fdf
 	t_vector3	pivot_point;
 	t_background	*background;
 	t_img	**backgrounds;
+	int	only_points;
 }	t_fdf;
 
 typedef struct s_rgb
@@ -376,8 +395,9 @@ void		init_navbar(t_fdf *fdf);
 
 //color.c
 int			get_color(char *value);
-int			create_color(float x, float y, float z, t_vector3 map_size);
+int			from_rgb(t_rgb rgb);
 int			color_between(int ca, int cb, float v, float t);
+void	update_colors(t_fdf *fdf, int (color)(t_vector3, t_vector2, t_vector3));
 
 int			ft_abs(int v);
 
@@ -390,18 +410,27 @@ int     black(void);
 void		free_buttons(t_button **buttons);
 
 int	rnb(t_vector2 v, int w, int h);
-int ver(t_vector2 v, int w, int h);
-int hor(t_vector2 v, int w, int h);
 int diag(t_vector2 v, int w, int h);
-int diag_m(t_vector2 v, int w, int h);
-int circ(t_vector2 v, int w, int h);
-int circ_m(t_vector2 v, int w, int h);
-int rnb2(t_vector2 v, int w, int h);
-int rnb2_m(t_vector2 v, int w, int h);
-int spir(t_vector2 v, int w, int h);
-int spir_m(t_vector2 v, int w, int h);
-int test(t_vector2 v);
-int gakarbou(t_vector2 v);
+int gakarbou(t_vector2 v, int w, int h);
+int test(t_vector2 v, int w, int h);
+int montain(t_vector2 v, int w, int h);
+int neon(t_vector2 v, int w, int h);
+int win(t_vector2 v, int w, int h);
+int ft(t_vector2 v, int w, int h);
+int rick(t_vector2 v, int w, int h);
+int larry(t_vector2 v, int w, int h);
+int hello_kitty(t_vector2 v, int w, int h);
+
+int white(void);
+int subject(t_vector3 v, t_vector2 mimay);
+int blue(t_vector3 v, t_vector2 mimay);
+int relief(t_vector3 v);
+int rgb(t_vector3 v, t_vector2 mimay, t_vector3 size);
+int pays(t_vector3 v);
+int mars(t_vector3 v);
+int black_and_white(t_vector3 v);
+int blue_and_yellow(t_vector3 v, t_vector2 mimay);
+int random_c(t_vector3 v);
 
 //utils/navbar/default_color.c
 int	dark_gray(void);
@@ -442,6 +471,8 @@ int	toggle_color_pressed(t_vector2 v, int w, int h);
 
 void	draw_square(t_fdf *fdf, t_button *button);
 
+void	draw_cube(t_fdf *fdf, t_button *button);
+
 //initialization/controls.c
 void	change_key(t_fdf *fdf);
 char	*get_name_for(int key);
@@ -467,5 +498,7 @@ void	init_contr(t_c *controls);
 void	add_key(t_c *controls, enum KeyId id, int key, enum ButtonId button);
 int	is_key(t_c controls, enum KeyId id, int keycode);
 void	free_contr(t_c controls);
+
+void	algo(t_fdf *fdf, t_vector2 po1, t_vector2 po2, int d1, int d2, int ca, int cb);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 09:42:27 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/27 12:30:56 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/06 16:26:11 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,14 +120,26 @@ int	color_between(int ca, int cb, float v, float t)
 	return (from_rgb(between));
 }
 
-int	create_color(float x, float y, float z, t_vector3 map_size)
+void	update_colors(t_fdf *fdf, int (color)(t_vector3, t_vector2, t_vector3))
 {
-	t_rgb		rgb;
-	const int	min_value = 50;
+	size_t	y;
+	size_t	x;
+	t_point	**points;
+	t_vector2	mimay;
 
-	rgb.t = 0;
-	rgb.r = min_value + (255 - min_value) * x / map_size.x;
-	rgb.g = min_value + (255 - min_value) * ft_abs(y) / map_size.y;
-	rgb.b = min_value + (255 - min_value) * z / map_size.z;
-	return (from_rgb(rgb));
+	y = 0;
+	points = fdf->map->points;
+	mimay.x = fdf->map->min_y;
+	mimay.y = fdf->map->max_y;
+	while (points[y])
+	{
+		x = 0;
+		while (x < fdf->map->size.x)
+		{
+			if (!points[y][x].hardcoded_color)
+				points[y][x].color = color(points[y][x].pos, mimay, fdf->map->size);
+			x++;
+		}
+		y++;
+	}
 }
