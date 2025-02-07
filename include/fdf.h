@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:05:01 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/07 16:41:27 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/07 17:09:44 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,12 @@
 # include <X11/keysym.h>
 # include <math.h>
 
-# define HEIGHT (get_swidth() - 40)
-# define WIDTH (get_sheight() - 20)
+# ifndef WINDOW_SIZE
+#  define WINDOW_SIZE 1
+# endif
+
+# define HEIGHT ((get_swidth() - 40) * WINDOW_SIZE)
+# define WIDTH ((get_sheight() - 20) * WINDOW_SIZE)
 
 typedef struct s_mimg
 {

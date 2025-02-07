@@ -56,7 +56,7 @@ FILES = $(addprefix $(SRC)/, $(DEFAULT))
 
 OBJS = $(DEFAULT:%.c=obj/%.o)
 
-FLAGS = -Wall -Wextra -Werror -O3 -g
+FLAGS = -Wall -Wextra -Werror -O3 -g -D WINDOW_SIZE=$(SIZE)
 
 LIBFT_DIR = libft
 LIBFT_INCLUDE_DIR = $(LIBFT_DIR)
@@ -66,6 +66,8 @@ MINILIBX_DIR = minilibx
 MINILIBX_INCLUDE_DIR = $(MINILIBX_DIR)
 MINILIBX = $(MINILIBX_DIR)/libmlx.a
 MINILIBX_FLAGS = -lX11 -lXext -lm
+
+SIZE ?= 1
 
 all: $(FDF)
 
