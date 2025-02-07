@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lines.c                                            :+:      :+:    :+:   */
+/*   file_lines.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 14:41:58 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/16 14:42:02 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/07 17:26:14 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,12 @@ int	init_lines(char *path, char ****lines, int *fd)
 {
 	char	*line;
 
+	*fd = open(path, O_RDONLY);
+	if (*fd < 0)
+		return (0);
 	*lines = malloc(sizeof(char *) * 2);
 	if (!(*lines))
 		return (0);
-	*fd = open(path, O_RDONLY);
 	line = get_next_line(*fd);
 	if (!line)
 	{
