@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 14:42:03 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/05 16:25:22 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/07 10:08:32 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ void	set_map_data(char ***lines, t_map *map)
 	float		v;
 
 	map->size.z = 0;
-	map->min_y = MAX_INT;
-	map->max_y = MIN_INT;
+	map->min_y = MAX_FLOAT;
+	map->max_y = MIN_FLOAT;
 	while (lines[(int)map->size.z])
 	{
 		map->size.x = 0;
