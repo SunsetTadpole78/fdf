@@ -33,7 +33,7 @@ int	on_update(t_fdf *fdf)
 		ft_memset(fdf->img.addr, 0, HEIGHT * WIDTH * (fdf->img.bpp / 8));
 		draw_map(fdf);
 		mlx_put_image_to_window(fdf->mlx, fdf->window, fdf->img.img, 0, 0);
-		update_buttons_texts(fdf);
+		update_navbar_texts(fdf);
 		get_navbar()->must_update = 0;
 		fdf->must_update = 0;
 	}
@@ -70,7 +70,7 @@ int	main(int argc, char **argv)
 	}
 	draw_map(fdf);
 	mlx_put_image_to_window(fdf->mlx, fdf->window, fdf->img.img, 0, 0);
-	update_buttons_texts(fdf);
+	update_navbar_texts(fdf);
 	mlx_hook(fdf->window, 2, 1L << 0, keys_hook, fdf);
 	mlx_hook(fdf->window, 17, 0, on_close, fdf);
 	mlx_hook(fdf->window, 12, 1L << 15, on_expose, fdf);

@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 12:49:27 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/06 17:39:40 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/06 18:25:12 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,23 @@ t_vector2	get_text_offset(t_button *button)
 	return (offset);
 }
 
-void	update_buttons_texts(t_fdf *fdf)
+void	update_buttons_texts(t_fdf *fdf, t_button **buttons)
+{
+	int	i;
+	t_vector2	offset;
+
+	i = 0;
+	while (buttons[i])
+	{
+		offset = get_text_offset(buttons[i]);
+		mlx_string_put(fdf->mlx, fdf->window, offset.x, offset.y,
+			0xFFFFFF, buttons[i]->name);
+		i++;
+	}
+
+}
+
+void	update_navbar_texts(t_fdf *fdf)
 {
 	int			i;
 	t_category	*category;
@@ -130,12 +146,12 @@ void	update_buttons_texts(t_fdf *fdf)
 	}
 	if (get_navbar()->actual)
 	{
+		update_buttons_texts(fdf, get_navbar()->actual->buttons);
 		i = 0;
-		while (get_navbar()->actual->buttons[i])
+		while (get_navbar()->actual->subs[i])
 		{
-			offset = get_text_offset(get_navbar()->actual->buttons[i]);
-			mlx_string_put(fdf->mlx, fdf->window, offset.x, offset.y,
-				0xFFFFFF, get_navbar()->actual->buttons[i]->name);
+			if (exec(get_navbar()->actual->subs[i]->showable))
+				update_buttons_texts(fdf, get_navbar()->actual->subs[i]->buttons);
 			i++;
 		}
 	}
@@ -345,6 +361,39 @@ void	add_sub(t_category *category, enum SubCategoryId id, int (showable)(void))
 	category->subs[count]->showable = showable;
 	category->subs[count]->buttons = malloc(sizeof(t_button *));
 	category->subs[count]->buttons[0] = NULL;
+	category->subs[count]->category = category;
 	category->subs[count + 1] = NULL;
 
+}
+
+t_subcategory	*get_sub(t_category *category, enum SubCategoryId id)
+{
+	int	i;
+
+	i = 0;
+	while (category->subs[i])
+	{
+		if (category->subs[i]->id == id)
+			return (category->subs[i]);
+		i++;
+	}
+	return (NULL);
+}
+
+void	add_subbutton(t_subcategory *sub, t_button *button)
+{
+	int			count;
+
+	if (!sub)
+	{
+		free(button);
+		return ;
+	}
+	button->category = sub->category;
+	count = buttons_count(sub->buttons);
+	sub->buttons = ft_realloc(sub->buttons,
+			(count + 1) * sizeof(t_button *),
+			(count + 2) * sizeof(t_button *));
+	sub->buttons[count] = button;
+	sub->buttons[count + 1] = NULL;
 }

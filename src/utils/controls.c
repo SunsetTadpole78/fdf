@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/05 10:36:04 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/06 17:50:12 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,20 @@ int	is_key(t_c controls, enum KeyId id, int keycode)
 		i++;
 	}
 	return (0);
+}
+
+t_key	*get_key(t_c controls, enum KeyId id)
+{
+	int	i;
+
+	i = 0;
+	while (controls.keys[i])
+	{
+		if (id == controls.keys[i]->key_id)
+			return (controls.keys[i]);
+		i++;
+	}
+	return (NULL);
 }
 
 void	free_contr(t_c controls)

@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:05:01 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/06 17:28:59 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/06 18:23:06 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ enum CategoryId {
 };
 
 enum SubCategoryId {
-	CONTROLS_ISO,
+	CONTROLS_ISO
 };
 
 enum ButtonId {
@@ -142,9 +142,10 @@ typedef struct s_button
 
 typedef struct s_subcategory
 {
-	enum SubCategoryId id;
+	enum SubCategoryId	id;
 	void	*showable;
 	t_button	**buttons;
+	struct s_category	*category;
 }	t_subcategory;
 
 typedef struct s_category
@@ -228,7 +229,7 @@ enum KeyId
 	P_ZOOM,
 	P_UNZOOM,
 	P_YA1,
-	P_YA2
+	P_YA2,
 };
 
 typedef struct s_key
@@ -420,8 +421,6 @@ void	update_colors(t_fdf *fdf, int (color)(t_vector3, t_vector2, t_vector3));
 int			ft_abs(int v);
 
 int	is_isometric(void);
-int	is_conic(void);
-int	is_parallel(void);
 
 t_pixel_data	pixel_pos(t_fdf *fdf, t_vector3 v3, int mirror);
 t_pixel_data	ipp(t_fdf *fdf, t_vector3 v3, int mirror);
@@ -464,7 +463,7 @@ void	draw_navbar(t_fdf *fdf);
 void	draw_button(t_fdf *fdf, t_button *button);
 void	draw_buttons(t_fdf *fdf, t_button **buttons);
 
-void	update_buttons_texts(t_fdf *fdf);
+void	update_navbar_texts(t_fdf *fdf);
 
 //button.c
 t_button	*set_color(t_button *button, void *default_color, void *hover_color, void *pressed_color);
@@ -479,7 +478,9 @@ int	active_navbar(int v);
 void		free_navbar(void);
 t_category	*get_navbar_category(enum CategoryId id);
 
+void	add_subbutton(t_subcategory *sub, t_button *button);
 void	add_sub(t_category *category, enum SubCategoryId id, int (showable)(void));
+t_subcategory	*get_sub(t_category *category, enum SubCategoryId id);
 
 //templates/keybox.c
 void	draw_keybox(t_fdf *fdf, t_button *button);
@@ -521,6 +522,7 @@ int	outside_p(t_vector2 v);
 void	init_contr(t_c *controls);
 void	add_key(t_c *controls, enum KeyId id, int key, enum ButtonId button);
 int	is_key(t_c controls, enum KeyId id, int keycode);
+t_key	*get_key(t_c controls, enum KeyId id);
 void	free_contr(t_c controls);
 
 void	algo(t_fdf *fdf, t_vector2 po1, t_vector2 po2, int d1, int d2, int ca, int cb);

@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 09:17:17 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/06 17:03:36 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/07 09:57:05 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ int	is_button(t_vector2 v, t_button *button)
 	if (button->type == CIRCLE)
 		return (ft_distance(offset, v) <= button->size.x);
 	if (button->type == CUBE)
-		return (v.x >= (offset.x - button->size.x) && v.x <= button->size.x - 10 + offset.x
-			&& v.y >= (offset.y - button->size.y) && v.y <= button->size.y + offset.y);
+		return (v.x >= (offset.x - button->size.x * 1.5f) && v.x <= button->size.x * 0.5f + offset.x
+				&& v.y >= (offset.y - button->size.y) && v.y <= button->size.y + offset.y);
 	return (v.x >= offset.x && v.x <= button->size.x + offset.x
 		&& v.y >= offset.y && v.y <= button->size.y + offset.y);
 }
