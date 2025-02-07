@@ -15,20 +15,20 @@
 static void	init_controls(t_fdf *fdf)
 {
 	init_contr(&fdf->isometric.controls);
-	add_key(&fdf->isometric.controls, I_UP, 'w', CTRL_UP);
-	add_key(&fdf->isometric.controls, I_DOWN, 's', CTRL_DOWN);
-	add_key(&fdf->isometric.controls, I_LEFT, 'a', CTRL_LEFT);
-	add_key(&fdf->isometric.controls, I_RIGHT, 'd', CTRL_RIGHT);
-	add_key(&fdf->isometric.controls, I_REDUCE_X, 'u', CTRL_REDUCE_X);
-	add_key(&fdf->isometric.controls, I_ADD_X, 'j', CTRL_ADD_X);
-	add_key(&fdf->isometric.controls, I_REDUCE_Y, 'i', CTRL_REDUCE_Y);
-	add_key(&fdf->isometric.controls, I_ADD_Y, 'k', CTRL_ADD_Y);
-	add_key(&fdf->isometric.controls, I_REDUCE_Z, 'o', CTRL_REDUCE_Z);
-	add_key(&fdf->isometric.controls, I_ADD_Z, 'l', CTRL_ADD_Z);
-	add_key(&fdf->isometric.controls, I_ZOOM, '=', CTRL_ZOOM);
-	add_key(&fdf->isometric.controls, I_UNZOOM, '-', CTRL_UNZOOM);
-	add_key(&fdf->isometric.controls, I_YA1, '0', CTRL_YA1);
-	add_key(&fdf->isometric.controls, I_YA2, '9', CTRL_YA2);
+	add_key(&fdf->isometric.controls, I_UP, 'w', CTRLI_UP);
+	add_key(&fdf->isometric.controls, I_DOWN, 's', CTRLI_DOWN);
+	add_key(&fdf->isometric.controls, I_LEFT, 'a', CTRLI_LEFT);
+	add_key(&fdf->isometric.controls, I_RIGHT, 'd', CTRLI_RIGHT);
+	add_key(&fdf->isometric.controls, I_RX1, 'u', CTRLI_RX1);
+	add_key(&fdf->isometric.controls, I_RX2, 'j', CTRLI_RX2);
+	add_key(&fdf->isometric.controls, I_RY1, 'i', CTRLI_RY1);
+	add_key(&fdf->isometric.controls, I_RY2, 'k', CTRLI_RY2);
+	add_key(&fdf->isometric.controls, I_RZ1, 'o', CTRLI_RZ1);
+	add_key(&fdf->isometric.controls, I_RZ2, 'l', CTRLI_RZ2);
+	add_key(&fdf->isometric.controls, I_ZOOM, '=', CTRLI_ZOOM);
+	add_key(&fdf->isometric.controls, I_UNZOOM, '-', CTRLI_UNZOOM);
+	add_key(&fdf->isometric.controls, I_YA1, '0', CTRLI_YA1);
+	add_key(&fdf->isometric.controls, I_YA2, '9', CTRLI_YA2);
 }
 
 void	init_isometric(t_fdf *fdf)

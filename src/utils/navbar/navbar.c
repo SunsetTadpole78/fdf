@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 12:49:27 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/07 10:33:43 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/07 15:43:25 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,7 @@ void	update_buttons_texts(t_fdf *fdf, t_button **buttons)
 	i = 0;
 	while (buttons[i])
 	{
+		//if (buttons[i]->id == )
 		offset = get_text_offset(buttons[i]);
 		text(fdf, offset, 0xFFFFFF, buttons[i]->name);
 		i++;
@@ -199,7 +200,9 @@ void	update_navbar_texts(t_fdf *fdf)
 		while (get_navbar()->actual->subs[i])
 		{
 			if (exec(get_navbar()->actual->subs[i]->showable))
+			{
 				update_buttons_texts(fdf, get_navbar()->actual->subs[i]->buttons);
+			}
 			i++;
 		}
 	}

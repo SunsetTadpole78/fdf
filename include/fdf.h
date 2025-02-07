@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:05:01 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/07 12:00:27 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/07 16:41:27 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,28 +96,48 @@ enum ButtonId {
 	I_AXIS,
 	P_AXIS,
 	MIRROR,
-	CTRL_UP,
-	CTRL_DOWN,
-	CTRL_LEFT,
-	CTRL_RIGHT,
-	CTRL_REDUCE_X,
-	CTRL_ADD_X,
-	CTRL_REDUCE_Y,
-	CTRL_ADD_Y,
-	CTRL_REDUCE_Z,
-	CTRL_ADD_Z,
-	CTRL_ZOOM,
-	CTRL_UNZOOM,
-	CTRL_RX1,
-	CTRL_RX2,
-	CTRL_RY1,
-	CTRL_RY2,
-	CTRL_RZ1,
-	CTRL_RZ2,
-	CTRL_FOV1,
-	CTRL_FOV2,
-	CTRL_YA1,
-	CTRL_YA2
+	CTRLI_UP,
+	CTRLI_DOWN,
+	CTRLI_LEFT,
+	CTRLI_RIGHT,
+	CTRLI_RX1,
+	CTRLI_RX2,
+	CTRLI_RY1,
+	CTRLI_RY2,
+	CTRLI_RZ1,
+	CTRLI_RZ2,
+	CTRLI_ZOOM,
+	CTRLI_UNZOOM,
+	CTRLI_YA1,
+	CTRLI_YA2,
+	CTRLC_FRONT,
+	CTRLC_BEHIND,
+	CTRLC_LEFT,
+	CTRLC_RIGHT,
+	CTRLC_UP,
+	CTRLC_DOWN,
+	CTRLC_RX1,
+	CTRLC_RX2,
+	CTRLC_RY1,
+	CTRLC_RY2,
+	CTRLC_RZ1,
+	CTRLC_RZ2,
+	CTRLC_FOV1,
+	CTRLC_FOV2,
+	CTRLC_YA1,
+	CTRLC_YA2,
+	CTRLP_UP,
+	CTRLP_DOWN,
+	CTRLP_LEFT,
+	CTRLP_RIGHT,
+	CTRLP_RX1,
+	CTRLP_RX2,
+	CTRLP_RY1,
+	CTRLP_RY2,
+	CTRLP_ZOOM,
+	CTRLP_UNZOOM,
+	CTRLP_YA1,
+	CTRLP_YA2
 };
 
 enum ButtonType {
@@ -197,12 +217,12 @@ enum KeyId
 	I_DOWN,
 	I_LEFT,
 	I_RIGHT,
-	I_REDUCE_X,
-	I_ADD_X,
-	I_REDUCE_Y,
-	I_ADD_Y,
-	I_REDUCE_Z,
-	I_ADD_Z,
+	I_RX1,
+	I_RX2,
+	I_RY1,
+	I_RY2,
+	I_RZ1,
+	I_RZ2,
 	I_ZOOM,
 	I_UNZOOM,
 	I_YA1,
@@ -234,7 +254,7 @@ enum KeyId
 	P_ZOOM,
 	P_UNZOOM,
 	P_YA1,
-	P_YA2,
+	P_YA2
 };
 
 typedef struct s_key
@@ -349,6 +369,7 @@ typedef struct s_fdf
 	t_background	*background;
 	t_img	**backgrounds;
 	int	only_points;
+	t_key	*edit_key;
 }	t_fdf;
 
 typedef struct s_rgb
@@ -506,9 +527,8 @@ void	draw_square(t_fdf *fdf, t_button *button);
 void	draw_cube(t_fdf *fdf, t_button *button);
 
 //initialization/controls.c
-void	change_key(t_fdf *fdf);
+void	change_key(t_fdf *fdf, int keycode);
 char	*get_name_for(int key);
-t_key	get_key_from(t_fdf *fdf, enum ButtonId id);
 
 void    change_background(t_fdf *fdf, int (color)(t_vector2, int, int, int));
 
@@ -527,9 +547,11 @@ int	get_sheight(void);
 int	outside_p(t_vector2 v);
 
 void	init_contr(t_c *controls);
+t_c	*get_controls(t_fdf *fdf);
 void	add_key(t_c *controls, enum KeyId id, int key, enum ButtonId button);
 int	is_key(t_c controls, enum KeyId id, int keycode);
 t_key	*get_key(t_c controls, enum KeyId id);
+t_key	*get_key_from(t_c *controls, enum ButtonId id);
 void	free_contr(t_c controls);
 
 void	algo(t_fdf *fdf, t_vector2 po1, t_vector2 po2, int d1, int d2, int ca, int cb);

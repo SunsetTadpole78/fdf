@@ -15,18 +15,18 @@
 static void	init_controls(t_fdf *fdf)
 {
 	init_contr(&fdf->parallel.controls);
-	add_key(&fdf->parallel.controls, P_UP, 'w', CTRL_UP);
-	add_key(&fdf->parallel.controls, P_DOWN, 's', CTRL_DOWN);
-	add_key(&fdf->parallel.controls, P_LEFT, 'a', CTRL_LEFT);
-	add_key(&fdf->parallel.controls, P_RIGHT, 'd', CTRL_RIGHT);
-	add_key(&fdf->parallel.controls, P_RX1, 65362, CTRL_RX1);
-	add_key(&fdf->parallel.controls, P_RX2, 65364, CTRL_RX2);
-	add_key(&fdf->parallel.controls, P_RY1, 65361, CTRL_RY1);
-	add_key(&fdf->parallel.controls, P_RY2, 65363, CTRL_RY2);
-	add_key(&fdf->parallel.controls, P_ZOOM, '=', CTRL_ZOOM);
-	add_key(&fdf->parallel.controls, P_UNZOOM, '-', CTRL_UNZOOM);
-	add_key(&fdf->parallel.controls, P_YA1, '0', CTRL_YA1);
-	add_key(&fdf->parallel.controls, P_YA2, '9', CTRL_YA2);
+	add_key(&fdf->parallel.controls, P_UP, 'w', CTRLP_UP);
+	add_key(&fdf->parallel.controls, P_DOWN, 's', CTRLP_DOWN);
+	add_key(&fdf->parallel.controls, P_LEFT, 'a', CTRLP_LEFT);
+	add_key(&fdf->parallel.controls, P_RIGHT, 'd', CTRLP_RIGHT);
+	add_key(&fdf->parallel.controls, P_RX1, 65362, CTRLP_RX1);
+	add_key(&fdf->parallel.controls, P_RX2, 65364, CTRLP_RX2);
+	add_key(&fdf->parallel.controls, P_RY1, 65361, CTRLP_RY1);
+	add_key(&fdf->parallel.controls, P_RY2, 65363, CTRLP_RY2);
+	add_key(&fdf->parallel.controls, P_ZOOM, '=', CTRLP_ZOOM);
+	add_key(&fdf->parallel.controls, P_UNZOOM, '-', CTRLP_UNZOOM);
+	add_key(&fdf->parallel.controls, P_YA1, '0', CTRLP_YA1);
+	add_key(&fdf->parallel.controls, P_YA2, '9', CTRLP_YA2);
 }
 
 void	init_parallel(t_fdf *fdf)

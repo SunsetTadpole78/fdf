@@ -15,22 +15,22 @@
 static void	init_controls(t_fdf *fdf)
 {
 	init_contr(&fdf->conic.controls);
-	add_key(&fdf->conic.controls, C_FRONT, 'w', CTRL_UP);
-	add_key(&fdf->conic.controls, C_BEHIND, 's', CTRL_DOWN);
-	add_key(&fdf->conic.controls, C_LEFT, 'a', CTRL_LEFT);
-	add_key(&fdf->conic.controls, C_RIGHT, 'd', CTRL_RIGHT);
-	add_key(&fdf->conic.controls, C_UP, 'r', CTRL_UP);
-	add_key(&fdf->conic.controls, C_DOWN, 'f', CTRL_DOWN);
-	add_key(&fdf->conic.controls, C_RX1, 'u', CTRL_RX1);
-	add_key(&fdf->conic.controls, C_RX2, 'j', CTRL_RX2);
-	add_key(&fdf->conic.controls, C_RY1, 'i', CTRL_RY1);
-	add_key(&fdf->conic.controls, C_RY2, 'k', CTRL_RY2);
-	add_key(&fdf->conic.controls, C_RZ1, 'o', CTRL_RZ1);
-	add_key(&fdf->conic.controls, C_RZ2, 'l', CTRL_RZ2);
-	add_key(&fdf->conic.controls, C_FOV1, '-', CTRL_FOV1);
-	add_key(&fdf->conic.controls, C_FOV2, '=', CTRL_FOV2);
-	add_key(&fdf->conic.controls, C_YA1, '0', CTRL_YA1);
-	add_key(&fdf->conic.controls, C_YA2, '9', CTRL_YA2);
+	add_key(&fdf->conic.controls, C_FRONT, 'w', CTRLC_FRONT);
+	add_key(&fdf->conic.controls, C_BEHIND, 's', CTRLC_BEHIND);
+	add_key(&fdf->conic.controls, C_LEFT, 'a', CTRLC_LEFT);
+	add_key(&fdf->conic.controls, C_RIGHT, 'd', CTRLC_RIGHT);
+	add_key(&fdf->conic.controls, C_UP, 'r', CTRLC_UP);
+	add_key(&fdf->conic.controls, C_DOWN, 'f', CTRLC_DOWN);
+	add_key(&fdf->conic.controls, C_RX1, 'u', CTRLC_RX1);
+	add_key(&fdf->conic.controls, C_RX2, 'j', CTRLC_RX2);
+	add_key(&fdf->conic.controls, C_RY1, 'i', CTRLC_RY1);
+	add_key(&fdf->conic.controls, C_RY2, 'k', CTRLC_RY2);
+	add_key(&fdf->conic.controls, C_RZ1, 'o', CTRLC_RZ1);
+	add_key(&fdf->conic.controls, C_RZ2, 'l', CTRLC_RZ2);
+	add_key(&fdf->conic.controls, C_FOV1, '-', CTRLC_FOV1);
+	add_key(&fdf->conic.controls, C_FOV2, '=', CTRLC_FOV2);
+	add_key(&fdf->conic.controls, C_YA1, '0', CTRLC_YA1);
+	add_key(&fdf->conic.controls, C_YA2, '9', CTRLC_YA2);
 }
 
 static void	init_default_z(t_fdf *fdf)

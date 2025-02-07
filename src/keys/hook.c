@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 09:17:17 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/07 10:33:38 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/07 14:01:12 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,11 @@ int	keys_hook(int keycode, t_fdf *fdf)
 		switch_view(fdf);
 		return (0);
 	}
-/*	if (fdf->isometric.controls.edit.old_key.id != -1)
+	if (fdf->edit_key)
 	{
-		fdf->isometric.controls.edit.new_key.v = keycode;
-		change_key(fdf);
+		change_key(fdf, keycode);
 		return (0);
-	}*/
+	}
 	resend = translation_check(keycode, fdf);
 	resend |= resend || rotatation_check(keycode, fdf);
 	resend |= resend || zoom_check(keycode, fdf);
@@ -164,10 +163,10 @@ void	button_click(t_fdf *fdf, t_button *button)
 		fdf->parallel.axis = button->selected;
 	else if (button->id == MIRROR)
 		fdf->isometric.mirror = button->selected;
-//	else if (button->type == KEYBOX && button->selected)
-//		fdf->isometric.controls.edit.old_key = get_key_from(fdf, button->id);
-//	else if (button->type == KEYBOX)
-//		fdf->isometric.controls.edit.old_key.id = -1;
+	else if (button->type == KEYBOX && button->selected)
+		fdf->edit_key = get_key_from(get_controls(fdf), button->id);
+	else if (button->type == KEYBOX)
+		fdf->edit_key = NULL;
 }
 
 void	select_toolbar_button(t_button *button)

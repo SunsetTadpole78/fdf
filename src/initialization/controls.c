@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:38:03 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/05 11:06:14 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/07 13:47:54 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ char	*get_name_for(int key)
 	return (ft_strdup(&c));
 }
 
-void	change_key(t_fdf *fdf)
-{(void)fdf;/*
+/*void	change_key(t_fdf *fdf)
+{(void)fdf;
 	int	old;
 	t_category	*category;
 	int	i;
@@ -103,10 +103,10 @@ void	change_key(t_fdf *fdf)
 	controls.edit.old_key.id = -1;
 	controls.edit.new_key.id = -1;
 	fdf->must_update = 1;
-*/}
+}*/
 
-t_key	get_key_from(t_fdf *fdf, enum ButtonId id)
-{(void)fdf;(void)id;/*
+/*t_key	get_key_from(t_fdf *fdf, enum ButtonId id)
+{(void)fdf;(void)id;
 	t_controls	controls;
 
 	controls = fdf->isometric.controls;
@@ -133,8 +133,8 @@ t_key	get_key_from(t_fdf *fdf, enum ButtonId id)
 	if (id == controls.zoom.button)
 		return (controls.zoom);
 	return (controls.unzoom);
-*/
+
 	t_key	k;
 	k.v = 0;
 	return k;
-}
+}*/

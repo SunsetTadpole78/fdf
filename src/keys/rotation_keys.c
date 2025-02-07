@@ -19,32 +19,32 @@ static int	isometric_view(int keycode, t_fdf *fdf)
 
 	controls = fdf->isometric.controls;
 	res = 0;
-	if (is_key(controls, I_REDUCE_X, keycode))
+	if (is_key(controls, I_RX1, keycode))
 	{
 		fdf->isometric.rotation.x -= 1;
 		res = 1;
 	}
-	if (is_key(controls, I_ADD_X, keycode))
+	if (is_key(controls, I_RX2, keycode))
 	{
 		fdf->isometric.rotation.x += 1;
 		res = 1;
 	}
-	if (is_key(controls, I_REDUCE_Y, keycode))
+	if (is_key(controls, I_RY1, keycode))
 	{
 		fdf->isometric.rotation.y -= 1;
 		res = 1;
 	}
-	if (is_key(controls, I_ADD_Y, keycode))
+	if (is_key(controls, I_RY2, keycode))
 	{
 		fdf->isometric.rotation.y += 1;
 		res = 1;
 	}
-	if (is_key(controls, I_REDUCE_Z, keycode))
+	if (is_key(controls, I_RZ1, keycode))
 	{
 		fdf->isometric.rotation.z -= 1;
 		res = 1;
 	}
-	if (is_key(controls, I_ADD_Z, keycode))
+	if (is_key(controls, I_RZ2, keycode))
 	{
 		fdf->isometric.rotation.z += 1;
 		res = 1;
