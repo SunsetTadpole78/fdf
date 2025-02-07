@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 14:45:42 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/07 12:10:06 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/07 17:22:38 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -476,6 +476,7 @@ t_fdf	*create_window(t_map *map)
 	fdf->pixel_pos = ipp;
 	fdf->must_update = 0;
 	fdf->only_points = 0;
+	fdf->edit_key = NULL;
 	init_navbar(fdf);
 	init_depth(fdf);
 	return (fdf);
