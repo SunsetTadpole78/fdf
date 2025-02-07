@@ -37,13 +37,13 @@ char	*get_name_for(int key)
 	char	c;
 
 	if (key == XK_Left)
-		return ft_strdup("<");
+		return ft_strdup("<-");
 	else if (key == XK_Right)
-		return ft_strdup(">");
+		return ft_strdup("->");
 	else if (key == XK_Up)
-		return ft_strdup("^");
+		return ft_strdup("^\n|");
 	else if (key == XK_Down)
-		return ft_strdup("v");
+		return ft_strdup("|\nv");
 	else if (key < 32 || key > 126)
 		return ft_strdup("<?>");
 	c = key;

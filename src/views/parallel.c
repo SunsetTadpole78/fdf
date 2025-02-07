@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 13:53:20 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/06 17:01:10 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/07 10:25:10 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 
 #include <math.h>
 #include "fdf.h"
+
+int	is_parallel(void)
+{
+	return (get_fdf()->type == PARALLEL);
+}
 
 t_pixel_data	ppp(t_fdf *fdf, t_vector3 v3, int mirror)
 {

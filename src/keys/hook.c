@@ -6,11 +6,16 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 09:17:17 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/07 09:57:05 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/07 10:33:38 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+
+static int	exec(int (showable)(void))
+{
+	return (showable());
+}
 
 void	switch_view(t_fdf *fdf)
 {
@@ -74,6 +79,25 @@ int	is_button(t_vector2 v, t_button *button)
 		&& v.y >= offset.y && v.y <= button->size.y + offset.y);
 }
 
+void	check_buttons(t_button **buttons, t_vector2 pos)
+{
+	int	i;
+	int			hovered;
+
+	i = 0;	
+	while (buttons[i])
+	{
+		hovered = buttons[i]->hover;
+		buttons[i]->hover = is_button(pos, buttons[i]);
+		if (hovered != buttons[i]->hover)
+		{
+			get_navbar()->must_update = 1;
+			break ;
+		}
+		i++;
+	}
+}
+
 int	on_move(int x, int y, t_navbar *navbar)
 {
 	t_category	**categories;
@@ -100,18 +124,14 @@ int	on_move(int x, int y, t_navbar *navbar)
 		}
 		i++;
 	}
-	i = 0;
 	if (get_navbar()->actual)
 	{
-		while (get_navbar()->actual->buttons[i])
+		check_buttons(get_navbar()->actual->buttons, pos);
+		i = 0;
+		while (get_navbar()->actual->subs[i])
 		{
-			hovered = get_navbar()->actual->buttons[i]->hover;
-			get_navbar()->actual->buttons[i]->hover = is_button(pos, get_navbar()->actual->buttons[i]);
-			if (hovered != get_navbar()->actual->buttons[i]->hover)
-			{
-				navbar->must_update = 1;
-				break ;
-			}
+			if (exec(get_navbar()->actual->subs[i]->showable))
+				check_buttons(get_navbar()->actual->subs[i]->buttons, pos);
 			i++;
 		}
 	}
@@ -138,8 +158,10 @@ void	button_click(t_fdf *fdf, t_button *button)
 			button->selected = 1;
 		}
 	}
-	else if (button->id == AXIS)
+	else if (button->id == I_AXIS)
 		fdf->isometric.axis = button->selected;
+	else if (button->id == P_AXIS)
+		fdf->parallel.axis = button->selected;
 	else if (button->id == MIRROR)
 		fdf->isometric.mirror = button->selected;
 //	else if (button->type == KEYBOX && button->selected)
@@ -180,6 +202,34 @@ void	unselect_others(t_button *button)
 	}
 }
 
+void	check_click(t_fdf *fdf, t_button **buttons, t_vector2 pos)
+{
+	int	i;
+
+	i = 0;
+	while (buttons[i])
+	{
+		if (is_button(pos, buttons[i]))
+		{
+			if (buttons[i]->type == TOGGLE)
+				buttons[i]->selected ^= 1;
+			else if (buttons[i]->type == KEYBOX)
+			{
+				unselect_others(buttons[i]);
+				buttons[i]->selected ^= 1;
+			}
+			else
+			{
+				unselect_others(buttons[i]);
+				buttons[i]->selected = 1;
+			}
+			get_navbar()->must_update = 1;
+			button_click(fdf, buttons[i]);
+		}
+		i++;
+	}
+}
+
 int	on_click(int id, int x, int y, t_fdf *fdf)
 {
 	int			i;
@@ -203,26 +253,12 @@ int	on_click(int id, int x, int y, t_fdf *fdf)
 			}
 			if (get_navbar()->actual)
 			{
+				check_click(fdf, get_navbar()->actual->buttons, pos);
 				i = 0;
-				while (get_navbar()->actual->buttons[i])
+				while (get_navbar()->actual->subs[i])
 				{
-					if (is_button(pos, get_navbar()->actual->buttons[i]))
-					{
-						if (get_navbar()->actual->buttons[i]->type == TOGGLE)
-							get_navbar()->actual->buttons[i]->selected ^= 1;
-						else if (get_navbar()->actual->buttons[i]->type == KEYBOX)
-						{
-							unselect_others(get_navbar()->actual->buttons[i]);
-							get_navbar()->actual->buttons[i]->selected ^= 1;
-						}
-						else
-						{
-							unselect_others(get_navbar()->actual->buttons[i]);
-							get_navbar()->actual->buttons[i]->selected = 1;
-						}
-						fdf->must_update = 1;
-						button_click(fdf, get_navbar()->actual->buttons[i]);
-					}
+					if (exec(get_navbar()->actual->subs[i]->showable))
+						check_click(fdf, get_navbar()->actual->subs[i]->buttons, pos);
 					i++;
 				}
 			}

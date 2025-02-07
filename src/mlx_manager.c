@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 14:45:42 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/06 16:56:06 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/07 12:10:06 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -325,9 +325,9 @@ void	draw_axes(t_fdf *fdf)
 	|| (fdf->type == PARALLEL && !fdf->parallel.axis))
 		return ;
 	m_y = ((fdf->map->max_y) + (fdf->map->min_y)) / 2;
-	o.x = (fdf->map->size.x - 1) / 2 - 0.5;
+	o.x = (fdf->map->size.x - 1) / 2;
 	o.y = m_y;
-	o.z = (fdf->map->size.z - 1) / 2 - 0.5;
+	o.z = (fdf->map->size.z - 1) / 2;
 	x = o;
 	x.x = 1000000;
 	y = o;

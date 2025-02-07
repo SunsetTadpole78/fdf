@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>		  +#+  +:+	   +#+		*/
 /*												+#+#+#+#+#+   +#+		   */
 /*   Created: 2025/01/27 08:48:43 by lroussel		  #+#	#+#			 */
-/*   Updated: 2025/02/07 10:01:53 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/07 10:36:53 by lroussel         ###   ########.fr       */
 /*																			*/
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	register_background_buttons(void)
 	size.y = 40.0f;
 	o.x = 100.0f;
 	o.y = 100.0f;
-	btn = create_button(BGG, CIRCLE, "black", size, o);
+	btn = create_button(BGG, CIRCLE, "", size, o);
 	btn->selected = 1;
 	add_button(bg, btn);
 	add_button(bg, set_color(next_b(btn, "", 200.0f, 100.0f), rnb, rnb, rnb));
@@ -117,7 +117,7 @@ char	*to_chars(char c)
 }
 
 void	register_controls_buttons(t_fdf *fdf)
-{(void)fdf;
+{
 	t_category      *controls;
 	t_subcategory	*iso;
 	t_vector2	size;
@@ -128,7 +128,6 @@ void	register_controls_buttons(t_fdf *fdf)
 	controls = get_navbar_category(CONTROLS);
 	add_sub(controls, CONTROLS_ISO, is_isometric);
 	iso = get_sub(controls, CONTROLS_ISO);
-	controls = get_navbar_category(CONTROLS);
 	ic = fdf->isometric.controls;
 	add_title(iso, "Translation:", 100.0f, 100.0f);
 	size.x = 40.0f;
@@ -149,56 +148,212 @@ void	register_controls_buttons(t_fdf *fdf)
 	btn = next_bm(btn, get_name_for(get_key(ic, I_RIGHT)->v), 240.0f, 100.0f);
 	btn->id = CTRL_RIGHT;
 	add_subbutton(iso, btn);
-	add_title(iso, "Rotation X:", 440.0f, 100.0f);
+	add_title(iso, "X Rotation:", 440.0f, 100.0f);
 	btn = next_bm(btn, get_name_for(get_key(ic, I_REDUCE_X)->v), 497.0f, 60.0f);
 	btn->id = CTRL_REDUCE_X;
 	add_subbutton(iso, btn);
 	btn = next_bm(btn, get_name_for(get_key(ic, I_ADD_X)->v), 497.0f, 100.0f);
 	btn->id = CTRL_ADD_X;
 	add_subbutton(iso, btn);
-	add_title(iso, "Rotation Y:", 702.0f, 100.0f);
-	btn = next_bm(btn, get_name_for(get_key(ic, I_REDUCE_Y)->v), 759.0f, 60.0f);
+	add_title(iso, "Y Rotation:", 697.0f, 100.0f);
+	btn = next_bm(btn, get_name_for(get_key(ic, I_REDUCE_Y)->v), 754.0f, 60.0f);
 	btn->id = CTRL_REDUCE_Y;
 	add_subbutton(iso, btn);
-	btn = next_bm(btn, get_name_for(get_key(ic, I_ADD_Y)->v), 759.0f, 100.0f);
+	btn = next_bm(btn, get_name_for(get_key(ic, I_ADD_Y)->v), 754.0f, 100.0f);
 	btn->id = CTRL_ADD_Y;
 	add_subbutton(iso, btn);
-	add_title(iso, "Rotation Z:", 962.0f, 100.0f);
-	btn = next_bm(btn, get_name_for(get_key(ic, I_REDUCE_Z)->v), 1019.0f, 60.0f);
+	add_title(iso, "Z Rotation:", 954.0f, 100.0f);
+	btn = next_bm(btn, get_name_for(get_key(ic, I_REDUCE_Z)->v), 1011.0f, 60.0f);
 	btn->id = CTRL_REDUCE_Z;
 	add_subbutton(iso, btn);
-	btn = next_bm(btn, get_name_for(get_key(ic, I_ADD_Z)->v), 1019.0f, 100.0f);
+	btn = next_bm(btn, get_name_for(get_key(ic, I_ADD_Z)->v), 1011.0f, 100.0f);
 	btn->id = CTRL_ADD_Z;
 	add_subbutton(iso, btn);
-	add_title(iso, "Zoom :", 1207.0f, 100.0f);
-	btn = next_bm(btn, get_name_for(get_key(ic, I_ZOOM)->v), 1249.0f, 60.0f);
+	add_title(iso, "Zoom :", 1196.0f, 100.0f);
+	btn = next_bm(btn, get_name_for(get_key(ic, I_ZOOM)->v), 1238.0f, 60.0f);
 	btn->id = CTRL_ZOOM;
 	add_subbutton(iso, btn);
-	btn = next_bm(btn, get_name_for(get_key(ic, I_UNZOOM)->v), 1249.0f, 100.0f);
+	btn = next_bm(btn, get_name_for(get_key(ic, I_UNZOOM)->v), 1238.0f, 100.0f);
 	btn->id = CTRL_UNZOOM;
 	add_subbutton(iso, btn);
+	add_title(iso, "Y Amplifier :", 1444.0f, 100.0f);
+	btn = next_bm(btn, get_name_for(get_key(ic, I_YA1)->v), 1507.0f, 60.0f);
+	btn->id = CTRL_ZOOM;
+	add_subbutton(iso, btn);
+	btn = next_bm(btn, get_name_for(get_key(ic, I_YA2)->v), 1507.0f, 100.0f);
+	btn->id = CTRL_UNZOOM;
+	add_subbutton(iso, btn);
+}
+
+void	register_conic_controls_buttons(t_fdf *fdf)
+{
+	t_category      *controls;
+	t_subcategory	*conic;
+	t_vector2	size;
+	t_vector2	o;
+	t_button	*btn;
+	t_c	cc;
+
+	controls = get_navbar_category(CONTROLS);
+	add_sub(controls, CONTROLS_CONIC, is_conic);
+	conic = get_sub(controls, CONTROLS_CONIC);
+	cc = fdf->conic.controls;
+	add_title(conic, "Movements:", 94.0f, 100.0f);
+	size.x = 40.0f;
+	size.y = 40.0f;
+	o.x = 188.0f;
+	o.y = 60.0f;
+	char *name = get_name_for(get_key(cc, C_FRONT)->v);
+	btn = create_button(CTRL_UP, KEYBOX, name, size, o);
+	free(name);
+	set_color(btn, keybox_color, keybox_color_hover, keybox_color_pressed);
+	add_subbutton(conic, btn);
+	btn = next_bm(btn, get_name_for(get_key(cc, C_BEHIND)->v), 188.0f, 100.0f);
+	btn->id = CTRL_DOWN;
+	add_subbutton(conic, btn);
+	btn = next_bm(btn, get_name_for(get_key(cc, C_LEFT)->v), 148.0f, 100.0f);
+	btn->id = CTRL_LEFT;
+	add_subbutton(conic, btn);
+	btn = next_bm(btn, get_name_for(get_key(cc, C_RIGHT)->v), 228.0f, 100.0f);
+	btn->id = CTRL_RIGHT;
+	add_subbutton(conic, btn);
+	add_title(conic, "Up / Down:", 425.0f, 100.0f);
+	btn = next_bm(btn, get_name_for(get_key(cc, C_UP)->v), 479.0f, 60.0f);
+	btn->id = CTRL_UP;
+	add_subbutton(conic, btn);
+	btn = next_bm(btn, get_name_for(get_key(cc, C_DOWN)->v), 479.0f, 100.0f);
+	btn->id = CTRL_DOWN;
+	add_subbutton(conic, btn);
+	
+	add_title(conic, "X Rotation:", 679.0f, 100.0f);
+	btn = next_bm(btn, get_name_for(get_key(cc, C_RX1)->v), 736.0f, 60.0f);
+	btn->id = CTRL_REDUCE_X;
+	add_subbutton(conic, btn);
+	btn = next_bm(btn, get_name_for(get_key(cc, C_RX2)->v), 736.0f, 100.0f);
+	btn->id = CTRL_ADD_X;
+	add_subbutton(conic, btn);
+
+	add_title(conic, "Y Rotation:", 936.0f, 100.0f);
+	btn = next_bm(btn, get_name_for(get_key(cc, C_RY1)->v), 993.0f, 60.0f);
+	btn->id = CTRL_REDUCE_Y;
+	add_subbutton(conic, btn);
+	btn = next_bm(btn, get_name_for(get_key(cc, C_RY2)->v), 993.0f, 100.0f);
+	btn->id = CTRL_ADD_Y;
+	add_subbutton(conic, btn);
+	add_title(conic, "Z Rotation:", 1193.0f, 100.0f);
+	btn = next_bm(btn, get_name_for(get_key(cc, C_RZ1)->v), 1250.0f, 60.0f);
+	btn->id = CTRL_REDUCE_Z;
+	add_subbutton(conic, btn);
+	btn = next_bm(btn, get_name_for(get_key(cc, C_RZ2)->v), 1250.0f, 100.0f);
+	btn->id = CTRL_ADD_Z;
+	add_subbutton(conic, btn);
+	add_title(conic, "FOV :", 1432.0f, 100.0f);
+	btn = next_bm(btn, get_name_for(get_key(cc, C_FOV1)->v), 1471.0f, 60.0f);
+	btn->id = CTRL_FOV1;
+	add_subbutton(conic, btn);
+	btn = next_bm(btn, get_name_for(get_key(cc, C_FOV2)->v), 1471.0f, 100.0f);
+	btn->id = CTRL_FOV2;
+	add_subbutton(conic, btn);
+	add_title(conic, "Y Amplifier :", 1677.0f, 100.0f);
+	btn = next_bm(btn, get_name_for(get_key(cc, C_YA1)->v), 1740.0f, 60.0f);
+	btn->id = CTRL_ZOOM;
+	add_subbutton(conic, btn);
+	btn = next_bm(btn, get_name_for(get_key(cc, C_YA2)->v), 1740.0f, 100.0f);
+	btn->id = CTRL_UNZOOM;
+	add_subbutton(conic, btn);
+}
+
+void	register_parallel_controls_buttons(t_fdf *fdf)
+{
+	t_category      *controls;
+	t_subcategory	*parallel;
+	t_vector2	size;
+	t_vector2	o;
+	t_button	*btn;
+	t_c	pc;
+
+	controls = get_navbar_category(CONTROLS);
+	add_sub(controls, CONTROLS_PARALLEL, is_parallel);
+	parallel = get_sub(controls, CONTROLS_PARALLEL);
+	pc = fdf->parallel.controls;
+	add_title(parallel, "Translation:", 100.0f, 100.0f);
+	size.x = 40.0f;
+	size.y = 40.0f;
+	o.x = 200.0f;
+	o.y = 60.0f;
+	char *name = get_name_for(get_key(pc, P_UP)->v);
+	btn = create_button(CTRL_UP, KEYBOX, name, size, o);
+	free(name);
+	set_color(btn, keybox_color, keybox_color_hover, keybox_color_pressed);
+	add_subbutton(parallel, btn);
+	btn = next_bm(btn, get_name_for(get_key(pc, P_DOWN)->v), 200.0f, 100.0f);
+	btn->id = CTRL_DOWN;
+	add_subbutton(parallel, btn);
+	btn = next_bm(btn, get_name_for(get_key(pc, P_LEFT)->v), 160.0f, 100.0f);
+	btn->id = CTRL_LEFT;
+	add_subbutton(parallel, btn);
+	btn = next_bm(btn, get_name_for(get_key(pc, P_RIGHT)->v), 240.0f, 100.0f);
+	btn->id = CTRL_RIGHT;
+	add_subbutton(parallel, btn);
+	add_title(parallel, "X Rotation:", 440.0f, 100.0f);
+	btn = next_bm(btn, get_name_for(get_key(pc, P_RX1)->v), 497.0f, 60.0f);
+	btn->id = CTRL_REDUCE_X;
+	add_subbutton(parallel, btn);
+	btn = next_bm(btn, get_name_for(get_key(pc, P_RX2)->v), 497.0f, 100.0f);
+	btn->id = CTRL_ADD_X;
+	add_subbutton(parallel, btn);
+	add_title(parallel, "Y Rotation:", 697.0f, 100.0f);
+	btn = next_bm(btn, get_name_for(get_key(pc, P_RY1)->v), 754.0f, 60.0f);
+	btn->id = CTRL_REDUCE_Y;
+	add_subbutton(parallel, btn);
+	btn = next_bm(btn, get_name_for(get_key(pc, P_RY2)->v), 754.0f, 100.0f);
+	btn->id = CTRL_ADD_Y;
+	add_subbutton(parallel, btn);
+	add_title(parallel, "Zoom :", 939.0f, 100.0f);
+	btn = next_bm(btn, get_name_for(get_key(pc, P_ZOOM)->v), 981.0f, 60.0f);
+	btn->id = CTRL_ZOOM;
+	add_subbutton(parallel, btn);
+	btn = next_bm(btn, get_name_for(get_key(pc, P_UNZOOM)->v), 981.0f, 100.0f);
+	btn->id = CTRL_UNZOOM;
+	add_subbutton(parallel, btn);
+	add_title(parallel, "Y Amplifier :", 1187.0f, 100.0f);
+	btn = next_bm(btn, get_name_for(get_key(pc, P_YA1)->v), 1250.0f, 60.0f);
+	btn->id = CTRL_ZOOM;
+	add_subbutton(parallel, btn);
+	btn = next_bm(btn, get_name_for(get_key(pc, P_YA2)->v), 1250.0f, 100.0f);
+	btn->id = CTRL_UNZOOM;
+	add_subbutton(parallel, btn);
 }
 
 void	register_other_buttons(void)
 {
 	t_category	*other;
+	t_subcategory	*iso;
+	t_subcategory	*parallel;
 	t_vector2	size;
 	t_vector2	o;
 	t_button	*btn;
 
 	other = get_navbar_category(OTHER);
+	add_sub(other, OTHER_ISO, is_isometric);
+	add_sub(other, OTHER_PARALLEL, is_parallel);
+	iso = get_sub(other, OTHER_ISO);
+	parallel = get_sub(other, OTHER_PARALLEL);
 	size.x = 30.0f;
 	size.y = 30.0f;
 	o.x = 100.0f;
 	o.y = 85.0f;
-	btn = create_button(AXIS, TOGGLE, "Axes", size, o);
+	btn = create_button(I_AXIS, TOGGLE, "Axes", size, o);
 	set_color(btn, toggle_color, toggle_color_hover, toggle_color_pressed);
 	btn->selected = 1;
-	add_button(other, btn);
+	add_subbutton(iso, btn);
+	btn = create_button(P_AXIS, TOGGLE, "Axes", size, o);
+	set_color(btn, toggle_color, toggle_color_hover, toggle_color_pressed);
+	btn->selected = 1;
+	add_subbutton(parallel, btn);
 	btn = next_b(btn, "Mirror", 200.0f, 85.0f);
 	btn->id = MIRROR;
-	btn->selected = 0;
-	add_button(other, btn);
+	add_subbutton(iso, btn);
 }
 
 void	init_navbar(t_fdf *fdf)
@@ -210,5 +365,7 @@ void	init_navbar(t_fdf *fdf)
 	register_background_buttons();
 	register_lines_buttons();
 	register_controls_buttons(fdf);
+	register_conic_controls_buttons(fdf);
+	register_parallel_controls_buttons(fdf);
 	register_other_buttons();
 }

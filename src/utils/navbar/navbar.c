@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 12:49:27 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/06 18:25:12 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/07 10:33:43 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	draw_open_category(t_fdf *fdf)
 	}
 }
 
-int	exec(int (showable)(void))
+static int	exec(int (showable)(void))
 {
 	return (showable());
 }
@@ -93,22 +93,72 @@ void	draw_category(t_fdf *fdf, t_category *category)
 t_vector2	get_text_offset(t_button *button)
 {
 	t_vector2	offset;
+	int			i;
+	int			j;
+	t_vector2	a;
 
+	i = 0;
+	j = 0;
+	a.x = 0;
+	a.y = 0;
+	while (button->name[i])
+	{
+		if (j > a.x)
+			a.x = j;
+		if (button->name[i] == '\n')
+		{
+			j = 0;
+			a.y++;
+		}
+		j++;
+		i++;
+	}
+	
 	if (button->type == CIRCLE)
 	{
-		offset.x = button->offset.x + button->size.x / 4 - ((ft_strlen(button->name) * 6) / 2) - 8;
-		offset.y = button->offset.y + button->size.y / 4 + 8;
+		offset.x = button->offset.x + button->size.x / 4 - (((a.x + (1 * a.y == 0)) * 6) / 2) - 8;
+		offset.y = button->offset.y + button->size.y / 4 + 8 - ((7 * a.y) / 2);
 		return (offset);
 	}
-	offset.y = button->offset.y + button->size.y / 2 + 4;
+	offset.y = button->offset.y + button->size.y / 2 + 4 - ((7 * a.y) / 2);
 	if (button->type == TOGGLE)
 	{
 		offset.x = button->offset.x + button->size.x + 7;
 		return (offset);
 	}
 
-	offset.x = button->offset.x + button->size.x / 2 - ((ft_strlen(button->name) * 6) / 2);
+	offset.x = button->offset.x + button->size.x / 2 - (((a.x + (1 * a.y == 0)) * 6) / 2);
 	return (offset);
+}
+
+void	text(t_fdf *fdf, t_vector2 offset, int color, char *text)
+{
+	int	i;
+	int base_x;
+	char *temp;
+
+	if (!ft_strchr(text, '\n'))
+	{
+		mlx_string_put(fdf->mlx, fdf->window, offset.x, offset.y, color, text);
+		return ;
+	}
+	i = 0;
+	base_x = offset.x;
+	while(text[i])
+	{
+		if (text[i] == '\n')
+		{
+			offset.x = base_x;
+			offset.y += 7;
+			i++;
+			continue ;
+		}
+		temp = ft_substr(text, i, i + 1);
+		mlx_string_put(fdf->mlx, fdf->window, offset.x, offset.y, color, temp);
+		free(temp);
+		offset.x += 6;
+		i++;
+	}
 }
 
 void	update_buttons_texts(t_fdf *fdf, t_button **buttons)
@@ -120,8 +170,7 @@ void	update_buttons_texts(t_fdf *fdf, t_button **buttons)
 	while (buttons[i])
 	{
 		offset = get_text_offset(buttons[i]);
-		mlx_string_put(fdf->mlx, fdf->window, offset.x, offset.y,
-			0xFFFFFF, buttons[i]->name);
+		text(fdf, offset, 0xFFFFFF, buttons[i]->name);
 		i++;
 	}
 
@@ -140,8 +189,7 @@ void	update_navbar_texts(t_fdf *fdf)
 	{
 		category = get_navbar()->categories[i];
 		offset = get_text_offset(category->main);
-		mlx_string_put(fdf->mlx, fdf->window, offset.x, offset.y,
-			0xFFFFFF, category->main->name);
+		text(fdf, offset, 0xFFFFFF, category->main->name);
 		i++;
 	}
 	if (get_navbar()->actual)

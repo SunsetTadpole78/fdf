@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:05:01 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/06 18:23:06 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/07 12:00:27 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,11 @@ enum CategoryId {
 };
 
 enum SubCategoryId {
-	CONTROLS_ISO
+	CONTROLS_ISO,
+	CONTROLS_CONIC,
+	CONTROLS_PARALLEL,
+	OTHER_PARALLEL,
+	OTHER_ISO
 };
 
 enum ButtonId {
@@ -89,7 +93,8 @@ enum ButtonId {
 	TIT,
 	BGG,
 	LINE,
-	AXIS,
+	I_AXIS,
+	P_AXIS,
 	MIRROR,
 	CTRL_UP,
 	CTRL_DOWN,
@@ -421,6 +426,8 @@ void	update_colors(t_fdf *fdf, int (color)(t_vector3, t_vector2, t_vector3));
 int			ft_abs(int v);
 
 int	is_isometric(void);
+int	is_conic(void);
+int	is_parallel(void);
 
 t_pixel_data	pixel_pos(t_fdf *fdf, t_vector3 v3, int mirror);
 t_pixel_data	ipp(t_fdf *fdf, t_vector3 v3, int mirror);

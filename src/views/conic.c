@@ -6,11 +6,16 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 13:53:20 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/06 17:00:58 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/07 11:00:46 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+
+int	is_conic(void)
+{
+	return (get_fdf()->type == CONIC);
+}
 
 static void	rotate(t_fdf *fdf, t_vector3 *v3)
 {
