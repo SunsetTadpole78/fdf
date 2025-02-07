@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 09:38:03 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/07 13:47:54 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/07 17:05:29 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*get_name_for(int key)
 	else if (key < 32 || key > 126)
 		return ft_strdup("<?>");
 	c = key;
-	return (ft_strdup(&c));
+	return (ft_substr(&c, 0, 1));
 }
 
 /*void	change_key(t_fdf *fdf)
