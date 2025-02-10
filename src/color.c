@@ -120,7 +120,8 @@ int	color_between(int ca, int cb, float v, float t)
 	return (from_rgb(between));
 }
 
-void	update_colors(t_fdf *fdf, int (color)(t_vector3, t_vector2, t_vector3))
+void	update_colors(t_fdf *fdf,
+			int (color)(t_vector3, t_vector2, t_vector3))
 {
 	size_t	y;
 	size_t	x;

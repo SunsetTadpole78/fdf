@@ -21,7 +21,7 @@ static int	isometric_view(int keycode, t_fdf *fdf)
 	res = 0;
 	if (is_key(controls, I_ZOOM, keycode))
 	{
-		if (fdf->isometric.zoom * fdf->isometric.zoom_base < WIDTH)
+		if (fdf->isometric.zoom * fdf->isometric.zoom_base < width())
 		{
 			fdf->isometric.zoom *= 1.05;
 			res = 1;
@@ -93,7 +93,7 @@ static int	parallel_view(int keycode, t_fdf *fdf)
 	res = 0;
 	if (is_key(controls, P_ZOOM, keycode))
 	{
-		if (fdf->parallel.zoom * fdf->parallel.zoom_base < WIDTH)
+		if (fdf->parallel.zoom * fdf->parallel.zoom_base < width())
 		{
 			fdf->parallel.zoom *= 1.05;
 			res = 1;

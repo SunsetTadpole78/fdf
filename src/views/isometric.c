@@ -58,8 +58,8 @@ t_pixel_data	ipp(t_fdf *fdf, t_vector3 v3, int  mirror)
 	v3.x += 0.5 * zoom;
 	v3.z += 0.5 * zoom;
 	rotate(fdf, &v3);
-		v2.x = WIDTH / 2 + (v3.x - v3.z) * cos(30 * (M_PI / 180));
-	v2.y = 2 + HEIGHT / 2 + (v3.x + v3.z) * sin(30 * (M_PI / 180)) - v3.y;
+		v2.x = width() / 2 + (v3.x - v3.z) * cos(30 * (M_PI / 180));
+	v2.y = 2 + height() / 2 + (v3.x + v3.z) * sin(30 * (M_PI / 180)) - v3.y;
 	v2.x += fdf->isometric.offset.x * 60;
 	v2.y += fdf->isometric.offset.y * 60;
 	data.pos = v2;

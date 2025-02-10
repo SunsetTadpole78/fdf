@@ -16,13 +16,13 @@ void	init_depth(t_fdf *fdf)
 {
 	int	y;
 
-	fdf->depth = malloc(sizeof(int *) * HEIGHT);
+	fdf->depth = malloc(sizeof(int *) * height());
 	if (!fdf->depth)
 		return ;
 	y = 0;
-	while (y < HEIGHT)
+	while (y < height())
 	{
-		fdf->depth[y] = malloc(sizeof(int) * WIDTH);
+		fdf->depth[y] = malloc(sizeof(int) * width());
 		if (!fdf->depth[y])
 		{
 			while (--y >= 0)
@@ -42,10 +42,10 @@ void	clear_depth(t_fdf *fdf)
 	int	y;
 
 	y = 0;
-	while (y < HEIGHT)
+	while (y < height())
 	{
 		x = 0;
-		while (x < WIDTH)
+		while (x < width())
 		{
 			fdf->depth[y][x] = MIN_INT;
 			x++;
@@ -61,7 +61,7 @@ void	free_depth(t_fdf *fdf)
 	if (!fdf->depth)
 		return ;
 	y = 0;
-	while (y < HEIGHT)
+	while (y < height())
 	{
 		if (fdf->depth[y])
 			free(fdf->depth[y]);

@@ -47,7 +47,7 @@ static int	next_id(void)
 	return (id);
 }
 
-void	add_key(t_c *controls, enum KeyId id, int key, enum ButtonId button)
+void	add_key(t_c *controls, enum e_KeyId id, int key, enum e_ButtonId button)
 {
 	int	count;
 
@@ -65,7 +65,7 @@ void	add_key(t_c *controls, enum KeyId id, int key, enum ButtonId button)
 	controls->keys[count + 1] = NULL;
 }
 
-int	is_key(t_c controls, enum KeyId id, int keycode)
+int	is_key(t_c controls, enum e_KeyId id, int keycode)
 {
 	int	i;
 
@@ -79,7 +79,7 @@ int	is_key(t_c controls, enum KeyId id, int keycode)
 	return (0);
 }
 
-t_key	*get_key(t_c controls, enum KeyId id)
+t_key	*get_key(t_c controls, enum e_KeyId id)
 {
 	int	i;
 
@@ -93,7 +93,7 @@ t_key	*get_key(t_c controls, enum KeyId id)
 	return (NULL);
 }
 
-t_key	*get_key_from(t_c *controls, enum ButtonId id)
+t_key	*get_key_from(t_c *controls, enum e_ButtonId id)
 {
 	int	i;
 
@@ -122,7 +122,7 @@ void	free_contr(t_c controls)
 
 void	change_key(t_fdf *fdf, int keycode)
 {
-	enum SubCategoryId	id;
+	enum e_SubCategoryId	id;
 	t_subcategory	*sub;
 	int	i;
 

@@ -42,7 +42,7 @@ static void	rotate(t_fdf *fdf, t_vector3 *v3)
 t_pixel_data	cpp(t_fdf *fdf, t_vector3 v3, int  mirror)
 {
 	float	fovr = fdf->conic.fov * (M_PI / 180);
-	float	d = WIDTH / (2 * tan(fovr / 2));
+	float	d = width() / (2 * tan(fovr / 2));
 	t_vector2	v;
 	float	dist;
 	t_pixel_data	data;
@@ -61,8 +61,8 @@ t_pixel_data	cpp(t_fdf *fdf, t_vector3 v3, int  mirror)
 	dist = sqrt(pow(v3.z - fdf->conic.camera.z, 2));
 	if (dist <= 0.01)
     	dist = 0.01;
-	v.x = WIDTH / 2 + ((d * (fdf->conic.camera.x - v3.x)) / (fdf->conic.camera.z - v3.z)) / dist;
-	v.y = HEIGHT / 2 + ((d * (fdf->conic.camera.y - v3.y)) / (fdf->conic.camera.z - v3.z)) / dist;
+	v.x = width() / 2 + ((d * (fdf->conic.camera.x - v3.x)) / (fdf->conic.camera.z - v3.z)) / dist;
+	v.y = height() / 2 + ((d * (fdf->conic.camera.y - v3.y)) / (fdf->conic.camera.z - v3.z)) / dist;
 	data.pos = v;
 	data.depth = -dist;
 	return (data);

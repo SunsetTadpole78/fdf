@@ -20,7 +20,7 @@ int	next_id(void)
 	return (id);
 }
 
-t_key	key(int v, enum ButtonId id)
+t_key	key(int v, enum e_ButtonId id)
 {
 	t_key	k;
 	if (v == -1)
@@ -105,7 +105,7 @@ char	*get_name_for(int key)
 	fdf->must_update = 1;
 }*/
 
-/*t_key	get_key_from(t_fdf *fdf, enum ButtonId id)
+/*t_key	get_key_from(t_fdf *fdf, enum e_ButtonId id)
 {(void)fdf;(void)id;
 	t_controls	controls;
 

@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:05:01 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/10 09:46:38 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/10 11:52:44 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 
 # include "libft.h"
 # include "mlx.h"
-
-#include <stdio.h>
 
 # include <stdlib.h>
 # include <unistd.h>
@@ -27,9 +25,6 @@
 # ifndef WINDOW_SIZE
 #  define WINDOW_SIZE 1
 # endif
-
-# define HEIGHT ((get_swidth() - 40) * WINDOW_SIZE)
-# define WIDTH ((get_sheight() - 20) * WINDOW_SIZE)
 
 typedef struct s_mimg
 {
@@ -66,11 +61,11 @@ typedef struct s_line_data
 	float		step;
 }	t_line_data;
 
-typedef	struct s_pixel_data
+typedef struct s_pixel_data
 {
 	t_vector2	pos;
-	float	depth;
-	int	color;
+	float		depth;
+	int			color;
 }	t_pixel_data;
 
 typedef struct s_point
@@ -81,14 +76,16 @@ typedef struct s_point
 	int			can_mirror;
 }	t_point;
 
-enum CategoryId {
+enum e_CategoryId
+{
 	BG,
 	LINES,
 	CONTROLS,
 	OTHER
 };
 
-enum SubCategoryId {
+enum e_SubCategoryId
+{
 	CONTROLS_ISO,
 	CONTROLS_CONIC,
 	CONTROLS_PARALLEL,
@@ -96,7 +93,8 @@ enum SubCategoryId {
 	OTHER_ISO
 };
 
-enum ButtonId {
+enum e_ButtonId
+{
 	NAV,
 	TIT,
 	BGG,
@@ -148,7 +146,8 @@ enum ButtonId {
 	CTRLP_YA2
 };
 
-enum ButtonType {
+enum e_ButtonType
+{
 	NAVBAR,
 	TITLE,
 	CIRCLE,
@@ -159,35 +158,35 @@ enum ButtonType {
 
 typedef struct s_button
 {
-	enum ButtonId	id;
-	int	uniq_id;
-	enum ButtonType	type;
-	char	*name;
-	t_vector2	size;
-	t_vector2	offset;
-	void	*color;
-	void	*hover_color;
-	void	*pressed_color;
-	int	selected;
-	int	hover;
+	enum e_ButtonId		id;
+	int					uniq_id;
+	enum e_ButtonType	type;
+	char				*name;
+	t_vector2			size;
+	t_vector2			offset;
+	void				*color;
+	void				*hover_color;
+	void				*pressed_color;
+	int					selected;
+	int					hover;
 	struct s_category	*category;
 }	t_button;
 
 typedef struct s_subcategory
 {
-	enum SubCategoryId	id;
-	void	*showable;
-	t_button	**buttons;
-	struct s_category	*category;
+	enum e_SubCategoryId	id;
+	void					*showable;
+	t_button				**buttons;
+	struct s_category		*category;
 }	t_subcategory;
 
 typedef struct s_category
 {
-	enum CategoryId	id;
-	t_button	*main;
-	t_button	**buttons;
-	t_subcategory	**subs;
-	char	*title;
+	enum e_CategoryId	id;
+	t_button			*main;
+	t_button			**buttons;
+	t_subcategory		**subs;
+	char				*title;
 }	t_category;
 
 typedef struct s_display_data
@@ -195,31 +194,31 @@ typedef struct s_display_data
 	t_vector3	pivot_point;
 	t_vector2	offset;
 	t_vector3	rotate;
-	float			zoom;
-	float			zoom_v;
-	t_img	bg;
-	void	*bg_color;
-	int	axis;
-	int	mirror;
-	t_img	**backgrounds;
+	float		zoom;
+	float		zoom_v;
+	t_img		bg;
+	void		*bg_color;
+	int			axis;
+	int			mirror;
+	t_img		**backgrounds;
 }	t_display_data;
 
 typedef struct s_map
 {
-	t_vector3       size;
-	float	min_y;
-	float	max_y;
+	t_vector3	size;
+	float		min_y;
+	float		max_y;
 	t_point		**points;
 }	t_map;
 
 typedef struct s_navbar
 {
-	t_category		**categories;
-	t_category		*actual;
-	int		must_update;
+	t_category	**categories;
+	t_category	*actual;
+	int			must_update;
 }	t_navbar;
 
-enum KeyId
+enum e_KeyId
 {
 	I_UP,
 	I_DOWN,
@@ -267,36 +266,19 @@ enum KeyId
 
 typedef struct s_key
 {
-	int	id;
-	enum KeyId	key_id;
-	int	v;
-	enum ButtonId	button;
+	int				id;
+	enum e_KeyId	key_id;
+	int				v;
+	enum e_ButtonId	button;
 }	t_key;
 
 typedef struct s_edit
 {
-	t_key	old_key;
-	t_key	new_key;
+	t_key		old_key;
+	t_key		new_key;
 }	t_edit;
-/* 
-typedef struct s_controls
-{
-	t_key	up;
-	t_key	down;
-	t_key	left;
-	t_key	right;
-	t_key	reduce_x;
-	t_key	add_x;
-	t_key	reduce_y;
-	t_key	add_y;
-	t_key	reduce_z;
-	t_key	add_z;
-	t_key	zoom;
-	t_key	unzoom;
-	t_edit	edit;
-}	t_controls;
- */
-enum ViewType
+
+enum e_ViewType
 {
 	ISOMETRIC,
 	CONIC,
@@ -312,44 +294,44 @@ typedef struct s_e
 typedef struct s_c
 {
 	t_key	**keys;
-	t_e	edit;
+	t_e		edit;
 }	t_c;
 
 typedef struct s_isometric
 {
-	t_c		controls;
+	t_c			controls;
 	t_vector2	offset;
 	t_vector3	rotation;
-	float			zoom;
-	float			zoom_base;
-	int	axis;
-	int	mirror;
-	float	y_amplifier;
+	float		zoom;
+	float		zoom_base;
+	int			axis;
+	int			mirror;
+	float		y_amplifier;
 }	t_isometric;
 
 typedef struct s_conic
 {
-	t_c		controls;
+	t_c			controls;
 	t_vector3	camera;
-	float	default_z;
+	float		default_z;
 	t_vector3	rotation;
-	float	fov;
-	float	yaw;
-	float	pitch;
-	float			zoom;
-	float			zoom_base;
-	float	y_amplifier;
+	float		fov;
+	float		yaw;
+	float		pitch;
+	float		zoom;
+	float		zoom_base;
+	float		y_amplifier;
 }	t_conic;
 
 typedef struct s_parallel
 {
-	t_c		controls;
+	t_c			controls;
 	t_vector2	offset;
 	t_vector2	rotation;
-	float			zoom;
-	float			zoom_base;
-	int	axis;
-	float	y_amplifier;
+	float		zoom;
+	float		zoom_base;
+	int			axis;
+	float		y_amplifier;
 }	t_parallel;
 
 typedef struct s_background
@@ -373,18 +355,18 @@ typedef struct s_fdf
 	t_waiting		waiting;
 	t_map			*map;
 	int				must_update;
-	float	**depth;
-	t_vector2	screen;
-	enum ViewType		type;
-	void	*pixel_pos;
-	t_isometric	isometric;
-	t_conic		conic;
+	float			**depth;
+	t_vector2		screen;
+	enum e_ViewType	type;
+	void			*pixel_pos;
+	t_isometric		isometric;
+	t_conic			conic;
 	t_parallel		parallel;
-	t_vector3	pivot_point;
+	t_vector3		pivot_point;
 	t_background	*background;
-	t_img	**backgrounds;
-	int	only_points;
-	t_key	*edit_key;
+	t_img			**backgrounds;
+	int				only_points;
+	t_key			*edit_key;
 }	t_fdf;
 
 typedef struct s_rgb
@@ -395,183 +377,191 @@ typedef struct s_rgb
 	int	b;
 }	t_rgb;
 
-int			on_update(t_fdf *fdf);
-t_fdf	*f(t_fdf *v);
+int				on_update(t_fdf *fdf);
+t_fdf			*f(t_fdf *v);
 
 //hook.c
-int			keys_hook(int keycode, t_fdf *fdf);
-int			on_move(int x, int y, t_navbar *navbar);
-int			on_click(int id, int x, int y, t_fdf *fdf);
-int			rotatation_check(int keycode, t_fdf *fdf);
-int			translation_check(int keycode, t_fdf *fdf);
-int			zoom_check(int keycode, t_fdf *fdf);
+int				keys_hook(int keycode, t_fdf *fdf);
+int				on_move(int x, int y, t_navbar *navbar);
+int				on_click(int id, int x, int y, t_fdf *fdf);
+int				rotatation_check(int keycode, t_fdf *fdf);
+int				translation_check(int keycode, t_fdf *fdf);
+int				zoom_check(int keycode, t_fdf *fdf);
 
 //destructor.c
-void		destruct(t_fdf *fdf);
-int			on_close(t_fdf *fdf);
+void			destruct(t_fdf *fdf);
+int				on_close(t_fdf *fdf);
 
 //lines_utils.c
-void	set_map_data(char ***lines, t_map *map);
+void			set_map_data(char ***lines, t_map *map);
 
 //lines.c
-void		free_lines(char ****lines, int y);
-int			add_line(char *line, char ****lines, int y);
-int			init_lines(char *path, char ****lines, int *fd);
+void			free_lines(char ****lines, int y);
+int				add_line(char *line, char ****lines, int y);
+int				init_lines(char *path, char ****lines, int *fd);
 
 //map.c
-void		free_map(t_map *map);
-t_map		*parse_map(char *path);
+void			free_map(t_map *map);
+t_map			*parse_map(char *path);
 
 //mlx_manager.c
-t_fdf		*init_fdf(void);
-void	init_data(t_fdf *fdf, t_map *map);
-void		draw_background(t_fdf *fdf);
-void		draw_axes(t_fdf *fdf);
-void		draw_map(t_fdf *fdf);
+t_fdf			*init_fdf(void);
+void			init_data(t_fdf *fdf, t_map *map);
+void			draw_background(t_fdf *fdf);
+void			draw_axes(t_fdf *fdf);
+void			draw_map(t_fdf *fdf);
 
 //points.c
 
 //utils.c
-float		chars_to_float(char *nbr);
-int			ft_distance(t_vector2 v1, t_vector2 v2);
+float			chars_to_float(char *nbr);
+int				ft_distance(t_vector2 v1, t_vector2 v2);
 
 //vector.c
-t_vector2	vector2(float x, float y);
+t_vector2		vector2(float x, float y);
 
 //display_data.c
-void		init_display_data(t_fdf *fdf);
+void			init_display_data(t_fdf *fdf);
 
-void		init_isometric(t_fdf *fdf);
-void		init_conic(t_fdf *fdf);
-void		init_parallel(t_fdf *fdf);
+void			init_isometric(t_fdf *fdf);
+void			init_conic(t_fdf *fdf);
+void			init_parallel(t_fdf *fdf);
 
-t_key   key(int v, enum ButtonId id);
+t_key			key(int v, enum e_ButtonId id);
 
 //backgrounds.c
-void		init_backgrounds(t_fdf *fdf);
-void		free_backgrounds(t_fdf *fdf);
+void			init_backgrounds(t_fdf *fdf);
+void			free_backgrounds(t_fdf *fdf);
 
 //init/navbar.c
-void		init_navbar(t_fdf *fdf);
+void			init_navbar(t_fdf *fdf);
 
 //color.c
-int			get_color(char *value);
-int			from_rgb(t_rgb rgb);
-int			color_between(int ca, int cb, float v, float t);
-void	update_colors(t_fdf *fdf, int (color)(t_vector3, t_vector2, t_vector3));
+int				get_color(char *value);
+int				from_rgb(t_rgb rgb);
+int				color_between(int ca, int cb, float v, float t);
+void			update_colors(t_fdf *fdf,
+					int (color)(t_vector3, t_vector2, t_vector3));
 
-int			ft_abs(int v);
+int				ft_abs(int v);
 
-int	is_isometric(void);
-int	is_conic(void);
-int	is_parallel(void);
+int				is_isometric(void);
+int				is_conic(void);
+int				is_parallel(void);
 
 t_pixel_data	pixel_pos(t_fdf *fdf, t_point p, int mirror);
 t_pixel_data	ipp(t_fdf *fdf, t_vector3 v3, int mirror);
 t_pixel_data	cpp(t_fdf *fdf, t_vector3 v3, int mirror);
 t_pixel_data	ppp(t_fdf *fdf, t_vector3 v3, int mirror);
 
-int     black(void);
-void		free_buttons(t_button **buttons);
+int				black(void);
+void			free_buttons(t_button **buttons);
 
-int	rnb(t_vector2 v, int w, int h);
-int diag(t_vector2 v, int w, int h);
-int gakarbou(t_vector2 v, int w, int h);
-int test(t_vector2 v, int w, int h);
-int montain(t_vector2 v, int w, int h);
-int neon(t_vector2 v, int w, int h);
-int win(t_vector2 v, int w, int h);
-int ft(t_vector2 v, int w, int h);
-int rick(t_vector2 v, int w, int h);
-int larry(t_vector2 v, int w, int h);
-int hello_kitty(t_vector2 v, int w, int h);
+int				rnb(t_vector2 v, int w, int h);
+int				diag(t_vector2 v, int w, int h);
+int				gakarbou(t_vector2 v, int w, int h);
+int				test(t_vector2 v, int w, int h);
+int				montain(t_vector2 v, int w, int h);
+int				neon(t_vector2 v, int w, int h);
+int				win(t_vector2 v, int w, int h);
+int				ft(t_vector2 v, int w, int h);
+int				rick(t_vector2 v, int w, int h);
+int				larry(t_vector2 v, int w, int h);
+int				hello_kitty(t_vector2 v, int w, int h);
 
-int white(void);
-int subject(t_vector3 v, t_vector2 mimay);
-int blue(t_vector3 v, t_vector2 mimay);
-int relief(t_vector3 v);
-int rgb(t_vector3 v, t_vector2 mimay, t_vector3 size);
-int pays(t_vector3 v);
-int mars(t_vector3 v);
-int black_and_white(t_vector3 v);
-int blue_and_yellow(t_vector3 v, t_vector2 mimay);
-int random_c(t_vector3 v);
+int				white(void);
+int				subject(t_vector3 v, t_vector2 mimay);
+int				blue(t_vector3 v, t_vector2 mimay);
+int				relief(t_vector3 v);
+int				rgb(t_vector3 v, t_vector2 mimay, t_vector3 size);
+int				pays(t_vector3 v);
+int				mars(t_vector3 v);
+int				black_and_white(t_vector3 v);
+int				blue_and_yellow(t_vector3 v, t_vector2 mimay);
+int				random_c(t_vector3 v);
 
 //utils/navbar/default_color.c
-int	dark_gray(void);
-int	gray(void);
-int	light_gray(void);
+int				dark_gray(void);
+int				gray(void);
+int				light_gray(void);
 
-int	put_pixel(t_fdf *fdf, t_vector2 pos, int color, float alpha);
-void	draw_navbar(t_fdf *fdf);
-void	draw_button(t_fdf *fdf, t_button *button);
-void	draw_buttons(t_fdf *fdf, t_button **buttons);
+int				put_pixel(t_fdf *fdf, t_vector2 pos, int color, float alpha);
+void			draw_navbar(t_fdf *fdf);
+void			draw_button(t_fdf *fdf, t_button *button);
+void			draw_buttons(t_fdf *fdf, t_button **buttons);
 
-void	update_navbar_texts(t_fdf *fdf);
+void			update_navbar_texts(t_fdf *fdf);
 
 //button.c
-t_button	*set_color(t_button *button, void *default_color, void *hover_color, void *pressed_color);
-t_button	*create_button(enum ButtonId id, enum ButtonType type, char *name, t_vector2 size, t_vector2 offset);
-int	buttons_count(t_button **buttons);
+t_button		*set_color(t_button *button, void *default_color,
+					void *hover_color, void *pressed_color);
+t_button		*create_button(enum e_ButtonId id, enum e_ButtonType type,
+					char *name, t_vector2 size, t_vector2 offset);
+int				buttons_count(t_button **buttons);
 
 //utils/navbar
-void	add_category(enum CategoryId id, char *title);
-void	add_button(t_category *category, t_button *button);
-t_navbar	*get_navbar(void);
-int	active_navbar(int v);
-void		free_navbar(void);
-t_category	*get_navbar_category(enum CategoryId id);
+void			add_category(enum e_CategoryId id, char *title);
+void			add_button(t_category *category, t_button *button);
+t_navbar		*get_navbar(void);
+int				active_navbar(int v);
+void			free_navbar(void);
+t_category		*get_navbar_category(enum e_CategoryId id);
 
-void	add_subbutton(t_subcategory *sub, t_button *button);
-void	add_sub(t_category *category, enum SubCategoryId id, int (showable)(void));
-t_subcategory	*get_sub(t_category *category, enum SubCategoryId id);
+void			add_subbutton(t_subcategory *sub, t_button *button);
+void			add_sub(t_category *category, enum e_SubCategoryId id,
+					int (showable)(void));
+t_subcategory	*get_sub(t_category *category, enum e_SubCategoryId id);
 
 //templates/keybox.c
-void	draw_keybox(t_fdf *fdf, t_button *button);
-int	keybox_color(t_vector2 v, int w, int h);
-int	keybox_color_hover(t_vector2 v, int w, int h, int selected);
-int	keybox_color_pressed(t_vector2 v, int w, int h);
+void			draw_keybox(t_fdf *fdf, t_button *button);
+int				keybox_color(t_vector2 v, int w, int h);
+int				keybox_color_hover(t_vector2 v, int w, int h, int selected);
+int				keybox_color_pressed(t_vector2 v, int w, int h);
 
 //templates/toggle.c
-void	draw_toggle(t_fdf *fdf, t_button *button);
-int	toggle_color(t_vector2 v, int w, int h);
-int	toggle_color_hover(t_vector2 v, int w, int h, int selected);
-int	toggle_color_pressed(t_vector2 v, int w, int h);
+void			draw_toggle(t_fdf *fdf, t_button *button);
+int				toggle_color(t_vector2 v, int w, int h);
+int				toggle_color_hover(t_vector2 v, int w, int h, int selected);
+int				toggle_color_pressed(t_vector2 v, int w, int h);
 
-void	draw_square(t_fdf *fdf, t_button *button);
+void			draw_square(t_fdf *fdf, t_button *button);
 
-void	draw_cube(t_fdf *fdf, t_button *button);
+void			draw_cube(t_fdf *fdf, t_button *button);
 
 //initialization/controls.c
-void	change_key(t_fdf *fdf, int keycode);
-char	*get_name_for(int key);
+void			change_key(t_fdf *fdf, int keycode);
+char			*get_name_for(int key);
 
-void    change_background(t_fdf *fdf, int (color)(t_vector2, int, int, int));
+void			change_background(t_fdf *fdf,
+					int (color)(t_vector2, int, int, int));
 
-t_fdf	*get_fdf(void);
+t_fdf			*get_fdf(void);
 
-void    init_depth(t_fdf *fdf);
-void    clear_depth(t_fdf *fdf);
-void    free_depth(t_fdf *fdf);
+void			init_depth(t_fdf *fdf);
+void			clear_depth(t_fdf *fdf);
+void			free_depth(t_fdf *fdf);
 
-int cohenSutherlandClip(t_vector2 *v1, t_vector2 *v2);
+int				cohenSutherlandClip(t_vector2 *v1, t_vector2 *v2);
 
-int	*get_resolution(void);
-int	get_swidth(void);
-int	get_sheight(void);
+int				*get_resolution(void);
+int				get_swidth(void);
+int				get_sheight(void);
+int				height(void);
+int				width(void);
 
-int	outside_p(t_vector2 v);
+int				outside_p(t_vector2 v);
 
-void	init_contr(t_c *controls);
-t_c	*get_controls(t_fdf *fdf);
-void	add_key(t_c *controls, enum KeyId id, int key, enum ButtonId button);
-int	is_key(t_c controls, enum KeyId id, int keycode);
-t_key	*get_key(t_c controls, enum KeyId id);
-t_key	*get_key_from(t_c *controls, enum ButtonId id);
-void	free_contr(t_c controls);
+void			init_contr(t_c *controls);
+t_c				*get_controls(t_fdf *fdf);
+void			add_key(t_c *controls, enum e_KeyId id,
+					int key, enum e_ButtonId button);
+int				is_key(t_c controls, enum e_KeyId id, int keycode);
+t_key			*get_key(t_c controls, enum e_KeyId id);
+t_key			*get_key_from(t_c *controls, enum e_ButtonId id);
+void			free_contr(t_c controls);
 
-void	algo(t_fdf *fdf, t_pixel_data p1, t_pixel_data p2);
+void			algo(t_fdf *fdf, t_pixel_data p1, t_pixel_data p2);
 
-void	draw_waiting_screen(t_fdf *fdf);
+void			draw_waiting_screen(t_fdf *fdf);
 
 #endif

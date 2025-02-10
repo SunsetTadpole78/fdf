@@ -35,7 +35,7 @@ int	put_pixel(t_fdf *fdf, t_vector2 pos, int color, float alpha)
 {
 	char	*pixel;
 
-	if (pos.x < 0 || pos.x >= WIDTH || pos.y < 0 || pos.y >= HEIGHT)
+	if (pos.x < 0 || pos.x >= width() || pos.y < 0 || pos.y >= height())
 		return (0);
 	pixel = fdf->img.addr + ((int)pos.y * fdf->img.ll
 			+ (int)pos.x * (fdf->img.bpp / 8));
@@ -54,7 +54,7 @@ int	ft_abs(int v)
 
 int	outside_p(t_vector2 v)
 {
-	return (v.x < 0 || v.x >= WIDTH || v.y < 0 || v.y >= HEIGHT);
+	return (v.x < 0 || v.x >= width() || v.y < 0 || v.y >= height());
 }
 
 int	rround(float num)
@@ -66,8 +66,8 @@ int	rround(float num)
 
 int	outside(t_vector2 v, t_vector2 v2)
 {
-	return ((v.x < 0 && v2.x < 0) || (v.x >= WIDTH && v2.x >= WIDTH)
-		|| (v.y < 0 && v2.y < 0) || (v.y >= HEIGHT && v2.y >= HEIGHT));
+	return ((v.x < 0 && v2.x < 0) || (v.x >= width() && v2.x >= width())
+		|| (v.y < 0 && v2.y < 0) || (v.y >= height() && v2.y >= height()));
 }
 
 int	black(void)
@@ -86,18 +86,18 @@ void	change_background(t_fdf *fdf, int (color)(t_vector2, int, int, int))
 	if (!color)
 		return ;
 	if (!bg->bg.img)
-		bg->bg.img = mlx_new_image(fdf->mlx, WIDTH, HEIGHT);
+		bg->bg.img = mlx_new_image(fdf->mlx, width(), height());
 	bg->bg.addr = mlx_get_data_addr(bg->bg.img, &bg->bg.bpp,
 			&bg->bg.ll, &bg->bg.endian);
 	pos.y = 0;
-	while (pos.y <= HEIGHT)
+	while (pos.y <= height())
 	{
 		pos.x = 0;
-		while (pos.x <= WIDTH)
+		while (pos.x <= width())
 		{
 			pixel = fdf->background->bg.addr
 				+ ((int)pos.y * fdf->img.ll + (int)pos.x * (fdf->img.bpp / 8));
-			*(unsigned int *)pixel = color(pos, WIDTH, HEIGHT, 0);
+			*(unsigned int *)pixel = color(pos, width(), height(), 0);
 			pos.x++;
 		}
 		pos.y++;
@@ -111,7 +111,7 @@ void	draw_background(t_fdf *fdf)
 	ft_memcpy(
 		fdf->img.addr,
 		fdf->background->bg.addr,
-		HEIGHT * fdf->img.ll + WIDTH * (fdf->img.bpp / 8));
+		height() * fdf->img.ll + width() * (fdf->img.bpp / 8));
 }
 
 void	circle_line(t_vector2 pos, int x2, t_fdf *fdf, t_button *button)
@@ -202,8 +202,8 @@ int	check_depth(t_fdf *fdf, t_pixel_data *new, float v)
 	int	res;
 
 	new->depth = v;
-	res = new->pos.x >= 0 && new->pos.x < WIDTH
-		&& new->pos.y >= 0 && new->pos.y < HEIGHT
+	res = new->pos.x >= 0 && new->pos.x < width()
+		&& new->pos.y >= 0 && new->pos.y < height()
 		&& new->depth > fdf->depth[(int)new->pos.y][(int)new->pos.x];
 	if (res)
 		fdf->depth[(int)new->pos.y][(int)new->pos.x] = new->depth;
@@ -412,11 +412,11 @@ t_fdf	*init_fdf(void)
 	if (!fdf)
 		return (NULL);
 	f(fdf);
-	fdf->screen.x = get_resolution()[1];
-	fdf->screen.y = get_resolution()[0];
+	fdf->screen.x = get_resolution()[0];
+	fdf->screen.y = get_resolution()[1];
 	fdf->mlx = mlx_init();
-	fdf->window = mlx_new_window(fdf->mlx, WIDTH, HEIGHT, "FdF");
-	fdf->img.img = mlx_new_image(fdf->mlx, WIDTH, HEIGHT);
+	fdf->window = mlx_new_window(fdf->mlx, width(), height(), "FdF");
+	fdf->img.img = mlx_new_image(fdf->mlx, width(), height());
 	fdf->img.addr = mlx_get_data_addr(fdf->img.img, &fdf->img.bpp,
 			&fdf->img.ll, &fdf->img.endian);
 	fdf->waiting.step = 3;

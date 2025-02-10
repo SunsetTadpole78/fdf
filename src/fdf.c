@@ -30,7 +30,7 @@ int	on_update(t_fdf *fdf)
 {
 	if (fdf->must_update || (active_navbar(2) && get_navbar()->must_update))
 	{
-		ft_memset(fdf->img.addr, 0, HEIGHT * WIDTH * (fdf->img.bpp / 8));
+		ft_memset(fdf->img.addr, 0, height() * width() * (fdf->img.bpp / 8));
 		clear_depth(fdf);
 		draw_background(fdf);
 		draw_map(fdf);

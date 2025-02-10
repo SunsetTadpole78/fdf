@@ -20,8 +20,8 @@ static int	next_id(void)
 	return (id);
 }
 
-t_button	*set_color(t_button *button, void *default_color, void *hover_color
-	, void *pressed_color)
+t_button	*set_color(t_button *button, void *default_color,
+				void *hover_color, void *pressed_color)
 {
 	button->color = default_color;
 	button->hover_color = hover_color;
@@ -29,7 +29,7 @@ t_button	*set_color(t_button *button, void *default_color, void *hover_color
 	return (button);
 }
 
-t_button	*create_button(enum ButtonId id, enum ButtonType type
+t_button	*create_button(enum e_ButtonId id, enum e_ButtonType type
 	, char *name, t_vector2 size, t_vector2 offset)
 {
 	t_button	*button;

@@ -42,9 +42,9 @@ void	init_isometric(t_fdf *fdf)
 	fdf->isometric.rotation.z = 0;
 	fdf->isometric.zoom = 1;
 	t = fdf->map->size.x + fdf->map->size.z;
-	fdf->isometric.zoom_base = (float)HEIGHT / (fdf->map->size.y + t * sin(30 * (M_PI / 180)));
-	if ((float)WIDTH / t < fdf->isometric.zoom_base)
-		fdf->isometric.zoom_base = (float)WIDTH / t;
+	fdf->isometric.zoom_base = (float)height() / (fdf->map->size.y + t * sin(30 * (M_PI / 180)));
+	if ((float)width() / t < fdf->isometric.zoom_base)
+		fdf->isometric.zoom_base = (float)width() / t;
 	fdf->isometric.axis = 1;
 	fdf->isometric.mirror = 0;
 	fdf->isometric.y_amplifier = 1;

@@ -32,8 +32,8 @@ void	init_display_data(t_fdf *fdf)
 	display_data->rotate.y = 0;
 	display_data->rotate.z = 0;
 	display_data->zoom = 1;
-	zoom_width = (float)WIDTH / (s.x + s.z);
-	zoom_height = (float)HEIGHT / (s.y + (s.x + s.z) * sin(30 * (M_PI / 180)));
+	zoom_width = (float)width() / (s.x + s.z);
+	zoom_height = (float)height() / (s.y + (s.x + s.z) * sin(30 * (M_PI / 180)));
 	display_data->zoom_v = zoom_height;
 	if (zoom_width < zoom_height)
 		display_data->zoom_v = zoom_width;

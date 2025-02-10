@@ -39,9 +39,9 @@ void	init_parallel(t_fdf *fdf)
 	fdf->parallel.offset.y = 0;
 	fdf->parallel.zoom = 1;
 	t = fdf->map->size.x + fdf->map->size.z;
-	fdf->parallel.zoom_base = (float)HEIGHT / (fdf->map->size.y + t * sin(30 * (M_PI / 180)));
-	if ((float)WIDTH / t < fdf->parallel.zoom_base)
-		fdf->parallel.zoom_base = (float)WIDTH / t;
+	fdf->parallel.zoom_base = (float)height() / (fdf->map->size.y + t * sin(30 * (M_PI / 180)));
+	if ((float)width() / t < fdf->parallel.zoom_base)
+		fdf->parallel.zoom_base = (float)width() / t;
 	fdf->parallel.axis = 1;
 	fdf->parallel.y_amplifier = 1;
 	init_controls(fdf);

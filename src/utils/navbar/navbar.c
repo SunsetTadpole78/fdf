@@ -20,7 +20,7 @@ void	draw_top(t_fdf *fdf)
 	while (pos.y < 51)
 	{
 		pos.x = 0;
-		while (pos.x < WIDTH)
+		while (pos.x < width())
 		{
 			if (pos.y == 50)
 				put_pixel(fdf, pos, 0x2F2F33, 0.9);
@@ -40,7 +40,7 @@ void	draw_open_category(t_fdf *fdf)
 	while (pos.y < 151)
 	{
 		pos.x = 0;
-		while (pos.x < WIDTH)
+		while (pos.x < width())
 		{
 			if (pos.y == 150)
 				put_pixel(fdf, pos, 0x2F2F33, 0.9);
@@ -297,7 +297,7 @@ void	add_to_navbar(t_category *category)
 	get_navbar()->categories[count + 1] = NULL;
 }
 
-void	add_category(enum CategoryId id, char *title)
+void	add_category(enum e_CategoryId id, char *title)
 {
 	t_category	*category;
 	t_vector2	size;
@@ -324,7 +324,7 @@ void	add_category(enum CategoryId id, char *title)
 	add_to_navbar(category);
 }
 
-t_category	*get_navbar_category(enum CategoryId id)
+t_category	*get_navbar_category(enum e_CategoryId id)
 {
 	int			i;
 	t_category	**categories;
@@ -396,7 +396,7 @@ int	subs_count(t_subcategory **subs)
 	return (i);
 }
 
-void	add_sub(t_category *category, enum SubCategoryId id, int (showable)(void))
+void	add_sub(t_category *category, enum e_SubCategoryId id, int (showable)(void))
 {
 	int	count;
 
@@ -416,7 +416,7 @@ void	add_sub(t_category *category, enum SubCategoryId id, int (showable)(void))
 
 }
 
-t_subcategory	*get_sub(t_category *category, enum SubCategoryId id)
+t_subcategory	*get_sub(t_category *category, enum e_SubCategoryId id)
 {
 	int	i;
 

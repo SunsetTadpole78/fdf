@@ -75,8 +75,8 @@ t_pixel_data	ppp(t_fdf *fdf, t_vector3 v3, int mirror)
 	v3.y *= zoom;
 	v3.z *= zoom;
 
-	v2.x = WIDTH / 2 + v3.x - ((fdf->map->size.x - 1) / 2) * zoom;
-	v2.y = HEIGHT / 2 + v3.y - ((fdf->map->size.y - 1) / 2) * zoom;
+	v2.x = width() / 2 + v3.x - ((fdf->map->size.x - 1) / 2) * zoom;
+	v2.y = height() / 2 + v3.y - ((fdf->map->size.y - 1) / 2) * zoom;
 	v2.x += fdf->parallel.offset.x * zoom;
 	v2.y += fdf->parallel.offset.y * zoom;
 

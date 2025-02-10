@@ -26,12 +26,12 @@ int	*get_resolution(void)
     return resolution;
 }
 
-int	get_swidth(void)
+int	height(void)
 {
-	return get_fdf()->screen.x;
+	return ((get_fdf()->screen.y * 0.9) * WINDOW_SIZE);
 }
 
-int	get_sheight(void)
+int	width(void)
 {
-	return get_fdf()->screen.y;
+	return ((get_fdf()->screen.x - 20) * WINDOW_SIZE);
 }

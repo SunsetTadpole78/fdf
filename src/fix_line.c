@@ -11,12 +11,12 @@ int computeOutCode(float x, float y) {
 
     if (x < 0)
         code |= LEFT;
-    else if (x > WIDTH)
+    else if (x > width())
         code |= RIGHT;
     
     if (y < 0)
         code |= TOP;
-    else if (y > HEIGHT)
+    else if (y > height())
         code |= BOTTOM;
 
     return code;
@@ -43,11 +43,11 @@ int cohenSutherlandClip(t_vector2 *v1, t_vector2 *v2)
                 x = v1->x + (v2->x - v1->x) * (0 - v1->y) / (v2->y - v1->y);
                 y = 0;
             } else if (outCodeOut & BOTTOM) {
-                x = v1->x + (v2->x - v1->x) * (HEIGHT - v1->y) / (v2->y - v1->y);
-                y = HEIGHT;
+                x = v1->x + (v2->x - v1->x) * (height() - v1->y) / (v2->y - v1->y);
+                y = height();
             } else if (outCodeOut & RIGHT) {
-                y = v1->y + (v2->y - v1->y) * (WIDTH - v1->x) / (v2->x - v1->x);
-                x = WIDTH;
+                y = v1->y + (v2->y - v1->y) * (width() - v1->x) / (v2->x - v1->x);
+                x = width();
             } else if (outCodeOut & LEFT) {
                 y = v1->y + (v2->y - v1->y) * (0 - v1->x) / (v2->x - v1->x);
                 x = 0;
