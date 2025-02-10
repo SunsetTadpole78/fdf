@@ -6,15 +6,16 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 14:45:42 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/07 17:22:38 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/10 10:45:41 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int	call(int (color)(t_vector2, int, int, int), t_vector2 cpos, t_button *button, t_vector2 size)
+int	call(int (color)(t_vector2, int, int, int), t_vector2 cpos,
+	t_button *button, t_vector2 size)
 {
-	return color(cpos, size.x, size.y, button->selected);
+	return (color(cpos, size.x, size.y, button->selected));
 }
 
 int	get_button_color(t_vector2 cpos, t_button *button, t_vector2 size)
@@ -27,7 +28,7 @@ int	get_button_color(t_vector2 cpos, t_button *button, t_vector2 size)
 		color = button->pressed_color;
 	else
 		color = button->color;
-	return call(color, cpos, button, size);
+	return (call(color, cpos, button, size));
 }
 
 int	put_pixel(t_fdf *fdf, t_vector2 pos, int color, float alpha)
@@ -36,7 +37,8 @@ int	put_pixel(t_fdf *fdf, t_vector2 pos, int color, float alpha)
 
 	if (pos.x < 0 || pos.x >= WIDTH || pos.y < 0 || pos.y >= HEIGHT)
 		return (0);
-	pixel = fdf->img.addr + ((int)pos.y * fdf->img.ll + (int)pos.x * (fdf->img.bpp / 8));
+	pixel = fdf->img.addr + ((int)pos.y * fdf->img.ll
+			+ (int)pos.x * (fdf->img.bpp / 8));
 	if (alpha < 1 && pixel != 0)
 		color = color_between(*(unsigned int *)pixel, color, alpha, 1);
 	*(unsigned int *)pixel = color;
@@ -55,43 +57,11 @@ int	outside_p(t_vector2 v)
 	return (v.x < 0 || v.x >= WIDTH || v.y < 0 || v.y >= HEIGHT);
 }
 
-int rround(float num) {
-    return (int)(num + (num >= 0 ? 0.5f : -0.5f));
-}
-
-void	fix_lines(t_vector2 *v, t_vector2 *v2)
+int	rround(float num)
 {
-	float	m;
-	float	p;
-	
-	if (v->x < 0 && v->x < v2->x)
-	{
-		m = (v2->y - v->y) / (v2->x - v->x);
-		p = v2->y - m * v2->x;
-		v->y = (m * 0 + p);
-		v->x = 0;
-	}
-	else if (v->x > WIDTH && v->x > v2->x)
-	{
-		m = (v2->y - v->y) / (v2->x - v->x);
-		p = v2->y - m * v2->x;
-		v->y = (m * (WIDTH) + p);
-		v->x = (WIDTH);
-	}
-	if (v->y < 0 && v->y < v2->y)
-	{
-		m = (v2->x - v->x) / (v2->y - v->y);
-		p = v2->x - m * v2->y;
-		v->x = (m * 0 + p);
-		v->y = 0;
-	}
-	else if (v->y > HEIGHT && v->y > v2->y)
-	{
-		m = (v2->x - v->x) / (v2->y - v->y);
-		p = v2->x - m * v2->y;
-		v->x = (m * (HEIGHT) + p);
-		v->y = (HEIGHT);
-	}
+	if (num >= 0)
+		return ((int)(num + 0.5f));
+	return ((int)(num - 0.5f));
 }
 
 int	outside(t_vector2 v, t_vector2 v2)
@@ -108,29 +78,30 @@ int	black(void)
 void	change_background(t_fdf *fdf, int (color)(t_vector2, int, int, int))
 {
 	t_background	*bg;
-	char	*pixel;
-	
+	char			*pixel;
+	t_vector2		pos;
+
 	bg = fdf->background;
 	bg->bg_color = color;
 	if (!color)
 		return ;
 	if (!bg->bg.img)
 		bg->bg.img = mlx_new_image(fdf->mlx, WIDTH, HEIGHT);
-	bg->bg.addr = mlx_get_data_addr(bg->bg.img, &bg->bg.bpp, &bg->bg.ll, &bg->bg.endian);
-	t_vector2	pos;
+	bg->bg.addr = mlx_get_data_addr(bg->bg.img, &bg->bg.bpp,
+			&bg->bg.ll, &bg->bg.endian);
 	pos.y = 0;
 	while (pos.y <= HEIGHT)
 	{
 		pos.x = 0;
 		while (pos.x <= WIDTH)
 		{
-			pixel = fdf->background->bg.addr + ((int)pos.y * fdf->img.ll + (int)pos.x * (fdf->img.bpp / 8));
+			pixel = fdf->background->bg.addr
+				+ ((int)pos.y * fdf->img.ll + (int)pos.x * (fdf->img.bpp / 8));
 			*(unsigned int *)pixel = color(pos, WIDTH, HEIGHT, 0);
 			pos.x++;
 		}
 		pos.y++;
 	}
-
 }
 
 void	draw_background(t_fdf *fdf)
@@ -140,8 +111,7 @@ void	draw_background(t_fdf *fdf)
 	ft_memcpy(
 		fdf->img.addr,
 		fdf->background->bg.addr,
-		HEIGHT * fdf->img.ll + WIDTH * (fdf->img.bpp / 8)
-	);
+		HEIGHT * fdf->img.ll + WIDTH * (fdf->img.bpp / 8));
 }
 
 void	circle_line(t_vector2 pos, int x2, t_fdf *fdf, t_button *button)
@@ -164,9 +134,9 @@ void	circle_line(t_vector2 pos, int x2, t_fdf *fdf, t_button *button)
 
 void	draw_circle(t_fdf *fdf, int radius, t_button *button)
 {
-	int	x;
-	int	y;
-	int	m;
+	int			x;
+	int			y;
+	int			m;
 	t_vector2	pos;
 
 	x = 0;
@@ -185,12 +155,8 @@ void	draw_circle(t_fdf *fdf, int radius, t_button *button)
 		pos.y = button->offset.y + x;
 		circle_line(pos, button->offset.x + y, fdf, button);
 		if (m > 0)
-		{
-			y--;
-			m -= 8 * y;
-		}
-		x++;
-		m += 8 * x + 4;
+			m -= 8 * --y;
+		m += 8 * ++x + 4;
 	}
 }
 
@@ -217,137 +183,132 @@ int	ft_max(int v, int v2)
 {
 	if (v > v2)
 		return (v);
-	return v2;
+	return (v2);
 }
 
-t_pixel_data	pixel_pos(t_fdf *fdf, t_vector3 v3, int  mirror)
+t_pixel_data	pixel_pos(t_fdf *fdf, t_point p, int mirror)
 {
+	t_pixel_data	data;
+
 	t_pixel_data (*pos)(t_fdf *, t_vector3, int);
-
 	pos = fdf->pixel_pos;
-	return (pos(fdf, v3, mirror));
+	data = pos(fdf, p.pos, mirror);
+	data.color = p.color;
+	return (data);
 }
 
-void	draw_points(t_fdf *fdf, t_vector2 p1, int c1, t_vector2 p2, int c2)
+int	check_depth(t_fdf *fdf, t_pixel_data *new, float v)
 {
-	put_pixel(fdf, p1, c1, 1);
-	put_pixel(fdf, p2, c2, 1);
+	int	res;
+
+	new->depth = v;
+	res = new->pos.x >= 0 && new->pos.x < WIDTH
+		&& new->pos.y >= 0 && new->pos.y < HEIGHT
+		&& new->depth > fdf->depth[(int)new->pos.y][(int)new->pos.x];
+	if (res)
+		fdf->depth[(int)new->pos.y][(int)new->pos.x] = new->depth;
+	return (res);
 }
 
-void	algo(t_fdf *fdf, t_vector2 po1, t_vector2 po2, int d1, int d2, int ca, int cb)
+void	init_line_data(t_line_data *data, t_vector2 po1, t_vector2 po2)
 {
-	float	dx;
-	float	dy;
-	float	e;
-	float	sx;
-	float	sy;
-	float	e2;
-	t_pixel_data	new;
-	float		total;
-	float		current;
-	float	depth;
-	sx = -1;
-	if (po1.x < po2.x)
-		sx = 1;
-	sy = -1;
-	if (po1.y < po2.y)
-		sy = 1;
-	dx = ft_abs(po1.x - po2.x);
-	dy = -ft_abs(po1.y - po2.y);
-	e = dx + dy;
-	total = sqrt((po2.x - po1.x) * (po2.x - po1.x)
+	data->s.x = 1 - (2 * (po1.x >= po2.x));
+	data->s.y = 1 - (2 * (po1.y >= po2.y));
+	data->delta.x = ft_abs(po1.x - po2.x);
+	data->delta.y = -ft_abs(po1.y - po2.y);
+	data->e = data->delta.x + data->delta.y;
+	data->tot = sqrt((po2.x - po1.x) * (po2.x - po1.x)
 			+ (po2.y - po1.y) * (po2.y - po1.y));
-	new.pos = po1;
+	data->step = data->tot / ft_max(data->delta.x, -data->delta.y);
+	data->cur = 0.0f;
+}
+
+void	algo(t_fdf *fdf, t_pixel_data p1, t_pixel_data p2)
+{
+	t_line_data		d;
+	t_pixel_data	new;
+
+	init_line_data(&d, p1.pos, p2.pos);
+	new.pos = p1.pos;
 	while (1)
 	{
-		current = sqrt((new.pos.x - po1.x) * (new.pos.x - po1.x)
-				+ (new.pos.y - po1.y) * (new.pos.y - po1.y));
-		depth = d1 + (current / total) * (d2 - d1);
-		if (new.pos.x >= 0 && new.pos.x < WIDTH && new.pos.y >= 0 && new.pos.y < HEIGHT) {
-			if (depth > fdf->depth[(int)new.pos.y][(int)new.pos.x]) {
-        			put_pixel(fdf, new.pos, color_between(ca, cb, current, total), 1);
-        			fdf->depth[(int)new.pos.y][(int)new.pos.x] = depth;
-   			}
-		}
-
-		if ((new.pos.x == po2.x) && (new.pos.y == po2.y))
+		if (check_depth(fdf, &new, p1.depth + (d.cur / d.tot)
+				* (p2.depth - p1.depth)))
+			put_pixel(fdf, new.pos,
+				color_between(p1.color, p2.color, d.cur, d.tot), 1);
+		if ((new.pos.x == p2.pos.x) && (new.pos.y == p2.pos.y))
 			break ;
-		e2 = e * 2;
-		if (e2 >= dy)
-			e += dy;
-		if (e2 >= dy)
-			new.pos.x += sx;
-		if (e2 <= dx)
-			e += dx;
-		if (e2 <= dx)
-			new.pos.y += sy;
+		d.e2 = d.e * 2;
+		if (d.e2 >= d.delta.y)
+			d.e += d.delta.y;
+		if (d.e2 >= d.delta.y)
+			new.pos.x += d.s.x;
+		if (d.e2 <= d.delta.x)
+			d.e += d.delta.x;
+		if (d.e2 <= d.delta.x)
+			new.pos.y += d.s.y;
+		d.cur += d.step;
 	}
 }
 
 void	draw_line(t_fdf *fdf, t_point a, t_point b, int mirror)
-{(void)mirror;
+{
 	t_pixel_data	p1;
 	t_pixel_data	p2;
-	t_vector2	po1;
-	t_vector2	po2;
-	p1 = pixel_pos(fdf, a.pos, mirror);
-	po1 = p1.pos;
-	p2 = pixel_pos(fdf, b.pos, mirror);
-	po2 = p2.pos;
-	if (outside(po1, po2))
+
+	p1 = pixel_pos(fdf, a, mirror);
+	p2 = pixel_pos(fdf, b, mirror);
+	if (outside(p1.pos, p2.pos))
 		return ;
-	if (!cohenSutherlandClip(&po1, &po2) || outside(po1, po2))
+	if (!cohenSutherlandClip(&p1.pos, &p2.pos) || outside(p1.pos, p2.pos))
 		return ;
-	po1.x = rround(po1.x);
-	po1.y = rround(po1.y);
-	po2.x = rround(po2.x);
-	po2.y = rround(po2.y);
+	p1.pos.x = rround(p1.pos.x);
+	p1.pos.y = rround(p1.pos.y);
+	p2.pos.x = rround(p2.pos.x);
+	p2.pos.y = rround(p2.pos.y);
 	if (fdf->only_points)
 	{
-		put_pixel(fdf, po1, a.color, 1);
-		put_pixel(fdf, po2, b.color, 1);
+		put_pixel(fdf, p1.pos, p1.color, 1);
+		put_pixel(fdf, p2.pos, p2.color, 1);
 		return ;
 	}
-	algo(fdf, po1, po2, p1.depth, p2.depth, a.color, b.color);
+	algo(fdf, p1, p2);
+}
+
+static void	draw_axe(t_fdf *fdf, t_vector3 o, int type, int color)
+{
+	t_point		p;
+	t_point		p2;
+
+	p.color = color;
+	p.can_mirror = 0;
+	p.pos = o;
+	p2 = p;
+	if (type == 0)
+		p2.pos.x = 1000000;
+	else if (type == 1)
+		p2.pos.y = 1000000;
+	else if (type == 2)
+		p2.pos.z = 1000000;
+	draw_line(fdf, p, p2, 0);
 }
 
 void	draw_axes(t_fdf *fdf)
 {
 	float		m_y;
 	t_vector3	o;
-	t_vector3	x;
-	t_vector3	y;
-	t_vector3	z;
-	t_point		p;
-	t_point		p2;
 
 	if (fdf->type == CONIC || (fdf->type == ISOMETRIC && !fdf->isometric.axis)
-	|| (fdf->type == PARALLEL && !fdf->parallel.axis))
+		|| (fdf->type == PARALLEL && !fdf->parallel.axis))
 		return ;
 	m_y = ((fdf->map->max_y) + (fdf->map->min_y)) / 2;
 	o.x = (fdf->map->size.x - 1) / 2;
 	o.y = m_y;
 	o.z = (fdf->map->size.z - 1) / 2;
-	x = o;
-	x.x = 1000000;
-	y = o;
-	y.y = x.x;
-	z = o;
-	z.z = x.x;
-	p.pos = o;
-	p.color = 0xFF0000;
-	p.can_mirror = 0;
-	p2 = p;
-	p2.pos = x;
-	draw_line(fdf, p, p2, 0);
-	p.color = 0x00FF00;
-	p2.color = 0x00FF00;
-	p2.pos = y;
-	draw_line(fdf, p, p2, 0);
-	p.color = 0x0000FF;
-	p2.color = 0x0000FF;
-	p2.pos = z;
-	draw_line(fdf, p, p2, 0);
+	draw_axe(fdf, o, 0, 0xFF0000);
+	draw_axe(fdf, o, 1, 0x00FF00);
+	draw_axe(fdf, o, 2, 0x0000FF);
+	return ;
 }
 
 void	draw_square(t_fdf *fdf, t_button *button)
@@ -363,7 +324,8 @@ void	draw_square(t_fdf *fdf, t_button *button)
 		cpos.x = 0;
 		while (pos.x < (button->size.x + button->offset.x))
 		{
-			put_pixel(fdf, pos, get_button_color(cpos, button, button->size), 1);
+			put_pixel(fdf, pos,
+				get_button_color(cpos, button, button->size), 1);
 			pos.x++;
 			cpos.x++;
 		}
@@ -408,15 +370,20 @@ void	draw_buttons(t_fdf *fdf, t_button **buttons)
 	}
 }
 
+void	draw_and_mirror(t_fdf *fdf, t_point p1, t_point p2)
+{
+	draw_line(fdf, p1, p2, 0);
+	if (fdf->isometric.mirror && (p1.can_mirror || p2.can_mirror))
+		draw_line(fdf, p1, p2, 1);
+}
+
 void	draw_map(t_fdf *fdf)
 {
 	size_t	x;
 	size_t	y;
 	t_map	*map;
+	t_point	p;
 
-	clear_depth(fdf);
-	draw_background(fdf);
-	draw_background(fdf);
 	map = fdf->map;
 	y = 0;
 	while (map->points[y])
@@ -424,50 +391,45 @@ void	draw_map(t_fdf *fdf)
 		x = 0;
 		while (x < map->size.x)
 		{
-			if (x + 1 < map->size.x)
-			{
-				if (map->points[y][x].pos.x == x && map->points[y][x + 1].pos.x == x + 1)
-				{
-						draw_line(fdf, map->points[y][x], map->points[y][x + 1], 0);
-					if (fdf->isometric.mirror && (map->points[y][x].can_mirror || map->points[y][x + 1].can_mirror))
-						draw_line(fdf, map->points[y][x], map->points[y][x + 1], 1);
-				}
-			}
-			if (map->points[y + 1])
-			{
-				if (map->points[y][x].pos.x == x && map->points[y + 1][x].pos.x == x)
-				{
-						draw_line(fdf, map->points[y][x], map->points[y + 1][x], 0);
-					if (fdf->isometric.mirror && (map->points[y][x].can_mirror || map->points[y + 1][x].can_mirror))
-						draw_line(fdf, map->points[y][x], map->points[y + 1][x], 1);
-				}
-			}
+			p = map->points[y][x];
+			if (x + 1 < map->size.x && p.pos.x == x
+				&& map->points[y][x + 1].pos.x == x + 1)
+				draw_and_mirror(fdf, p, map->points[y][x + 1]);
+			if (map->points[y + 1] && p.pos.x == x
+				&& map->points[y + 1][x].pos.x == x)
+				draw_and_mirror(fdf, p, map->points[y + 1][x]);
 			x++;
 		}
 		y++;
 	}
-	draw_axes(fdf);
-	draw_navbar(fdf);
 }
 
-t_fdf	*create_window(t_map *map)
+t_fdf	*init_fdf(void)
 {
 	t_fdf	*fdf;
 
 	fdf = malloc(sizeof(t_fdf));
 	if (!fdf)
-		return (NULL);	
+		return (NULL);
 	f(fdf);
 	fdf->screen.x = get_resolution()[1];
 	fdf->screen.y = get_resolution()[0];
 	fdf->mlx = mlx_init();
 	fdf->window = mlx_new_window(fdf->mlx, WIDTH, HEIGHT, "FdF");
 	fdf->img.img = mlx_new_image(fdf->mlx, WIDTH, HEIGHT);
-	fdf->img.addr = mlx_get_data_addr(fdf->img.img, &fdf->img.bpp, &fdf->img.ll, &fdf->img.endian);
+	fdf->img.addr = mlx_get_data_addr(fdf->img.img, &fdf->img.bpp,
+			&fdf->img.ll, &fdf->img.endian);
+	fdf->waiting.step = 3;
+	fdf->waiting.total = 3;
+	return (fdf);
+}
+
+void	init_data(t_fdf *fdf, t_map *map)
+{
 	fdf->map = map;
-	fdf->pivot_point.x = fdf->map->size.x / 2;
-	fdf->pivot_point.y = fdf->map->size.y / 2;
-	fdf->pivot_point.z = fdf->map->size.z / 2;
+	fdf->pivot_point.x = fdf->map->size.x / 2.0f;
+	fdf->pivot_point.y = fdf->map->size.y / 2.0f;
+	fdf->pivot_point.z = fdf->map->size.z / 2.0f;
 	init_backgrounds(fdf);
 	init_isometric(fdf);
 	init_conic(fdf);
@@ -479,5 +441,4 @@ t_fdf	*create_window(t_map *map)
 	fdf->edit_key = NULL;
 	init_navbar(fdf);
 	init_depth(fdf);
-	return (fdf);
 }

@@ -6,7 +6,7 @@
 /*   By: lroussel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 12:35:19 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/07 10:08:18 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/10 09:20:41 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int				ft_toupper(int c);
 
 unsigned int	ft_count_digits(int n);
 unsigned int	ft_count_words(char const *s, char c);
+unsigned int	ft_count_words_charset(char const *s, char *c);
 
 size_t			ft_strlcat(char *dst, const char *src, size_t size);
 size_t			ft_strlcpy(char *dst, const char *src, size_t size);
@@ -71,6 +72,7 @@ char			*ft_strtrim(char const *s1, char const *set);
 char			*ft_substr(char const *s, unsigned int start, size_t len);
 
 char			**ft_split(char const *s, char c);
+char			**ft_split_charset(char const *s, char *c);
 
 /* ______________________________ Partie Bonus ______________________________ */
 

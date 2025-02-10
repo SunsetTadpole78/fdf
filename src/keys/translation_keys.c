@@ -59,15 +59,11 @@ static int	conic_view(int keycode, t_fdf *fdf)
 	}
 	else if (is_key(controls, C_BEHIND, keycode))
 	{
-		t_vector3	p1;
-		t_vector3	p2;
+		t_point	p1;
+		t_point	p2;
 
-		p1.x = 0;
-		p1.y = fdf->map->points[(int)fdf->map->size.z - 1][0].pos.y;
-		p1.z = (int)fdf->map->size.z - 1;
-		p2.x = fdf->map->size.x - 1;
-		p2.y = fdf->map->points[(int)fdf->map->size.z - 1][(int)fdf->map->size.x - 1].pos.y;
-		p2.z = (int)fdf->map->size.z - 1;
+		p1 = fdf->map->points[(int)fdf->map->size.z - 1][0];
+		p2 = fdf->map->points[(int)fdf->map->size.z - 1][(int)fdf->map->size.x - 1];
 		if (!(fdf->conic.camera.z < fdf->conic.default_z && ft_distance(pixel_pos(fdf, p1, 0).pos, pixel_pos(fdf, p2, 0).pos) <= 50))
 		{
 			fdf->conic.camera.z -= 1;

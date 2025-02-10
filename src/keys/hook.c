@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 09:17:17 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/07 14:01:12 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/10 10:06:18 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ int	keys_hook(int keycode, t_fdf *fdf)
 		return (0);
 	}
 	resend = translation_check(keycode, fdf);
-	resend |= resend || rotatation_check(keycode, fdf);
-	resend |= resend || zoom_check(keycode, fdf);
+	resend |= rotatation_check(keycode, fdf);
+	resend |= zoom_check(keycode, fdf);
 	if (resend)
 		fdf->must_update = 1;
 	return (0);

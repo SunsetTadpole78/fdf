@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 13:53:20 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/07 10:25:10 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/10 09:30:41 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ t_pixel_data	ppp(t_fdf *fdf, t_vector3 v3, int mirror)
 	float			zoom;
 	float			temp;
 
-	(void)mirror;
-
+	if (mirror)
+		v3.y *= -1;
 	zoom = fdf->parallel.zoom * fdf->parallel.zoom_base;
 	v3.x -= fdf->pivot_point.x;
 	v3.y -= fdf->pivot_point.y;

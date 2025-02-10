@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:00:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/05 16:10:48 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/10 09:46:12 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,11 @@ int	on_update(t_fdf *fdf)
 	if (fdf->must_update || (active_navbar(2) && get_navbar()->must_update))
 	{
 		ft_memset(fdf->img.addr, 0, HEIGHT * WIDTH * (fdf->img.bpp / 8));
+		clear_depth(fdf);
+		draw_background(fdf);
 		draw_map(fdf);
+		draw_axes(fdf);
+		draw_navbar(fdf);
 		mlx_put_image_to_window(fdf->mlx, fdf->window, fdf->img.img, 0, 0);
 		update_navbar_texts(fdf);
 		get_navbar()->must_update = 0;
@@ -62,13 +66,14 @@ int	main(int argc, char **argv)
 		ft_putstr_fd("Map not found\n", 2);
 		return (1);
 	}
-	fdf = create_window(map);
+	fdf = init_fdf();
 	if (!fdf)
 	{
+		free_map(map);
 		ft_putstr_fd("Malloc Error\n", 2);
 		return (2);
 	}
-	draw_map(fdf);
+	init_data(fdf, map);
 	mlx_put_image_to_window(fdf->mlx, fdf->window, fdf->img.img, 0, 0);
 	update_navbar_texts(fdf);
 	mlx_hook(fdf->window, 2, 1L << 0, keys_hook, fdf);

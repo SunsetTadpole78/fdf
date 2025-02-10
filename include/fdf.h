@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:05:01 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/07 17:09:44 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/10 09:46:38 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,22 @@ typedef struct s_vector3
 	float	z;
 }	t_vector3;
 
+typedef struct s_line_data
+{
+	t_vector2	delta;
+	t_vector2	s;
+	float		e;
+	float		e2;
+	float		cur;
+	float		tot;
+	float		step;
+}	t_line_data;
+
 typedef	struct s_pixel_data
 {
 	t_vector2	pos;
 	float	depth;
+	int	color;
 }	t_pixel_data;
 
 typedef struct s_point
@@ -68,14 +80,6 @@ typedef struct s_point
 	int			hardcoded_color;
 	int			can_mirror;
 }	t_point;
-
-typedef struct s_line
-{
-	t_point			point1;
-	t_point			point2;
-	struct s_line	*previous;
-	struct s_line	*next;
-}	t_line;
 
 enum CategoryId {
 	BG,
@@ -355,11 +359,18 @@ typedef struct s_background
 	t_img	**backgrounds;
 }	t_background;
 
+typedef struct s_waiting
+{
+	int	step;
+	int	total;
+}	t_waiting;
+
 typedef struct s_fdf
 {
 	void			*mlx;
 	void			*window;
 	t_img			img;
+	t_waiting		waiting;
 	t_map			*map;
 	int				must_update;
 	float	**depth;
@@ -403,18 +414,19 @@ int			on_close(t_fdf *fdf);
 void	set_map_data(char ***lines, t_map *map);
 
 //lines.c
-t_line		*build_line(char ***lines, t_vector2 p1, t_vector2 p2);
 void		free_lines(char ****lines, int y);
 int			add_line(char *line, char ****lines, int y);
 int			init_lines(char *path, char ****lines, int *fd);
 
 //map.c
 void		free_map(t_map *map);
-void		add_to_map(t_map *map, t_line *line);
 t_map		*parse_map(char *path);
 
 //mlx_manager.c
-t_fdf		*create_window(t_map *map);
+t_fdf		*init_fdf(void);
+void	init_data(t_fdf *fdf, t_map *map);
+void		draw_background(t_fdf *fdf);
+void		draw_axes(t_fdf *fdf);
 void		draw_map(t_fdf *fdf);
 
 //points.c
@@ -454,7 +466,7 @@ int	is_isometric(void);
 int	is_conic(void);
 int	is_parallel(void);
 
-t_pixel_data	pixel_pos(t_fdf *fdf, t_vector3 v3, int mirror);
+t_pixel_data	pixel_pos(t_fdf *fdf, t_point p, int mirror);
 t_pixel_data	ipp(t_fdf *fdf, t_vector3 v3, int mirror);
 t_pixel_data	cpp(t_fdf *fdf, t_vector3 v3, int mirror);
 t_pixel_data	ppp(t_fdf *fdf, t_vector3 v3, int mirror);
@@ -558,6 +570,8 @@ t_key	*get_key(t_c controls, enum KeyId id);
 t_key	*get_key_from(t_c *controls, enum ButtonId id);
 void	free_contr(t_c controls);
 
-void	algo(t_fdf *fdf, t_vector2 po1, t_vector2 po2, int d1, int d2, int ca, int cb);
+void	algo(t_fdf *fdf, t_pixel_data p1, t_pixel_data p2);
+
+void	draw_waiting_screen(t_fdf *fdf);
 
 #endif
