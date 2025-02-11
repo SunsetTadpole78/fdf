@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 09:42:08 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/06 17:01:58 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/10 14:00:39 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,12 @@ static void	init_default_z(t_fdf *fdf)
 	t_vector3	p1;
 	t_vector3	p2;
 	t_vector3	p3;
-	t_map	*map;
+	t_map		*map;
 
 	map = fdf->map;
 	p1.x = (int)(map->size.x / 2);
-	p1.y = map->points[(int)map->size.z - 1][(int)((map->size.x - 1) / 2)].pos.y;
+	p1.y = map->points[(int)map->size.z - 1][(int)((map->size.x - 1) / 2)]
+		.pos.y;
 	p1.z = map->size.z - 1;
 	p2.x = 0;
 	p2.y = map->points[(int)(map->size.z - 1)][0].pos.y;
@@ -51,7 +52,9 @@ static void	init_default_z(t_fdf *fdf)
 	p3.y = map->points[(int)map->size.z - 1][(int)map->size.x - 1].pos.y;
 	p3.z = map->size.z - 1;
 	fdf->conic.camera.z = 0;
-	while ((outside_p(cpp(fdf, p1, 0).pos) || outside_p(cpp(fdf, p2, 0).pos) || outside_p(cpp(fdf, p3, 0).pos)) && fdf->conic.camera.z > -map->size.z * 2)
+	while ((outside_p(cpp(fdf, p1, 0).pos) || outside_p(cpp(fdf, p2, 0).pos)
+			|| outside_p(cpp(fdf, p3, 0).pos))
+		&& fdf->conic.camera.z > -map->size.z * 2)
 		fdf->conic.camera.z--;
 	fdf->conic.camera.z--;
 	fdf->conic.default_z = fdf->conic.camera.z;

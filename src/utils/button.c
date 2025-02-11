@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 08:45:04 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/27 18:07:57 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/11 16:31:16 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,17 @@ t_button	*set_color(t_button *button, void *default_color,
 	return (button);
 }
 
-t_button	*create_button(enum e_ButtonId id, enum e_ButtonType type
-	, char *name, t_vector2 size, t_vector2 offset)
+void	set_button_name(t_button *button, char *name, int must_be_free)
+{
+	if (button->name)
+		free(button->name);
+	button->name = ft_strdup(name);
+	if (must_be_free)
+		free(name);
+}
+
+t_button	*create_button(enum e_ButtonId id, enum e_ButtonType type,
+	t_vector2 size, t_vector2 offset)
 {
 	t_button	*button;
 
@@ -40,7 +49,7 @@ t_button	*create_button(enum e_ButtonId id, enum e_ButtonType type
 	button->id = id;
 	button->uniq_id = next_id();
 	button->type = type;
-	button->name = ft_strdup(name);
+	button->name = ft_strdup("");
 	button->size = size;
 	button->offset = offset;
 	button->color = black;
@@ -76,4 +85,18 @@ void	free_buttons(t_button **buttons)
 		i++;
 	}
 	free(buttons);
+}
+
+int	is_button(t_vector2 v, t_button *button)
+{
+	t_vector2	offset;
+
+	offset = button->offset;
+	if (button->type == CIRCLE)
+		return (ft_distance(offset, v) <= button->size.x);
+	if (button->type == CUBE)
+		return (v.x >= (offset.x - button->size.x * 1.5f) && v.x <= button->size.x * 0.5f + offset.x
+				&& v.y >= (offset.y - button->size.y) && v.y <= button->size.y + offset.y);
+	return (v.x >= offset.x && v.x <= button->size.x + offset.x
+		&& v.y >= offset.y && v.y <= button->size.y + offset.y);
 }

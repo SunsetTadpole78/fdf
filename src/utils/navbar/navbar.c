@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 12:49:27 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/07 17:04:19 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/11 17:04:26 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,80 +90,88 @@ void	draw_category(t_fdf *fdf, t_category *category)
 	}
 }
 
-t_vector2	get_text_offset(t_button *button)
+static t_vector2	init_text_data(t_button *button)
 {
-	t_vector2	offset;
 	int			i;
 	int			j;
-	t_vector2	a;
+	t_vector2	data;
 
 	i = 0;
 	j = 0;
-	a.x = 0;
-	a.y = 0;
+	data.x = 0;
+	data.y = 0;
 	while (button->name[i])
 	{
-		if (j > a.x)
-			a.x = j;
+		if (j > data.x)
+			data.x = j;
 		if (button->name[i] == '\n')
 		{
 			j = 0;
-			a.y++;
+			data.y++;
 		}
 		j++;
 		i++;
 	}
-	
+	return (data);
+}
+
+t_vector2	get_text_offset(t_button *button)
+{
+	t_vector2	offset;
+	t_vector2	data;
+
+	data = init_text_data(button);
 	if (button->type == CIRCLE)
 	{
-		offset.x = button->offset.x + button->size.x / 4 - (((a.x + (1 * a.y == 0)) * 6) / 2) - 8;
-		offset.y = button->offset.y + button->size.y / 4 + 8 - ((7 * a.y) / 2);
+		offset.x = button->offset.x + button->size.x / 4
+			- (((data.x + (1 * data.y == 0)) * 6) / 2) - 8;
+		offset.y = button->offset.y + button->size.y / 4
+			+ 8 - ((7 * data.y) / 2);
 		return (offset);
 	}
-	offset.y = button->offset.y + button->size.y / 2 + 4 - ((7 * a.y) / 2);
+	offset.y = button->offset.y + button->size.y / 2 + 4 - ((7 * data.y) / 2);
 	if (button->type == TOGGLE)
 	{
 		offset.x = button->offset.x + button->size.x + 7;
 		return (offset);
 	}
-
-	offset.x = button->offset.x + button->size.x / 2 - (((a.x + (1 * a.y == 0)) * 6) / 2);
+	offset.x = button->offset.x + button->size.x / 2
+		- (((data.x + (1 * data.y == 0)) * 6) / 2);
 	return (offset);
 }
 
 void	text(t_fdf *fdf, t_vector2 offset, int color, char *text)
 {
-	int	i;
-	int base_x;
-	char *temp;
+	int		i;
+	int		base_x;
+	char	*temp;
 
 	if (!ft_strchr(text, '\n'))
 	{
 		mlx_string_put(fdf->mlx, fdf->window, offset.x, offset.y, color, text);
 		return ;
 	}
-	i = 0;
+	i = -1;
 	base_x = offset.x;
-	while(text[i])
+	while (text[i + 1])
 	{
+		i++;
 		if (text[i] == '\n')
 		{
 			offset.x = base_x;
 			offset.y += 7;
-			i++;
 			continue ;
 		}
 		temp = ft_substr(text, i, i + 1);
 		mlx_string_put(fdf->mlx, fdf->window, offset.x, offset.y, color, temp);
 		free(temp);
 		offset.x += 6;
-		i++;
 	}
 }
 
-void	update_buttons_texts(t_fdf *fdf, t_button **buttons)
+void	update_texts(t_fdf *fdf, t_button **buttons)
 {
-	int	i;
+	int			i;
 	t_vector2	offset;
 
 	i = 0;
@@ -173,7 +181,6 @@ void	update_buttons_texts(t_fdf *fdf, t_button **buttons)
 		text(fdf, offset, 0xFFFFFF, buttons[i]->name);
 		i++;
 	}
-
 }
 
 void	update_navbar_texts(t_fdf *fdf)
@@ -194,14 +201,12 @@ void	update_navbar_texts(t_fdf *fdf)
 	}
 	if (get_navbar()->actual)
 	{
-		update_buttons_texts(fdf, get_navbar()->actual->buttons);
+		update_texts(fdf, get_navbar()->actual->buttons);
 		i = 0;
 		while (get_navbar()->actual->subs[i])
 		{
 			if (exec(get_navbar()->actual->subs[i]->showable))
-			{
-				update_buttons_texts(fdf, get_navbar()->actual->subs[i]->buttons);
-			}
+				update_texts(fdf, get_navbar()->actual->subs[i]->buttons);
 			i++;
 		}
 	}
@@ -312,7 +317,8 @@ void	add_category(enum e_CategoryId id, char *title)
 	size.y = 50;
 	offset.x = 0;
 	offset.y = 0;
-	category->main = create_button(NAV, NAVBAR, title, size, offset);
+	category->main = create_button(NAV, NAVBAR, size, offset);
+	set_button_name(category->main, title, 0);
 	set_color(category->main, dark_gray, light_gray, gray);
 	category->main->category = category;
 	category->id = id;
@@ -342,7 +348,7 @@ t_category	*get_navbar_category(enum e_CategoryId id)
 	return (NULL);
 }
 
-void	add_button(t_category *category, t_button *button)
+void	add_b(t_category *category, t_button *button)
 {
 	int			count;
 
@@ -362,10 +368,17 @@ void	add_button(t_category *category, t_button *button)
 
 int	active_navbar(int v)
 {
-	static int	active;
+	static int	active = 0;
+	int		temp;
 
+	temp = active;
 	if (v == 0 || v == 1)
 		active = v;
+	if (v == 1 && temp == 0)
+	{
+		//mlx_hook(get_fdf()->window, 6, 1L << 6, on_move_navbar, get_navbar());
+		//mlx_hook(fdf->window, 4, 1L << 2, on_click, get_navbar());
+	}
 	return (active);
 }
 
@@ -389,14 +402,15 @@ t_navbar	*get_navbar(void)
 int	subs_count(t_subcategory **subs)
 {
 	int	i;
-	
+
 	i = 0;
 	while (subs[i])
 		i++;
 	return (i);
 }
 
-void	add_sub(t_category *category, enum e_SubCategoryId id, int (showable)(void))
+void	add_subcategory(t_category *category,
+	enum e_SubCategoryId id, int (showable)(void))
 {
 	int	count;
 
@@ -404,8 +418,7 @@ void	add_sub(t_category *category, enum e_SubCategoryId id, int (showable)(void)
 	category->subs = ft_realloc(
 			category->subs,
 			sizeof(t_subcategory *) * (count + 1),
-			sizeof(t_subcategory *) * (count + 2)
-		);
+			sizeof(t_subcategory *) * (count + 2));
 	category->subs[count] = malloc(sizeof (t_subcategory));
 	category->subs[count]->id = id;
 	category->subs[count]->showable = showable;
@@ -413,7 +426,6 @@ void	add_sub(t_category *category, enum e_SubCategoryId id, int (showable)(void)
 	category->subs[count]->buttons[0] = NULL;
 	category->subs[count]->category = category;
 	category->subs[count + 1] = NULL;
-
 }
 
 t_subcategory	*get_sub(t_category *category, enum e_SubCategoryId id)
@@ -430,7 +442,7 @@ t_subcategory	*get_sub(t_category *category, enum e_SubCategoryId id)
 	return (NULL);
 }
 
-void	add_subbutton(t_subcategory *sub, t_button *button)
+void	add_sb(t_subcategory *sub, t_button *button)
 {
 	int			count;
 

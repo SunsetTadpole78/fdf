@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:00:44 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/10 09:46:12 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/11 15:24:10 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 t_fdf	*f(t_fdf *v)
 {
-	static	t_fdf *fdf = NULL;
-	
+	static t_fdf	*fdf = NULL;
+
 	if (v)
 		fdf = v;
 	return (fdf);
@@ -26,8 +26,21 @@ t_fdf	*get_fdf(void)
 	return (f(NULL));
 }
 
+void	update_keys(t_fdf *fdf)
+{
+	if (fdf->type == ISOMETRIC)
+		isometric_key_event(fdf);
+	else if (fdf->type == CONIC)
+		conic_key_event(fdf);
+	else
+		parallel_key_event(fdf);
+	fdf->must_update = 1;
+}
+
 int	on_update(t_fdf *fdf)
 {
+	if (fdf->keys != 0)
+		update_keys(fdf);
 	if (fdf->must_update || (active_navbar(2) && get_navbar()->must_update))
 	{
 		ft_memset(fdf->img.addr, 0, height() * width() * (fdf->img.bpp / 8));
@@ -76,9 +89,11 @@ int	main(int argc, char **argv)
 	init_data(fdf, map);
 	mlx_put_image_to_window(fdf->mlx, fdf->window, fdf->img.img, 0, 0);
 	update_navbar_texts(fdf);
-	mlx_hook(fdf->window, 2, 1L << 0, keys_hook, fdf);
+	mlx_hook(fdf->window, 2, 1L << 0, on_press, fdf);
+	mlx_hook(fdf->window, 3, 1L << 1, on_release, fdf);
 	mlx_hook(fdf->window, 17, 0, on_close, fdf);
 	mlx_hook(fdf->window, 12, 1L << 15, on_expose, fdf);
+	//mlx_loop_hook(fdf->mlx, update_display, fdf);
 	mlx_loop_hook(fdf->mlx, on_update, fdf);
 	mlx_loop(fdf->mlx);
 	return (0);

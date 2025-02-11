@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 11:00:05 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/07 12:36:18 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/11 09:58:40 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,8 @@ int	pays(t_vector3 v)
 		return (0x142F66);
 	if (v.y < -5)
 		return (0x214BA5);
-	if (v.y < 0)
+	if (v.y <= 0)
 		return (0x2C63DC);
-	if (v.y == 0)
-		return (0xFFD800);
 	if (v.y < 3)
 		return (0x00AF11);
 	if (v.y < 5)

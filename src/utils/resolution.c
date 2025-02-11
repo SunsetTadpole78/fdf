@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 11:48:53 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/04 11:54:51 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/11 10:59:48 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,16 @@
 
 int	*get_resolution(void)
 {
-    static int resolution[2];
+	static int	resolution[2];
+	Display		*display;
 
-    Display *display = XOpenDisplay(NULL);
-    if (!display)
-	    return (NULL);
-    resolution[0] = DisplayWidth(display, 0);
-    resolution[1] = DisplayHeight(display, 0);
-    XCloseDisplay(display);
-    return resolution;
+	display = XOpenDisplay(NULL);
+	if (!display)
+		return (NULL);
+	resolution[0] = DisplayWidth(display, 0);
+	resolution[1] = DisplayHeight(display, 0);
+	XCloseDisplay(display);
+	return (resolution);
 }
 
 int	height(void)

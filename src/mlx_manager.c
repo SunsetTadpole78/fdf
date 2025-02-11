@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 14:45:42 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/10 10:45:41 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/11 13:44:14 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -419,8 +419,7 @@ t_fdf	*init_fdf(void)
 	fdf->img.img = mlx_new_image(fdf->mlx, width(), height());
 	fdf->img.addr = mlx_get_data_addr(fdf->img.img, &fdf->img.bpp,
 			&fdf->img.ll, &fdf->img.endian);
-	fdf->waiting.step = 3;
-	fdf->waiting.total = 3;
+	fdf->keys = 0;
 	return (fdf);
 }
 

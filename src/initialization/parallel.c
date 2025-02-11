@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 11:32:18 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/06 17:04:29 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/10 13:58:54 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ void	init_parallel(t_fdf *fdf)
 	fdf->parallel.offset.y = 0;
 	fdf->parallel.zoom = 1;
 	t = fdf->map->size.x + fdf->map->size.z;
-	fdf->parallel.zoom_base = (float)height() / (fdf->map->size.y + t * sin(30 * (M_PI / 180)));
+	fdf->parallel.zoom_base = (float)height()
+		/ (fdf->map->size.y + t * sin(30 * (M_PI / 180)));
 	if ((float)width() / t < fdf->parallel.zoom_base)
 		fdf->parallel.zoom_base = (float)width() / t;
 	fdf->parallel.axis = 1;

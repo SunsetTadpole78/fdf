@@ -32,15 +32,15 @@ DEFAULT =	fdf.c		\
 		initialization/file_lines.c		\
 		initialization/map.c		\
 		initialization/navbar.c	\
-		initialization/controls.c	\
 		initialization/backgrounds.c	\
 		initialization/isometric.c	\
 		initialization/conic.c	\
 		initialization/parallel.c	\
-		keys/hook.c	\
-		keys/rotation_keys.c	\
-		keys/translation_keys.c	\
-		keys/zoom_keys.c	\
+		events/isometric/press.c	\
+		events/conic/press.c	\
+		events/parallel/press.c	\
+		events/events.c	\
+		events/controls_events.c	\
 		destructor.c	\
 		lines_utils.c	\
 		mlx_manager.c	\

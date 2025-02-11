@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 10:04:53 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/07 17:00:19 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/11 13:56:40 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,30 +53,26 @@ void	add_key(t_c *controls, enum e_KeyId id, int key, enum e_ButtonId button)
 
 	count = count_keys(controls->keys);
 	controls->keys = ft_realloc(
-		controls->keys,
-		sizeof(t_key *) * (count + 1),
-		sizeof(t_key *) * (count + 2)
-	);
+			controls->keys,
+			sizeof(t_key *) * (count + 1),
+			sizeof(t_key *) * (count + 2));
 	controls->keys[count] = malloc(sizeof(t_key));
 	controls->keys[count]->id = next_id();
 	controls->keys[count]->key_id = id;
 	controls->keys[count]->v = key;
 	controls->keys[count]->button = button;
+	controls->keys[count]->pressed = 0;
 	controls->keys[count + 1] = NULL;
 }
 
-int	is_key(t_c controls, enum e_KeyId id, int keycode)
+int	is_pressed(t_c controls, enum e_KeyId id)
 {
-	int	i;
+	t_key	*key;
 
-	i = 0;
-	while (controls.keys[i])
-	{
-		if (id == controls.keys[i]->key_id && keycode == controls.keys[i]->v)
-			return (1);
-		i++;
-	}
-	return (0);
+	key = get_key(controls, id);
+	if (!key)
+		return (0);
+	return (key->pressed);
 }
 
 t_key	*get_key(t_c controls, enum e_KeyId id)
@@ -87,6 +83,20 @@ t_key	*get_key(t_c controls, enum e_KeyId id)
 	while (controls.keys[i])
 	{
 		if (id == controls.keys[i]->key_id)
+			return (controls.keys[i]);
+		i++;
+	}
+	return (NULL);
+}
+
+t_key	*get_key_with_code(t_c controls, int keycode)
+{
+	int	i;
+
+	i = 0;
+	while (controls.keys[i])
+	{
+		if (keycode == controls.keys[i]->v)
 			return (controls.keys[i]);
 		i++;
 	}
@@ -123,17 +133,13 @@ void	free_contr(t_c controls)
 void	change_key(t_fdf *fdf, int keycode)
 {
 	enum e_SubCategoryId	id;
-	t_subcategory	*sub;
-	int	i;
+	t_subcategory			*sub;
+	int						i;
 
 	fdf->edit_key->v = keycode;
-	if (fdf->type == ISOMETRIC)
-		id = CONTROLS_ISO;
-	else if (fdf->type == CONIC)
-		id = CONTROLS_CONIC;
-	else
-		id = CONTROLS_PARALLEL;
-
+	id = (fdf->type == ISOMETRIC) * CONTROLS_ISO
+		+ (fdf->type == CONIC) * CONTROLS_CONIC
+		+ (fdf->type == PARALLEL) * CONTROLS_PARALLEL;
 	sub = get_sub(get_navbar_category(CONTROLS), id);
 	i = 0;
 	while (sub->buttons[i])
@@ -149,4 +155,22 @@ void	change_key(t_fdf *fdf, int keycode)
 	}
 	fdf->edit_key = NULL;
 	fdf->must_update = 1;
+}
+
+char	*get_name_for(int key)
+{
+	char	c;
+
+	if (key == XK_Left)
+		return (ft_strdup("<-"));
+	else if (key == XK_Right)
+		return (ft_strdup("->"));
+	else if (key == XK_Up)
+		return (ft_strdup("^\n|"));
+	else if (key == XK_Down)
+		return (ft_strdup("|\nv"));
+	else if (key < 32 || key > 126)
+		return (ft_strdup("<?>"));
+	c = key;
+	return (ft_substr(&c, 0, 1));
 }

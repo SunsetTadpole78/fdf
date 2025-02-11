@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 14:49:19 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/07 09:53:00 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/11 10:53:55 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static t_pixel_data	pos(t_vector3 v3, float zoom)
 {
-	t_vector2	v2;
+	t_vector2		v2;
 	t_pixel_data	data;
 
 	v3.x *= zoom;
@@ -57,21 +57,19 @@ static void	dr(t_fdf *fdf, t_vector3 v, t_vector3 v2, t_button *button)
 	d2.pos.y = (int)d2.pos.y + button->offset.y - button->size.y / 2;
 	d1.depth *= 100;
 	d2.depth *= 100;
-	algo(fdf, d1, d2);	
+	algo(fdf, d1, d2);
 }
 
 void	draw_cube(t_fdf *fdf, t_button *button)
-{(void)button;
+{
 	dr(fdf, (t_vector3){0, 0, 0}, (t_vector3){1, 0, 0}, button);
 	dr(fdf, (t_vector3){0, 0, 0}, (t_vector3){0, 1, 0}, button);
 	dr(fdf, (t_vector3){0, 1, 0}, (t_vector3){1, 1, 0}, button);
 	dr(fdf, (t_vector3){1, 0, 0}, (t_vector3){1, 1, 0}, button);
-	
 	dr(fdf, (t_vector3){0, 0, 1}, (t_vector3){1, 0, 1}, button);
 	dr(fdf, (t_vector3){0, 0, 1}, (t_vector3){0, 1, 1}, button);
 	dr(fdf, (t_vector3){0, 1, 1}, (t_vector3){1, 1, 1}, button);
 	dr(fdf, (t_vector3){1, 0, 1}, (t_vector3){1, 1, 1}, button);
-
 	dr(fdf, (t_vector3){0, 0, 0}, (t_vector3){0, 0, 1}, button);
 	dr(fdf, (t_vector3){0, 1, 0}, (t_vector3){0, 1, 1}, button);
 	dr(fdf, (t_vector3){1, 0, 0}, (t_vector3){1, 0, 1}, button);

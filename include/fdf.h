@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:05:01 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/10 11:52:44 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/11 16:34:34 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include "libft.h"
 # include "mlx.h"
+
+#include<stdio.h>
 
 # include <stdlib.h>
 # include <unistd.h>
@@ -25,6 +27,8 @@
 # ifndef WINDOW_SIZE
 #  define WINDOW_SIZE 1
 # endif
+
+#define ISOMETRIC_ANGLE 30 * (M_PI / 180)
 
 typedef struct s_mimg
 {
@@ -270,6 +274,7 @@ typedef struct s_key
 	enum e_KeyId	key_id;
 	int				v;
 	enum e_ButtonId	button;
+	int				pressed;
 }	t_key;
 
 typedef struct s_edit
@@ -341,18 +346,11 @@ typedef struct s_background
 	t_img	**backgrounds;
 }	t_background;
 
-typedef struct s_waiting
-{
-	int	step;
-	int	total;
-}	t_waiting;
-
 typedef struct s_fdf
 {
 	void			*mlx;
 	void			*window;
 	t_img			img;
-	t_waiting		waiting;
 	t_map			*map;
 	int				must_update;
 	float			**depth;
@@ -367,6 +365,7 @@ typedef struct s_fdf
 	t_img			**backgrounds;
 	int				only_points;
 	t_key			*edit_key;
+	int			keys;
 }	t_fdf;
 
 typedef struct s_rgb
@@ -382,11 +381,26 @@ t_fdf			*f(t_fdf *v);
 
 //hook.c
 int				keys_hook(int keycode, t_fdf *fdf);
+int				on_press(int keycode, t_fdf *fdf);
+int				on_release(int keycode, t_fdf *fdf);
+int				update_display(t_fdf *fdf);
+//int				keys_hook2(int keycode, t_fdf *fdf);
 int				on_move(int x, int y, t_navbar *navbar);
 int				on_click(int id, int x, int y, t_fdf *fdf);
 int				rotatation_check(int keycode, t_fdf *fdf);
 int				translation_check(int keycode, t_fdf *fdf);
 int				zoom_check(int keycode, t_fdf *fdf);
+
+int				on_press_controls(int keycode, t_fdf *fdf);
+
+int				on_move_navbar(int x, int y, t_navbar *navbar);
+
+void			fix_angle(float *v);
+
+void			isometric_key_event(t_fdf *fdf);
+void			conic_key_event(t_fdf *fdf);
+void			rotate_parallel(t_parallel *parallel, t_c controls, int keycode);
+void			parallel_key_event(t_fdf *fdf);
 
 //destructor.c
 void			destruct(t_fdf *fdf);
@@ -495,20 +509,22 @@ void			update_navbar_texts(t_fdf *fdf);
 //button.c
 t_button		*set_color(t_button *button, void *default_color,
 					void *hover_color, void *pressed_color);
+void			set_button_name(t_button *button, char *name, int must_be_free);
 t_button		*create_button(enum e_ButtonId id, enum e_ButtonType type,
-					char *name, t_vector2 size, t_vector2 offset);
+					t_vector2 size, t_vector2 offset);
 int				buttons_count(t_button **buttons);
+int				is_button(t_vector2 v, t_button *button);
 
 //utils/navbar
 void			add_category(enum e_CategoryId id, char *title);
-void			add_button(t_category *category, t_button *button);
+void			add_b(t_category *category, t_button *button);
 t_navbar		*get_navbar(void);
 int				active_navbar(int v);
 void			free_navbar(void);
 t_category		*get_navbar_category(enum e_CategoryId id);
 
-void			add_subbutton(t_subcategory *sub, t_button *button);
-void			add_sub(t_category *category, enum e_SubCategoryId id,
+void			add_sb(t_subcategory *sub, t_button *button);
+void			add_subcategory(t_category *category, enum e_SubCategoryId id,
 					int (showable)(void));
 t_subcategory	*get_sub(t_category *category, enum e_SubCategoryId id);
 
@@ -555,13 +571,12 @@ void			init_contr(t_c *controls);
 t_c				*get_controls(t_fdf *fdf);
 void			add_key(t_c *controls, enum e_KeyId id,
 					int key, enum e_ButtonId button);
-int				is_key(t_c controls, enum e_KeyId id, int keycode);
+int				is_pressed(t_c controls, enum e_KeyId id);
 t_key			*get_key(t_c controls, enum e_KeyId id);
 t_key			*get_key_from(t_c *controls, enum e_ButtonId id);
+t_key			*get_key_with_code(t_c controls, int keycode);
 void			free_contr(t_c controls);
 
 void			algo(t_fdf *fdf, t_pixel_data p1, t_pixel_data p2);
-
-void			draw_waiting_screen(t_fdf *fdf);
 
 #endif

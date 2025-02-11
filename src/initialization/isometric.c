@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 13:29:41 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/05 16:30:49 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/10 13:59:11 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ void	init_isometric(t_fdf *fdf)
 	fdf->isometric.rotation.z = 0;
 	fdf->isometric.zoom = 1;
 	t = fdf->map->size.x + fdf->map->size.z;
-	fdf->isometric.zoom_base = (float)height() / (fdf->map->size.y + t * sin(30 * (M_PI / 180)));
+	fdf->isometric.zoom_base = (float)height()
+		/ (fdf->map->size.y + t * sin(30 * (M_PI / 180)));
 	if ((float)width() / t < fdf->isometric.zoom_base)
 		fdf->isometric.zoom_base = (float)width() / t;
 	fdf->isometric.axis = 1;
