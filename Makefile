@@ -90,7 +90,7 @@ LIBFT = $(LIBFT_DIR)/libft.a
 MINILIBX_DIR = minilibx
 MINILIBX_INCLUDE_DIR = $(MINILIBX_DIR)
 MINILIBX = $(MINILIBX_DIR)/libmlx.a
-MINILIBX_FLAGS = -lX11 -lXext -lm
+MINILIBX_FLAGS = -lX11 -lXext
 
 SIZE ?= 1
 
@@ -120,7 +120,7 @@ obj/%.o: src/%.c
 $(FDF): $(LIBFT) $(MINILIBX) $(OBJS)
 	@echo $(SEPARATOR)
 	@echo "${ORANGE}${ARROW} Compiling ${YELLOW}${FDF}${ORANGE}...${CLEAR}"
-	cc $(FLAGS) $(OBJS) -o $(FDF) $(LIBFT) $(MINILIBX) -I $(INCLUDE) -I $(LIBFT_INCLUDE_DIR) -I $(MINILIBX_INCLUDE_DIR) $(MINILIBX_FLAGS)
+	cc $(FLAGS) $(OBJS) -o $(FDF) $(LIBFT) $(MINILIBX) -lm -I $(INCLUDE) -I $(LIBFT_INCLUDE_DIR) -I $(MINILIBX_INCLUDE_DIR) $(MINILIBX_FLAGS)
 	@echo "${GREEN}${CHECK} ${YELLOW}${FDF}${GREEN} compiled successfully!${CLEAR}"
 	@echo $(SEPARATOR)
 	@echo "${GREEN}${CHECK} All targets are up to date!${CLEAR}"

@@ -54,7 +54,7 @@ static t_vector2	find_intersection(t_vector2 v1,
 		v.y = v1.y + (v2.y - v1.y) * (width() - v1.x) / (v2.x - v1.x);
 		v.x = width();
 	}
-	else if (outcode_out & LEFT)
+	else
 	{
 		v.y = v1.y + (v2.y - v1.y) * (0 - v1.x) / (v2.x - v1.x);
 		v.x = 0;
