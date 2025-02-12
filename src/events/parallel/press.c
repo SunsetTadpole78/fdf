@@ -6,13 +6,13 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:17:02 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/11 16:19:52 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/12 23:13:33 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static void	translations(t_parallel *parallel, t_c controls)
+static void	translations(t_parallel *parallel, t_controls controls)
 {
 	if (is_pressed(controls, P_UP))
 		parallel->offset.y -= 0.1f;
@@ -24,7 +24,7 @@ static void	translations(t_parallel *parallel, t_c controls)
 		parallel->offset.x += 0.1f;
 }
 
-void	rotate_parallel(t_parallel *parallel, t_c controls, int keycode)
+void	rotate_parallel(t_parallel *parallel, t_controls controls, int keycode)
 {
 	t_key	*key;
 
@@ -33,15 +33,15 @@ void	rotate_parallel(t_parallel *parallel, t_c controls, int keycode)
 		return ;
 	if (key->id == P_RX1)
 		parallel->rotation.x = ((int)parallel->rotation.x + 1) % 4;
-	else if (key->id == P_RX2)
+	if (key->id == P_RX2)
 		parallel->rotation.x = ((int)parallel->rotation.x - 1 + 4) % 4;
-	else if (key->id == P_RY1)
+	if (key->id == P_RY1)
 		parallel->rotation.y = ((int)parallel->rotation.y + 1) % 4;
-	else if (key->id == P_RY2)
+	if (key->id == P_RY2)
 		parallel->rotation.y = ((int)parallel->rotation.y - 1 + 4) % 4;
 }
 
-static void	zoom(t_parallel *parallel, t_c controls)
+static void	zoom(t_parallel *parallel, t_controls controls)
 {
 	if (is_pressed(controls, P_ZOOM)
 		&& parallel->zoom * parallel->zoom_base < width())
@@ -51,7 +51,7 @@ static void	zoom(t_parallel *parallel, t_c controls)
 		parallel->zoom *= 0.97f;
 }
 
-static void	y_amplifier(t_parallel *parallel, t_c controls)
+static void	y_amplifier(t_parallel *parallel, t_controls controls)
 {
 	if (is_pressed(controls, P_YA1))
 		parallel->y_amplifier += 0.25f;
@@ -61,8 +61,8 @@ static void	y_amplifier(t_parallel *parallel, t_c controls)
 
 void	parallel_key_event(t_fdf *fdf)
 {
-	t_parallel	*parallel;
-	t_c			controls;
+	t_parallel			*parallel;
+	t_controls			controls;
 
 	parallel = &fdf->parallel;
 	controls = parallel->controls;

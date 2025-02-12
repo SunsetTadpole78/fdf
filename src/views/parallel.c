@@ -12,7 +12,6 @@
 
 #include "fdf.h"
 
-#include <math.h>
 #include "fdf.h"
 
 int	is_parallel(void)
@@ -84,7 +83,7 @@ static void	adjust_point(t_fdf *fdf, t_vector3 *v3, int mirror, float zoom)
 	v3->z *= zoom;
 }
 
-t_pixel_data	ppp(t_fdf *fdf, t_vector3 v3, int mirror)
+t_pixel_data	parallel_data(t_fdf *fdf, t_vector3 v3, int mirror)
 {
 	t_pixel_data	data;
 	float			zoom;

@@ -116,7 +116,7 @@ void	*mlx_int_parse_xpm(t_xvar *xvar,void *info,int info_size,char *(*f)())
   char	*clip_data;
   int	nc;
   int	opp;
-  int	cpp;
+  int	conic_data
   int	col;
   int	rgb_col;
   int	col_name;

@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 13:53:20 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/11 12:10:20 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/12 12:28:47 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ static void	rotate(t_fdf *fdf, t_vector3 *v3)
 	float		gamma;
 	t_vector3	cpy;
 
-	alpha = fdf->conic.rotation.y * (M_PI / 180);
-	theta = fdf->conic.rotation.x * (M_PI / 180);
-	gamma = fdf->conic.rotation.z * (M_PI / 180);
+	alpha = fdf->conic.rotation.y * (M_PI / 180.0f);
+	theta = fdf->conic.rotation.x * (M_PI / 180.0f);
+	gamma = fdf->conic.rotation.z * (M_PI / 180.0f);
 	cpy = *v3;
 	v3->x = cpy.x * cos(theta) * cos(gamma)
 		+ cpy.y * (cos(gamma) * sin(theta)
@@ -54,7 +54,7 @@ static void	adjust_point(t_fdf *fdf, t_vector3 *v3, int mirror)
 	rotate(fdf, v3);
 }
 
-t_pixel_data	cpp(t_fdf *fdf, t_vector3 v3, int mirror)
+t_pixel_data	conic_data(t_fdf *fdf, t_vector3 v3, int mirror)
 {
 	float			fovr;
 	float			d;

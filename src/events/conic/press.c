@@ -6,40 +6,40 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 14:52:49 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/11 15:44:29 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/12 23:12:51 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static void	moves(t_conic *conic, t_c controls, t_fdf *fdf)
+static void	moves(t_conic *conic, t_controls controls, t_fdf *fdf)
 {
 	t_point	p1;
 	t_point	p2;
 
 	if (is_pressed(controls, C_FRONT) && conic->camera.z < -2)
 		conic->camera.z += 0.2f;
-	else if (is_pressed(controls, C_BEHIND))
+	if (is_pressed(controls, C_BEHIND))
 	{
 		p1 = fdf->map->points[(int)fdf->map->size.z - 1][0];
 		p2 = fdf->map->points[(int)fdf->map->size.z - 1]
 		[(int)fdf->map->size.x - 1];
 		if (!(conic->camera.z < conic->default_z
-				&& ft_distance(pixel_pos(fdf, p1, 0).pos,
-					pixel_pos(fdf, p2, 0).pos) <= 50))
+				&& ft_distance(get_pdata(fdf, p1, 0).pos,
+					get_pdata(fdf, p2, 0).pos) <= 50))
 			conic->camera.z -= 0.2f;
 	}
-	else if (is_pressed(controls, C_LEFT))
+	if (is_pressed(controls, C_LEFT))
 		conic->camera.x -= 0.2f;
-	else if (is_pressed(controls, C_RIGHT))
+	if (is_pressed(controls, C_RIGHT))
 		conic->camera.x += 0.2f;
-	else if (is_pressed(controls, C_UP))
+	if (is_pressed(controls, C_UP))
 		conic->camera.y += 0.2f;
-	else if (is_pressed(controls, C_DOWN))
+	if (is_pressed(controls, C_DOWN))
 		conic->camera.y -= 0.2f;
 }
 
-static void	rotations(t_conic *conic, t_c controls)
+static void	rotations(t_conic *conic, t_controls controls)
 {
 	if (is_pressed(controls, C_RX1))
 		conic->rotation.x -= 0.6f;
@@ -53,12 +53,12 @@ static void	rotations(t_conic *conic, t_c controls)
 		conic->rotation.z -= 0.6f;
 	if (is_pressed(controls, C_RZ2))
 		conic->rotation.z += 0.6f;
-	fix_angle(&conic->rotation.x);
-	fix_angle(&conic->rotation.y);
-	fix_angle(&conic->rotation.z);
+	ft_angle(&conic->rotation.x);
+	ft_angle(&conic->rotation.y);
+	ft_angle(&conic->rotation.z);
 }
 
-static void	fov(t_conic *conic, t_c controls)
+static void	fov(t_conic *conic, t_controls controls)
 {
 	if (is_pressed(controls, C_FOV1) && conic->fov < 179)
 		conic->fov += 0.5f;
@@ -66,7 +66,7 @@ static void	fov(t_conic *conic, t_c controls)
 		conic->fov -= 0.5f;
 }
 
-static void	y_amplifier(t_conic *conic, t_c controls)
+static void	y_amplifier(t_conic *conic, t_controls controls)
 {
 	if (is_pressed(controls, C_YA1))
 		conic->y_amplifier += 0.25f;
@@ -76,8 +76,8 @@ static void	y_amplifier(t_conic *conic, t_c controls)
 
 void	conic_key_event(t_fdf *fdf)
 {
-	t_conic	*conic;
-	t_c		controls;
+	t_conic			*conic;
+	t_controls		controls;
 
 	conic = &fdf->conic;
 	controls = conic->controls;

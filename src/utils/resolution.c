@@ -6,33 +6,27 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 11:48:53 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/11 10:59:48 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/12 22:24:46 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include <X11/Xlib.h>
 
-int	*get_resolution(void)
-{
-	static int	resolution[2];
-	Display		*display;
-
-	display = XOpenDisplay(NULL);
-	if (!display)
-		return (NULL);
-	resolution[0] = DisplayWidth(display, 0);
-	resolution[1] = DisplayHeight(display, 0);
-	XCloseDisplay(display);
-	return (resolution);
-}
-
 int	height(void)
 {
-	return ((get_fdf()->screen.y * 0.9) * WINDOW_SIZE);
+	static int	h = -1;
+
+	if (h == -1)
+		h = (get_fdf()->screen.y * 0.9) * WINDOW_SIZE;
+	return (h);
 }
 
 int	width(void)
 {
-	return ((get_fdf()->screen.x - 20) * WINDOW_SIZE);
+	static int	w = -1;
+
+	if (w == -1)
+		w = (get_fdf()->screen.x - 20) * WINDOW_SIZE;
+	return (w);
 }

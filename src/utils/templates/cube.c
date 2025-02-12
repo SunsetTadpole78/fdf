@@ -57,7 +57,7 @@ static void	dr(t_fdf *fdf, t_vector3 v, t_vector3 v2, t_button *button)
 	d2.pos.y = (int)d2.pos.y + button->offset.y - button->size.y / 2;
 	d1.depth *= 100;
 	d2.depth *= 100;
-	algo(fdf, d1, d2);
+	process_line(fdf, d1, d2);
 }
 
 void	draw_cube(t_fdf *fdf, t_button *button)

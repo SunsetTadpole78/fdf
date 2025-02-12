@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:05:01 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/11 16:34:34 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/12 23:24:14 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 
 # include "libft.h"
 # include "mlx.h"
-
-#include<stdio.h>
 
 # include <stdlib.h>
 # include <unistd.h>
@@ -28,8 +26,6 @@
 #  define WINDOW_SIZE 1
 # endif
 
-#define ISOMETRIC_ANGLE 30 * (M_PI / 180)
-
 typedef struct s_mimg
 {
 	void			*img;
@@ -40,19 +36,6 @@ typedef struct s_mimg
 	int				width;
 	int				height;
 }	t_img;
-
-typedef struct s_vector2
-{
-	float	x;
-	float	y;
-}	t_vector2;
-
-typedef struct s_vector3
-{
-	float	x;
-	float	y;
-	float	z;
-}	t_vector3;
 
 typedef struct s_line_data
 {
@@ -93,8 +76,9 @@ enum e_SubCategoryId
 	CONTROLS_ISO,
 	CONTROLS_CONIC,
 	CONTROLS_PARALLEL,
-	OTHER_PARALLEL,
-	OTHER_ISO
+	OTHER_ISO,
+	OTHER_CONIC,
+	OTHER_PARALLEL
 };
 
 enum e_ButtonId
@@ -104,8 +88,13 @@ enum e_ButtonId
 	BGG,
 	LINE,
 	I_AXIS,
+	I_MIRROR,
+	I_ONLY_POINTS,
+	C_MIRROR,
+	C_ONLY_POINTS,
 	P_AXIS,
-	MIRROR,
+	P_MIRROR,
+	P_ONLY_POINTS,
 	CTRLI_UP,
 	CTRLI_DOWN,
 	CTRLI_LEFT,
@@ -296,15 +285,15 @@ typedef struct s_e
 	t_key	*new_key;
 }	t_e;
 
-typedef struct s_c
+typedef struct s_controls
 {
 	t_key	**keys;
 	t_e		edit;
-}	t_c;
+}	t_controls;
 
 typedef struct s_isometric
 {
-	t_c			controls;
+	t_controls	controls;
 	t_vector2	offset;
 	t_vector3	rotation;
 	float		zoom;
@@ -312,11 +301,12 @@ typedef struct s_isometric
 	int			axis;
 	int			mirror;
 	float		y_amplifier;
+	int			only_points;
 }	t_isometric;
 
 typedef struct s_conic
 {
-	t_c			controls;
+	t_controls	controls;
 	t_vector3	camera;
 	float		default_z;
 	t_vector3	rotation;
@@ -325,18 +315,22 @@ typedef struct s_conic
 	float		pitch;
 	float		zoom;
 	float		zoom_base;
+	int			mirror;
 	float		y_amplifier;
+	int			only_points;
 }	t_conic;
 
 typedef struct s_parallel
 {
-	t_c			controls;
+	t_controls	controls;
 	t_vector2	offset;
 	t_vector2	rotation;
 	float		zoom;
 	float		zoom_base;
 	int			axis;
+	int			mirror;
 	float		y_amplifier;
+	int			only_points;
 }	t_parallel;
 
 typedef struct s_background
@@ -356,227 +350,290 @@ typedef struct s_fdf
 	float			**depth;
 	t_vector2		screen;
 	enum e_ViewType	type;
-	void			*pixel_pos;
+	void			*position_adr;
 	t_isometric		isometric;
 	t_conic			conic;
 	t_parallel		parallel;
 	t_vector3		pivot_point;
 	t_background	*background;
 	t_img			**backgrounds;
-	int				only_points;
 	t_key			*edit_key;
-	int			keys;
+	int				keys;
 }	t_fdf;
 
-typedef struct s_rgb
-{
-	int	t;
-	int	r;
-	int	g;
-	int	b;
-}	t_rgb;
-
-int				on_update(t_fdf *fdf);
-t_fdf			*f(t_fdf *v);
-
-//hook.c
-int				keys_hook(int keycode, t_fdf *fdf);
-int				on_press(int keycode, t_fdf *fdf);
-int				on_release(int keycode, t_fdf *fdf);
-int				update_display(t_fdf *fdf);
-//int				keys_hook2(int keycode, t_fdf *fdf);
-int				on_move(int x, int y, t_navbar *navbar);
-int				on_click(int id, int x, int y, t_fdf *fdf);
-int				rotatation_check(int keycode, t_fdf *fdf);
-int				translation_check(int keycode, t_fdf *fdf);
-int				zoom_check(int keycode, t_fdf *fdf);
-
-int				on_press_controls(int keycode, t_fdf *fdf);
-
-int				on_move_navbar(int x, int y, t_navbar *navbar);
-
-void			fix_angle(float *v);
-
-void			isometric_key_event(t_fdf *fdf);
-void			conic_key_event(t_fdf *fdf);
-void			rotate_parallel(t_parallel *parallel, t_c controls, int keycode);
-void			parallel_key_event(t_fdf *fdf);
-
-//destructor.c
-void			destruct(t_fdf *fdf);
-int				on_close(t_fdf *fdf);
-
-//lines_utils.c
-void			set_map_data(char ***lines, t_map *map);
-
-//lines.c
-void			free_lines(char ****lines, int y);
-int				add_line(char *line, char ****lines, int y);
-int				init_lines(char *path, char ****lines, int *fd);
-
-//map.c
-void			free_map(t_map *map);
-t_map			*parse_map(char *path);
-
-//mlx_manager.c
-t_fdf			*init_fdf(void);
-void			init_data(t_fdf *fdf, t_map *map);
-void			draw_background(t_fdf *fdf);
+//drawers/axes.c
 void			draw_axes(t_fdf *fdf);
+
+//drawers/background.c
+void			change_background(t_fdf *fdf,
+					int (color)(t_vector2, int, int, int));
+void			draw_background(t_fdf *fdf);
+
+//drawers/line.c
+void			process_line(t_fdf *fdf, t_pixel_data p1, t_pixel_data p2);
+void			draw_line(t_fdf *fdf, t_point a, t_point b, int mirror);
+
+//drawers/map.c
 void			draw_map(t_fdf *fdf);
 
-//points.c
+//events/conic/press.c
+void			conic_key_event(t_fdf *fdf);
 
-//utils.c
-float			chars_to_float(char *nbr);
-int				ft_distance(t_vector2 v1, t_vector2 v2);
+//events/isometric/press.c
+void			isometric_key_event(t_fdf *fdf);
 
-//vector.c
-t_vector2		vector2(float x, float y);
+//events/parallel/press.c
+void			parallel_key_event(t_fdf *fdf);
+void			rotate_parallel(t_parallel *parallel,
+					t_controls controls, int keycode);
 
-//display_data.c
-void			init_display_data(t_fdf *fdf);
+//events/controls_events.c
+int				on_press_controls(int keycode, t_fdf *fdf);
 
-void			init_isometric(t_fdf *fdf);
-void			init_conic(t_fdf *fdf);
-void			init_parallel(t_fdf *fdf);
+//events/events.c
+int				on_press(int keycode, t_fdf *fdf);
+int				on_release(int keycode, t_fdf *fdf);
+int				on_expose(t_fdf *fdf);
 
-t_key			key(int v, enum e_ButtonId id);
+//events/navbar_events.c
+int				on_move_navbar(int x, int y, t_navbar *navbar);
+int				check_outnav(int y, t_navbar *navbar);
+int				on_click_navbar(int id, int x, int y, t_navbar *navbar);
 
-//backgrounds.c
+//initialization/navbar/controls.c
+void			register_iso_controls_buttons(t_subcategory *c,
+					t_controls ic);
+t_subcategory	*register_sub_controls(enum e_SubCategoryId id, void *fn);
+void			register_conic_controls_buttons(t_subcategory *c,
+					t_controls cc);
+void			register_parallel_controls_buttons(t_subcategory *c,
+					t_controls pc);
+
+//initialization/navbar/comsetic.c
+void			register_background_buttons(void);
+void			register_lines_buttons(void);
+
+//initialization/navbar/navbar.c
+void			init_navbar(t_fdf *fdf);
+
+//initialization/navbar/other.c
+void			register_iso_other_buttons(void);
+void			register_conic_other_buttons(void);
+void			register_parallel_other_buttons(void);
+
+//initialization/backgrounds.c
 void			init_backgrounds(t_fdf *fdf);
 void			free_backgrounds(t_fdf *fdf);
 
-//init/navbar.c
-void			init_navbar(t_fdf *fdf);
+//initialization/views/conic.c
+void			init_conic(t_fdf *fdf);
 
-//color.c
-int				get_color(char *value);
-int				from_rgb(t_rgb rgb);
-int				color_between(int ca, int cb, float v, float t);
-void			update_colors(t_fdf *fdf,
-					int (color)(t_vector3, t_vector2, t_vector3));
+//initialization/views/isometric.c
+void			init_isometric(t_fdf *fdf);
 
-int				ft_abs(int v);
+//initialization/views/parallel.c
+void			init_parallel(t_fdf *fdf);
 
-int				is_isometric(void);
-int				is_conic(void);
-int				is_parallel(void);
+//initialization/backgrounds.c
+void			init_backgrounds(t_fdf *fdf);
+void			free_backgrounds(t_fdf *fdf);
 
-t_pixel_data	pixel_pos(t_fdf *fdf, t_point p, int mirror);
-t_pixel_data	ipp(t_fdf *fdf, t_vector3 v3, int mirror);
-t_pixel_data	cpp(t_fdf *fdf, t_vector3 v3, int mirror);
-t_pixel_data	ppp(t_fdf *fdf, t_vector3 v3, int mirror);
+//initialization/data.c
+t_fdf			*init_fdf(void);
+void			init_mlx(t_fdf *fdf, t_map *map);
 
-int				black(void);
+//initialization/file_lines.c
+int				add_line(char *line, char ****lines, int y);
+int				init_lines(char *path, char ****lines, int *fd);
+
+//initialization/map.c
+t_map			*init_map(char ***lines);
+t_map			*parse_map(char *path);
+void			set_map_data(char ***lines, t_map *map);
+
+//utils/buttons/button.c
+t_button		*create_button(enum e_ButtonId id, enum e_ButtonType type,
+					t_vector2 size, t_vector2 offset);
+int				buttons_count(t_button **buttons);
 void			free_buttons(t_button **buttons);
+int				is_button(t_vector2 v, t_button *button);
+int				get_button_color(t_vector2 cpos,
+					t_button *button, t_vector2 size);
 
+//utils/buttons/drawer.c
+void			draw_button(t_fdf *fdf, t_button *button);
+void			draw_buttons(t_fdf *fdf, t_button **buttons);
+
+//utils/buttons/set_data.c
+t_button		*set_color(t_button *button, void *default_color,
+					void *hover_color, void *pressed_color);
+void			set_button_name(t_button *button, char *name, int must_be_free);
+t_button		**create_array(t_button *buttons[2], t_button *button);
+
+//utils/controls/controls.c
+void			init_controls(t_controls *controls);
+t_controls		*get_controls(t_fdf *fdf);
+void			add_key(t_controls *controls, enum e_KeyId id,
+					int key, enum e_ButtonId button);
+void			free_contr(t_controls controls);
+
+//utils/controls/keys.c
+int				is_pressed(t_controls controls, enum e_KeyId id);
+t_key			*get_key(t_controls controls, enum e_KeyId id);
+t_key			*get_key_with_code(t_controls controls, int keycode);
+t_key			*get_key_from(t_controls *controls, enum e_ButtonId id);
+
+//utils/controls/update.c
+void			change_key(t_fdf *fdf, int keycode);
+char			*get_name_for(int key);
+
+//utils/cosmetic/backgrounds/backgrounds1.c
 int				rnb(t_vector2 v, int w, int h);
 int				diag(t_vector2 v, int w, int h);
-int				gakarbou(t_vector2 v, int w, int h);
 int				test(t_vector2 v, int w, int h);
+int				gakarbou(t_vector2 v, int w, int h);
 int				montain(t_vector2 v, int w, int h);
+
+//utils/cosmetic/backgrounds/backgrounds2.c
 int				neon(t_vector2 v, int w, int h);
 int				win(t_vector2 v, int w, int h);
 int				ft(t_vector2 v, int w, int h);
 int				rick(t_vector2 v, int w, int h);
 int				larry(t_vector2 v, int w, int h);
+
+//utils/cosmetic/backgrounds/backgrounds3.c
 int				hello_kitty(t_vector2 v, int w, int h);
 
-int				white(void);
-int				subject(t_vector3 v, t_vector2 mimay);
-int				blue(t_vector3 v, t_vector2 mimay);
-int				relief(t_vector3 v);
+//utils/cosmetic/lines/lines1.c
+int				wtop(t_vector3 v, t_vector2 mimay);
+int				btob(t_vector3 v, t_vector2 mimay);
+int				heat(t_vector3 v);
 int				rgb(t_vector3 v, t_vector2 mimay, t_vector3 size);
-int				pays(t_vector3 v);
-int				mars(t_vector3 v);
-int				black_and_white(t_vector3 v);
-int				blue_and_yellow(t_vector3 v, t_vector2 mimay);
-int				random_c(t_vector3 v);
+int				ground(t_vector3 v);
 
-//utils/navbar/default_color.c
+//utils/cosmetic/lines/lines2.c
+int				mars(t_vector3 v);
+int				btow(t_vector3 v);
+int				btoy(t_vector3 v, t_vector2 mimay);
+int				sin_col(t_vector3 v);
+
+//utils/navbar/buttons.c
+void			add_btn(t_category *category, t_button *button);
+void			add_sbtn(t_subcategory *sub, t_button *button);
+void			navbutton_click(t_button *button);
+void			check_buttons(t_button **buttons, t_vector2 pos);
+
+//utils/navbar/category.c
+void			add_category(enum e_CategoryId id, char *title);
+t_category		*get_category(enum e_CategoryId id);
+
+//utils/navbar/drawer.c
+void			draw_navbar(t_fdf *fdf);
+
+//utils/navbar/navbar.c
+int				active_navbar(int v);
+t_navbar		*get_navbar(void);
+void			add_to_navbar(t_category *category);
+void			free_navbar(void);
+
+//utils/navbar/register.c
+void			add_title(t_subcategory *sub, char *title,
+					int offsetx, int offsety);
+t_button		*next_b(t_button *button, char *name, int x, int y);
+t_button		*next_bm(t_button *button, char *name, t_vector2 offset);
+
+//utils/navbar/selection.c
+void			select_toolbar_button(t_button *button);
+void			unselect_others(t_button *button);
+
+//utils/navbar/subcategory.c
+int				is_showable(t_subcategory *sub);
+void			add_subcategory(t_category *category,
+					enum e_SubCategoryId id, int (showable)(void));
+t_subcategory	*get_sub(t_category *category, enum e_SubCategoryId id);
+void			free_subs(t_subcategory **subs);
+
+//utils/navbar/text.c
+void			update_navbar_texts(t_fdf *fdf);
+
+//utils/templates/circle.c
+void			draw_circle(t_fdf *fdf, t_button *button);
+
+//utils/templates/cube.c
+void			draw_cube(t_fdf *fdf, t_button *button);
+
+//utils/templates/keybox.c
+int				keybox_color(t_vector2 v, int w, int h);
+int				keybox_color_hover(t_vector2 v, int w, int h, int selected);
+int				keybox_color_pressed(t_vector2 v, int w, int h);
+void			draw_keybox(t_fdf *fdf, t_button *button);
+
+//utils/templates/square.c
+void			draw_square(t_fdf *fdf, t_button *button);
+
+//utils/templates/toggle.c
+int				toggle_color(t_vector2 v, int w, int h);
+int				toggle_color_hover(t_vector2 v, int w, int h, int selected);
+int				toggle_color_pressed(t_vector2 v, int w, int h);
+void			draw_toggle(t_fdf *fdf, t_button *button);
+
+//utils/cohen_sutherland_clip.c
+int				cohen_sutherland_clip(t_vector2 *v1, t_vector2 *v2);
+
+//utils/color.c
+int				get_color(char *el);
+void			update_colors(t_fdf *fdf,
+					int (color)(t_vector3, t_vector2, t_vector3));
+
+//utils/default_color.c
+int				white(void);
+int				black(void);
 int				dark_gray(void);
 int				gray(void);
 int				light_gray(void);
 
+//utils/image.c
+int				from_img(t_vector2 v, t_img *img, t_vector2 size);
+
+//utils/pixel.c
 int				put_pixel(t_fdf *fdf, t_vector2 pos, int color, float alpha);
-void			draw_navbar(t_fdf *fdf);
-void			draw_button(t_fdf *fdf, t_button *button);
-void			draw_buttons(t_fdf *fdf, t_button **buttons);
+int				is_outside(t_vector2 v);
+t_pixel_data	get_pdata(t_fdf *fdf, t_point p, int mirror);
 
-void			update_navbar_texts(t_fdf *fdf);
+//utils/resolution.c
+int				height(void);
+int				width(void);
 
-//button.c
-t_button		*set_color(t_button *button, void *default_color,
-					void *hover_color, void *pressed_color);
-void			set_button_name(t_button *button, char *name, int must_be_free);
-t_button		*create_button(enum e_ButtonId id, enum e_ButtonType type,
-					t_vector2 size, t_vector2 offset);
-int				buttons_count(t_button **buttons);
-int				is_button(t_vector2 v, t_button *button);
-
-//utils/navbar
-void			add_category(enum e_CategoryId id, char *title);
-void			add_b(t_category *category, t_button *button);
-t_navbar		*get_navbar(void);
-int				active_navbar(int v);
-void			free_navbar(void);
-t_category		*get_navbar_category(enum e_CategoryId id);
-
-void			add_sb(t_subcategory *sub, t_button *button);
-void			add_subcategory(t_category *category, enum e_SubCategoryId id,
-					int (showable)(void));
-t_subcategory	*get_sub(t_category *category, enum e_SubCategoryId id);
-
-//templates/keybox.c
-void			draw_keybox(t_fdf *fdf, t_button *button);
-int				keybox_color(t_vector2 v, int w, int h);
-int				keybox_color_hover(t_vector2 v, int w, int h, int selected);
-int				keybox_color_pressed(t_vector2 v, int w, int h);
-
-//templates/toggle.c
-void			draw_toggle(t_fdf *fdf, t_button *button);
-int				toggle_color(t_vector2 v, int w, int h);
-int				toggle_color_hover(t_vector2 v, int w, int h, int selected);
-int				toggle_color_pressed(t_vector2 v, int w, int h);
-
-void			draw_square(t_fdf *fdf, t_button *button);
-
-void			draw_cube(t_fdf *fdf, t_button *button);
-
-//initialization/controls.c
-void			change_key(t_fdf *fdf, int keycode);
-char			*get_name_for(int key);
-
-void			change_background(t_fdf *fdf,
-					int (color)(t_vector2, int, int, int));
-
+//utils/updator.c
+void			define_fdf(t_fdf *v);
 t_fdf			*get_fdf(void);
+void			update_keys(t_fdf *fdf);
+int				on_update(t_fdf *fdf);
 
+//views/conic.c
+int				is_conic(void);
+t_pixel_data	conic_data(t_fdf *fdf, t_vector3 v3, int mirror);
+
+//views/isometric.c
+int				is_isometric(void);
+t_pixel_data	isometric_data(t_fdf *fdf, t_vector3 v3, int mirror);
+
+//views/parallel.c
+int				is_parallel(void);
+t_pixel_data	parallel_data(t_fdf *fdf, t_vector3 v3, int mirror);
+
+//views/switcher.c
+void			switch_view(t_fdf *fdf);
+
+//depth_manager.c
 void			init_depth(t_fdf *fdf);
 void			clear_depth(t_fdf *fdf);
 void			free_depth(t_fdf *fdf);
 
-int				cohenSutherlandClip(t_vector2 *v1, t_vector2 *v2);
-
-int				*get_resolution(void);
-int				get_swidth(void);
-int				get_sheight(void);
-int				height(void);
-int				width(void);
-
-int				outside_p(t_vector2 v);
-
-void			init_contr(t_c *controls);
-t_c				*get_controls(t_fdf *fdf);
-void			add_key(t_c *controls, enum e_KeyId id,
-					int key, enum e_ButtonId button);
-int				is_pressed(t_c controls, enum e_KeyId id);
-t_key			*get_key(t_c controls, enum e_KeyId id);
-t_key			*get_key_from(t_c *controls, enum e_ButtonId id);
-t_key			*get_key_with_code(t_c controls, int keycode);
-void			free_contr(t_c controls);
-
-void			algo(t_fdf *fdf, t_pixel_data p1, t_pixel_data p2);
+//destructor.c
+void			destruct(t_fdf *fdf);
+int				on_close(t_fdf *fdf);
+void			free_lines(char ****lines, int y);
+void			free_map(t_map *map);
 
 #endif

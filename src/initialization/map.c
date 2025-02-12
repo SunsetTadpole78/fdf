@@ -12,7 +12,7 @@
 
 #include "fdf.h"
 
-void	create_points(t_map *map, char ***lines)
+static void	create_points(t_map *map, char ***lines)
 {
 	size_t	x;
 	size_t	y;
@@ -24,7 +24,7 @@ void	create_points(t_map *map, char ***lines)
 		while (lines[y][x])
 		{
 			map->points[y][x].pos.x = x;
-			map->points[y][x].pos.y = chars_to_float(lines[y][x]) / 10;
+			map->points[y][x].pos.y = ft_atof(lines[y][x]) / 10;
 			map->points[y][x].pos.z = y;
 			map->points[y][x].can_mirror = map->points[y][x].pos.y != 0;
 			map->points[y][x].hardcoded_color = ft_strchr(lines[y][x], ',')
@@ -90,4 +90,28 @@ t_map	*parse_map(char *path)
 	map = init_map(lines);
 	free_lines(&lines, y);
 	return (map);
+}
+
+void	set_map_data(char ***lines, t_map *map)
+{
+	float		v;
+
+	map->size.z = 0;
+	map->min_y = MAX_FLOAT;
+	map->max_y = MIN_FLOAT;
+	while (lines[(int)map->size.z])
+	{
+		map->size.x = 0;
+		while (lines[(int)map->size.z][(int)map->size.x])
+		{
+			v = (float)ft_atoi(lines[(int)map->size.z][(int)map->size.x]) / 10;
+			if (v < map->min_y)
+				map->min_y = v;
+			else if (v > map->max_y)
+				map->max_y = v;
+			map->size.x++;
+		}
+		map->size.z++;
+	}
+	map->size.y = ft_abs(map->max_y - map->min_y);
 }

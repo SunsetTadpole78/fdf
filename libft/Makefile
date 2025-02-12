@@ -42,7 +42,21 @@ DEFAULT = ft_isalpha.c			\
 	ft_islower.c			\
 	ft_isupper.c			\
 	gnl/get_next_line.c		\
-	gnl/get_next_line_utils.c
+	gnl/get_next_line_utils.c	\
+	ft_max.c	\
+	ft_min.c	\
+	ft_abs.c	\
+	ft_angle.c	\
+	ft_atof.c	\
+	ft_atoh.c	\
+	ft_distance.c	\
+	ft_ftoi.c	\
+	ft_ishexa.c	\
+	ft_nextid.c	\
+	ft_vector2.c	\
+	ft_fromrgb.c	\
+	ft_torgb.c	\
+	ft_colorbetween.c
 BONUS = ft_lstnew_bonus.c		\
 	ft_lstadd_front_bonus.c		\
 	ft_lstsize_bonus.c		\

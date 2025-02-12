@@ -12,7 +12,7 @@
 
 #include "fdf.h"
 
-void	add_background(t_fdf *fdf, char *path)
+static void	add_background(t_fdf *fdf, char *path)
 {
 	t_background	*dd;
 	static int		c = 0;

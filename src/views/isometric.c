@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 13:16:21 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/11 17:08:32 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/12 22:43:18 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ static void	rotate(t_fdf *fdf, t_vector3 *v3)
 	float		gamma;
 	t_vector3	cpy;
 
-	alpha = fdf->isometric.rotation.x * (M_PI / 180);
-	theta = fdf->isometric.rotation.y * (M_PI / 180);
-	gamma = fdf->isometric.rotation.z * (M_PI / 180);
+	alpha = fdf->isometric.rotation.x * (M_PI / 180.0f);
+	theta = fdf->isometric.rotation.y * (M_PI / 180.0f);
+	gamma = fdf->isometric.rotation.z * (M_PI / 180.0f);
 	cpy = *v3;
 	v3->x = cpy.x * cos(theta) * cos(gamma)
 		+ cpy.y * (cos(gamma) * sin(theta)
@@ -59,17 +59,17 @@ static void	adjust_point(t_fdf *fdf, t_vector3 *v3, int mirror, float zoom)
 	rotate(fdf, v3);
 }
 
-t_pixel_data	ipp(t_fdf *fdf, t_vector3 v3, int mirror)
+t_pixel_data	isometric_data(t_fdf *fdf, t_vector3 v3, int mirror)
 {
 	float			zoom;
 	t_pixel_data	data;
 
 	zoom = fdf->isometric.zoom * fdf->isometric.zoom_base;
 	adjust_point(fdf, &v3, mirror, zoom);
-	data.pos.x = width() / 2.0f + (v3.x - v3.z) * cos(ISOMETRIC_ANGLE)
-		+ fdf->isometric.offset.x * 60.0f;
-	data.pos.y = 2.0f + height() / 2.0f + (v3.x + v3.z) * sin(ISOMETRIC_ANGLE)
-		- v3.y + fdf->isometric.offset.y * 60.0f;
+	data.pos.x = width() / 2.0f + (v3.x - v3.z) * cos(30 * (M_PI / 180))
+		+ fdf->isometric.offset.x * (width() / 30);
+	data.pos.y = 2.0f + height() / 2.0f + (v3.x + v3.z) * sin(30 * (M_PI / 180))
+		- v3.y + fdf->isometric.offset.y * (height() / 30);
 	data.depth = v3.z;
 	return (data);
 }

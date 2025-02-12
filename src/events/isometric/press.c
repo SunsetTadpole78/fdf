@@ -6,13 +6,13 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 13:59:41 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/11 15:46:44 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/12 23:13:07 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static void	translations(t_isometric *isometric, t_c controls)
+static void	translations(t_isometric *isometric, t_controls controls)
 {
 	if (is_pressed(controls, I_UP))
 		isometric->offset.y -= 0.1f;
@@ -24,7 +24,7 @@ static void	translations(t_isometric *isometric, t_c controls)
 		isometric->offset.x += 0.1f;
 }
 
-static void	rotations(t_isometric *isometric, t_c controls)
+static void	rotations(t_isometric *isometric, t_controls controls)
 {
 	if (is_pressed(controls, I_RX1))
 		isometric->rotation.x -= 0.6f;
@@ -38,12 +38,12 @@ static void	rotations(t_isometric *isometric, t_c controls)
 		isometric->rotation.z -= 0.6f;
 	if (is_pressed(controls, I_RZ2))
 		isometric->rotation.z += 0.6f;
-	fix_angle(&isometric->rotation.x);
-	fix_angle(&isometric->rotation.y);
-	fix_angle(&isometric->rotation.z);
+	ft_angle(&isometric->rotation.x);
+	ft_angle(&isometric->rotation.y);
+	ft_angle(&isometric->rotation.z);
 }
 
-static void	zoom(t_isometric *isometric, t_c controls)
+static void	zoom(t_isometric *isometric, t_controls controls)
 {
 	if (is_pressed(controls, I_ZOOM)
 		&& isometric->zoom * isometric->zoom_base < width())
@@ -53,7 +53,7 @@ static void	zoom(t_isometric *isometric, t_c controls)
 		isometric->zoom *= 0.97f;
 }
 
-static void	y_amplifier(t_isometric *isometric, t_c controls)
+static void	y_amplifier(t_isometric *isometric, t_controls controls)
 {
 	if (is_pressed(controls, I_YA1))
 		isometric->y_amplifier += 0.25f;
@@ -63,8 +63,8 @@ static void	y_amplifier(t_isometric *isometric, t_c controls)
 
 void	isometric_key_event(t_fdf *fdf)
 {
-	t_isometric	*isometric;
-	t_c			controls;
+	t_isometric			*isometric;
+	t_controls			controls;
 
 	isometric = &fdf->isometric;
 	controls = isometric->controls;

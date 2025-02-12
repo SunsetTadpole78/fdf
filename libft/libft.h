@@ -6,7 +6,7 @@
 /*   By: lroussel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 12:35:19 by lroussel          #+#    #+#             */
-/*   Updated: 2025/02/10 09:20:41 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/12 22:05:40 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # define MIN_INT -2147483648
 # define MAX_INT 2147483647
 
-#define MAX_FLOAT 3.402823e+38F
-#define MIN_FLOAT -3.402823e+38F
+# define MAX_FLOAT 3.402823e+38F
+# define MIN_FLOAT -3.402823e+38F
 
 /* ___________________________ Partie Obligatoire ___________________________ */
 
@@ -96,8 +96,6 @@ t_list			*ft_lstlast(t_list *lst);
 t_list			*ft_lstmap(t_list *lst, void *(*f)(void*), void (*del)(void*));
 t_list			*ft_lstnew(void *content);
 
-//GET NEXT LINE
-
 /* ______________________________ BUFFER_SIZE ______________________________ */
 
 # ifndef BUFFER_SIZE
@@ -106,17 +104,55 @@ t_list			*ft_lstnew(void *content);
 
 /* ____________________________ get_next_line.c ____________________________ */
 
-char	*get_next_line(int fd);
-char	*create_line(int byte_read, char **stashed, char **buffer);
-char	*recover_stashed(char *buffer, char *stashed);
-char	*seperate(char *buffer, char **stashed);
-void	*on_error(char **buffer, char **stashed);
+char			*get_next_line(int fd);
+char			*create_line(int byte_read, char **stashed, char **buffer);
+char			*recover_stashed(char *buffer, char *stashed);
+char			*seperate(char *buffer, char **stashed);
+void			*on_error(char **buffer, char **stashed);
 
 /* _________________________ get_next_line_utils.c _________________________ */
 
-char	*ft_strchr(const char *s, int c);
-char	*ft_strdup(const char *s);
-size_t	ft_strlcpy(char *dst, const char *src, size_t size);
-size_t	ft_strlen(const char *s);
+char			*ft_strchr(const char *s, int c);
+char			*ft_strdup(const char *s);
+size_t			ft_strlcpy(char *dst, const char *src, size_t size);
+size_t			ft_strlen(const char *s);
+
+/* _________________________________ others _________________________________ */
+
+typedef struct s_vector2
+{
+	float	x;
+	float	y;
+}	t_vector2;
+
+typedef struct s_vector3
+{
+	float	x;
+	float	y;
+	float	z;
+}	t_vector3;
+
+typedef struct s_rgb
+{
+	int	t;
+	int	r;
+	int	g;
+	int	b;
+}	t_rgb;
+
+int				ft_abs(int v);
+void			ft_angle(float *v);
+float			ft_atof(char *nbr);
+int				ft_atoh(char *value);
+int				ft_distance(t_vector2 v1, t_vector2 v2);
+int				ft_ftoi(float num);
+int				ft_ishexa(char *value);
+int				ft_max(int v, int v2);
+int				ft_min(int v, int v2);
+int				ft_nextid(void);
+t_vector2		ft_vector2(float x, float y);
+int				ft_fromrgb(t_rgb rgb);
+t_rgb			ft_torgb(int v);
+int				ft_colorbetween(int ca, int cb, float v, float t);
 
 #endif

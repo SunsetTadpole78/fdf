@@ -6,7 +6,7 @@
 /*   By: lroussel <lroussel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 11:40:18 by lroussel          #+#    #+#             */
-/*   Updated: 2025/01/30 12:19:16 by lroussel         ###   ########.fr       */
+/*   Updated: 2025/02/12 22:33:10 by lroussel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void	init_depth(t_fdf *fdf)
 		y++;
 	}
 }
-
 
 void	clear_depth(t_fdf *fdf)
 {
@@ -70,4 +69,3 @@ void	free_depth(t_fdf *fdf)
 	free(fdf->depth);
 	fdf->depth = NULL;
 }
-

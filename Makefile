@@ -18,39 +18,64 @@ INCLUDE = include
 FDF = fdf
 
 DEFAULT =	fdf.c		\
+		drawers/axes.c	\
+		drawers/background.c	\
+		drawers/map.c	\
+		drawers/line.c	\
 		views/isometric.c		\
 		views/parallel.c		\
 		views/conic.c		\
+		views/switcher.c		\
 		utils/templates/cube.c		\
 		utils/templates/toggle.c		\
 		utils/templates/keybox.c		\
+		utils/templates/square.c		\
+		utils/templates/circle.c		\
 		utils/navbar/navbar.c		\
-		utils/navbar/default_color.c		\
-		utils/button.c		\
+		utils/navbar/drawer.c		\
+		utils/navbar/category.c		\
+		utils/navbar/subcategory.c		\
+		utils/navbar/text.c		\
+		utils/navbar/buttons.c		\
+		utils/navbar/selection.c		\
+		utils/navbar/register.c		\
+		utils/default_color.c		\
+		utils/buttons/button.c		\
+		utils/buttons/drawer.c		\
+		utils/buttons/set_data.c		\
 		utils/resolution.c		\
-		utils/controls.c		\
+		utils/pixel.c		\
+		utils/image.c		\
+		utils/controls/controls.c		\
+		utils/controls/update.c		\
+		utils/controls/keys.c		\
+		utils/cosmetic/lines/lines1.c		\
+		utils/cosmetic/lines/lines2.c		\
+		utils/cosmetic/backgrounds/backgrounds1.c		\
+		utils/cosmetic/backgrounds/backgrounds3.c		\
+		utils/cosmetic/backgrounds/backgrounds2.c		\
+		initialization/backgrounds.c				\
 		initialization/file_lines.c		\
 		initialization/map.c		\
-		initialization/navbar.c	\
-		initialization/backgrounds.c	\
-		initialization/isometric.c	\
-		initialization/conic.c	\
-		initialization/parallel.c	\
+		initialization/navbar/navbar.c	\
+		initialization/navbar/cosmetic.c	\
+		initialization/navbar/controls.c	\
+		initialization/navbar/other.c	\
+		initialization/views/isometric.c	\
+		initialization/views/conic.c	\
+		initialization/views/parallel.c	\
+		initialization/data.c	\
 		events/isometric/press.c	\
 		events/conic/press.c	\
 		events/parallel/press.c	\
 		events/events.c	\
 		events/controls_events.c	\
+		events/navbar_events.c	\
 		destructor.c	\
-		lines_utils.c	\
-		mlx_manager.c	\
-		utils.c		\
-		color.c		\
-		backgrounds.c		\
-		lines.c		\
+		utils/color.c		\
+		utils/updater.c		\
 		depth_manager.c		\
-		fix_line.c		\
-		vector.c
+		utils/cohen_sutherland_clip.c
 
 FILES = $(addprefix $(SRC)/, $(DEFAULT))
 
